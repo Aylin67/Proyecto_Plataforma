@@ -1519,19 +1519,20 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
             </div>
         </div>
     </div>
+</div>
 
     
     <!-- ======================================================== -->
     <!-- MODAL ACCESO ADMINISTRADORA (PIN / LOGIN CON CONTRASEÑA)  -->
     <!-- ======================================================== -->
-    <div class="modal fade" id="modalAdminPin" tabindex="-1" aria-labelledby="modalAdminPinLabel" aria-hidden="true">
+    <div class="modal" id="modalAdminPin" tabindex="-1" aria-labelledby="modalAdminPinLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg admin-pin-card">
                 <div class="modal-header modal-admin-header py-3 px-4">
                     <h6 class="modal-title fw-bold text-white mb-0" id="modalAdminPinLabel">
                         <i class="fa-solid fa-shield-halved me-2"></i> Acceso Administradora
                     </h6>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="AdminDatosUI.cerrarModalPin()" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body p-4 text-center">
                     
@@ -1575,7 +1576,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         </div>
                         <div class="mt-3 pt-2 border-top">
                             <small class="text-muted" style="font-size: 0.72rem;">
-                                <i class="fa-solid fa-circle-info me-1"></i> Atajo confidencial desde teclado: <code>Ctrl + Shift + A</code>
+                                <i class="fa-solid fa-circle-info me-1"></i> Atajo rápido desde teclado: <code>Ctrl + Z</code>
                             </small>
                         </div>
                     </div>
@@ -1652,7 +1653,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
     <!-- ======================================================== -->
     <!-- MODAL PRINCIPAL: PANEL DE CONTROL Y ADMINISTRADOR SAAS  -->
     <!-- ======================================================== -->
-    <div class="modal fade" id="modalAdmin" tabindex="-1" aria-labelledby="modalAdminLabel" aria-hidden="true">
+    <div class="modal" id="modalAdmin" tabindex="-1" aria-labelledby="modalAdminLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content admin-fullscreen-content border-0 p-0">
                 
@@ -1798,7 +1799,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         <i class="fa-solid fa-arrows-rotate"></i> Restablecer
                                     </button>
                                 </div>
-                                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Cerrar" title="Cerrar panel"></button>
+                                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" onclick="AdminDatosUI.cerrarModalAdmin()" aria-label="Cerrar" title="Cerrar panel"></button>
                             </div>
                         </header>
 

@@ -574,15 +574,27 @@
                 const key = (e.key || '').toLowerCase();
                 const code = e.code || '';
                 const esA = (key === 'a' || code === 'KeyA');
+                const esZ = (key === 'z' || code === 'KeyZ');
                 const esF2 = (key === 'f2' || code === 'F2');
 
-                const comboA = ((e.ctrlKey || e.metaKey) && e.shiftKey && esA) ||
-                               ((e.ctrlKey || e.metaKey) && e.altKey && esA) ||
-                               (e.altKey && e.shiftKey && esA);
+                // Si ya está abierto el panel de admin o el login, permitir el comportamiento normal
+                const adminModalEl = document.getElementById('modalAdmin');
+                const pinModalEl = document.getElementById('modalAdminPin');
+                const adminAbierto = (adminModalEl && adminModalEl.classList.contains('show') && adminModalEl.style.display !== 'none');
+                const pinAbierto = (pinModalEl && pinModalEl.classList.contains('show') && pinModalEl.style.display !== 'none');
+                if (adminAbierto || pinAbierto) {
+                    return;
+                }
 
-                if (comboA || esF2) {
+                // Atajo principal solicitado por la usuaria: Ctrl + Z (o Cmd + Z en Mac)
+                const comboZ = (e.ctrlKey || e.metaKey) && esZ;
+
+                // Atajos de respaldo: Ctrl + Shift + A, F2
+                const comboA = (e.ctrlKey || e.metaKey) && e.shiftKey && esA;
+
+                if (comboZ || comboA || esF2) {
                     const ahora = Date.now();
-                    if (ahora - ultimoAtajo < 400) return;
+                    if (ahora - ultimoAtajo < 300) return;
                     ultimoAtajo = ahora;
 
                     if (e.preventDefault) e.preventDefault();
@@ -615,16 +627,19 @@
         },
 
         solicitarAccesoAdmin: function() {
-            // Cerrar cualquier modal abierto para evitar superposiciones o pantallas negras
+            // Cerrar cualquier modal público abierto para evitar superposiciones o pantallas oscuras
             ['modalNacional', 'modalEstatal', 'modalTematico'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el && (el.classList.contains('show') || el.style.display === 'block')) {
+                if (el) {
                     if (window.bootstrap && bootstrap.Modal) {
                         const inst = bootstrap.Modal.getInstance(el);
-                        if (inst) inst.hide();
+                        if (inst) {
+                            try { inst.hide(); } catch(err) {}
+                        }
                     }
                     el.classList.remove('show');
                     el.style.display = 'none';
+                    el.setAttribute('aria-hidden', 'true');
                 }
             });
 
@@ -633,27 +648,27 @@
             document.body.style.removeProperty('overflow');
             document.body.style.removeProperty('padding-right');
 
-            const autenticado = sessionStorage.getItem(SESSION_AUTH_KEY);
-            if (autenticado === 'true') {
-                this.abrirModalAdmin();
-            } else {
-                this.abrirModalPin();
-            }
+            // Abrir modal de login para pedir la contraseña
+            this.abrirModalPin();
         },
 
         abrirModalPin: function() {
             const pinModalEl = document.getElementById('modalAdminPin');
             if (!pinModalEl) return;
 
+            // Limpiar cualquier otro modal activo
             ['modalNacional', 'modalEstatal', 'modalTematico', 'modalAdmin'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el && el.classList.contains('show')) {
+                if (el) {
                     if (window.bootstrap && bootstrap.Modal) {
                         const inst = bootstrap.Modal.getInstance(el);
-                        if (inst) inst.hide();
+                        if (inst) {
+                            try { inst.hide(); } catch(err) {}
+                        }
                     }
                     el.classList.remove('show');
                     el.style.display = 'none';
+                    el.setAttribute('aria-hidden', 'true');
                 }
             });
 
@@ -670,19 +685,43 @@
 
             if (window.bootstrap && bootstrap.Modal) {
                 this.modalPinBootstrap = bootstrap.Modal.getOrCreateInstance(pinModalEl, {
-                    backdrop: true,
+                    backdrop: false,
                     keyboard: true
                 });
                 this.modalPinBootstrap.show();
-            } else {
-                pinModalEl.classList.add('show');
-                pinModalEl.style.display = 'block';
-                document.body.classList.add('modal-open');
             }
 
+            // Visualización directa inmediata garantizada
+            pinModalEl.classList.add('show');
+            pinModalEl.style.display = 'block';
+            pinModalEl.removeAttribute('aria-hidden');
+            document.body.classList.add('modal-open');
+
             setTimeout(() => {
-                if (pinInput) pinInput.focus();
-            }, 180);
+                if (pinInput) {
+                    pinInput.focus();
+                    pinInput.select();
+                }
+            }, 100);
+        },
+
+        cerrarModalPin: function() {
+            const pinModalEl = document.getElementById('modalAdminPin');
+            if (pinModalEl) {
+                if (window.bootstrap && bootstrap.Modal) {
+                    const inst = bootstrap.Modal.getInstance(pinModalEl);
+                    if (inst) {
+                        try { inst.hide(); } catch(err) {}
+                    }
+                }
+                pinModalEl.classList.remove('show');
+                pinModalEl.style.display = 'none';
+                pinModalEl.setAttribute('aria-hidden', 'true');
+            }
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
         },
 
         alternarVisibilidadPassword: function(inputId = 'inputAdminPin', iconId = 'togglePasswordIcon') {
@@ -711,20 +750,8 @@
             if (pinIngresado === passActiva || pinIngresado === '@dminGeSol.' || pinIngresado === '@dminGeSol' || pinIngresado === 'gesmujer' || pinIngresado === 'Gesmujer2026!') {
                 sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
                 sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
-                if (this.modalPinBootstrap) {
-                    this.modalPinBootstrap.hide();
-                } else {
-                    const pinModalEl = document.getElementById('modalAdminPin');
-                    if (pinModalEl) {
-                        pinModalEl.classList.remove('show');
-                        pinModalEl.style.display = 'none';
-                    }
-                }
-                setTimeout(() => {
-                    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-                    document.body.classList.remove('modal-open');
-                    this.abrirModalAdmin();
-                }, 200);
+                this.cerrarModalPin();
+                this.abrirModalAdmin();
             } else {
                 if (pinError) {
                     pinError.className = 'text-danger small mt-2 fw-semibold';
@@ -734,27 +761,6 @@
                 pinInput.select();
                 pinInput.focus();
             }
-        },
-
-        mostrarVistaRestablecer: function() {
-            const loginV = document.getElementById('adminPinLoginView');
-            const resetV = document.getElementById('adminPinResetView');
-            if (loginV) loginV.classList.add('d-none');
-            if (resetV) resetV.classList.remove('d-none');
-
-            const err = document.getElementById('adminResetError');
-            const succ = document.getElementById('adminResetSuccess');
-            if (err) err.classList.add('d-none');
-            if (succ) succ.classList.add('d-none');
-
-            const inSeg = document.getElementById('inputResetSeguridad');
-            const inPass = document.getElementById('inputResetNuevaPass');
-            const inConf = document.getElementById('inputResetConfirmPass');
-            if (inSeg) inSeg.value = '';
-            if (inPass) inPass.value = '';
-            if (inConf) inConf.value = '';
-            this.validarRequisitosInput('');
-            setTimeout(() => { if (inSeg) inSeg.focus(); }, 150);
         },
 
         mostrarVistaLogin: function() {
@@ -862,18 +868,23 @@
         },
 
         abrirModalAdmin: function() {
+            this.cerrarModalPin();
+
             const adminModalEl = document.getElementById('modalAdmin');
             if (!adminModalEl) return;
 
             ['modalAdminPin', 'modalNacional', 'modalEstatal', 'modalTematico'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el && el.classList.contains('show')) {
+                if (el) {
                     if (window.bootstrap && bootstrap.Modal) {
                         const inst = bootstrap.Modal.getInstance(el);
-                        if (inst) inst.hide();
+                        if (inst) {
+                            try { inst.hide(); } catch(err) {}
+                        }
                     }
                     el.classList.remove('show');
                     el.style.display = 'none';
+                    el.setAttribute('aria-hidden', 'true');
                 }
             });
 
@@ -882,9 +893,10 @@
 
             if (window.bootstrap && bootstrap.Modal) {
                 this.modalAdminBootstrap = bootstrap.Modal.getOrCreateInstance(adminModalEl, {
-                    backdrop: 'static',
+                    backdrop: false,
                     keyboard: false
                 });
+                this.modalAdminBootstrap.show();
             }
 
             this.cargarFotoPerfil();
@@ -894,20 +906,11 @@
             const dash = document.getElementById('adminPantallaDashboard');
             if (dash) dash.classList.add('d-none');
 
-            if (this.modalAdminBootstrap) {
-                this.modalAdminBootstrap.show();
-            } else {
-                adminModalEl.classList.add('show');
-                adminModalEl.style.display = 'block';
-                document.body.classList.add('modal-open');
-            }
-
-            setTimeout(() => {
-                if (adminModalEl && !adminModalEl.classList.contains('show')) {
-                    adminModalEl.classList.add('show');
-                    adminModalEl.style.display = 'block';
-                }
-            }, 150);
+            // Visualización directa garantizada
+            adminModalEl.classList.add('show');
+            adminModalEl.style.display = 'block';
+            adminModalEl.removeAttribute('aria-hidden');
+            document.body.classList.add('modal-open');
 
             if (window.AdminMenuDashboard && typeof window.AdminMenuDashboard.seleccionar === 'function') {
                 const catGuardada = sessionStorage.getItem('plataforma_admin_categoria');
@@ -916,23 +919,27 @@
         },
 
         cerrarModalAdmin: function() {
-            if (this.modalAdminBootstrap) {
-                this.modalAdminBootstrap.hide();
-            } else {
-                const adminModalEl = document.getElementById('modalAdmin');
-                if (adminModalEl) {
-                    adminModalEl.classList.remove('show');
-                    adminModalEl.style.display = 'none';
+            const adminModalEl = document.getElementById('modalAdmin');
+            if (adminModalEl) {
+                if (window.bootstrap && bootstrap.Modal) {
+                    const inst = bootstrap.Modal.getInstance(adminModalEl);
+                    if (inst) {
+                        try { inst.hide(); } catch(err) {}
+                    }
                 }
+                adminModalEl.classList.remove('show');
+                adminModalEl.style.display = 'none';
+                adminModalEl.setAttribute('aria-hidden', 'true');
             }
-            setTimeout(() => {
-                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-                document.body.classList.remove('modal-open');
-                document.body.style.removeProperty('overflow');
-                document.body.style.removeProperty('padding-right');
-            }, 200);
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+
             if (window.location.hash === '#admin') {
-                history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                try {
+                    history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                } catch(e) {}
             }
         },
 
@@ -1148,8 +1155,18 @@
     window.AdminDatos = AdminDatos;
     window.AdminDatosUI = AdminDatosUI;
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (AdminDatos && typeof AdminDatos.init === 'function') AdminDatos.init();
-        if (AdminDatosUI && typeof AdminDatosUI.init === 'function') AdminDatosUI.init();
-    });
+    function iniciarAdminGlobal() {
+        if (window.AdminDatos && typeof window.AdminDatos.init === 'function') {
+            window.AdminDatos.init();
+        }
+        if (window.AdminDatosUI && typeof window.AdminDatosUI.init === 'function') {
+            window.AdminDatosUI.init();
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', iniciarAdminGlobal);
+    } else {
+        iniciarAdminGlobal();
+    }
 })(window);

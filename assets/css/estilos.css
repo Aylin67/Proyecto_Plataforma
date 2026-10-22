@@ -650,16 +650,23 @@ h1, h2, h3, h4, h5, h6,
 
 /* Modal PIN y Administración */
 #modalAdmin {
-    z-index: 1060 !important;
+    z-index: 99990 !important;
+    background-color: rgba(15, 23, 42, 0.65) !important;
 }
 #modalAdminPin {
-    z-index: 1070 !important;
+    z-index: 99999 !important;
+    background-color: rgba(15, 23, 42, 0.70) !important;
 }
 #modalAdmin.show,
 #modalAdminPin.show {
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
+}
+#modalAdminPin .modal-dialog {
+    z-index: 100000 !important;
+    position: relative;
+    margin: 1.75rem auto;
 }
 .admin-pin-card {
     background: #ffffff;
