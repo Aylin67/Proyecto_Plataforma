@@ -1520,7 +1520,934 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         </div>
     </div>
 
+    
+    <!-- ======================================================== -->
+    <!-- MODAL ACCESO ADMINISTRADORA (PIN / LOGIN CON CONTRASEÑA)  -->
+    <!-- ======================================================== -->
+    <div class="modal fade" id="modalAdminPin" tabindex="-1" aria-labelledby="modalAdminPinLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content border-0 shadow-lg admin-pin-card">
+                <div class="modal-header modal-admin-header py-3 px-4">
+                    <h6 class="modal-title fw-bold text-white mb-0" id="modalAdminPinLabel">
+                        <i class="fa-solid fa-shield-halved me-2"></i> Acceso Administradora
+                    </h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    
+                    <!-- 1. VISTA DE INICIO DE SESIÓN -->
+                    <div id="adminPinLoginView">
+                        <div class="mb-3">
+                            <div style="width: 58px; height: 58px; background: #fdf2f7; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #c2185b; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(194,24,91,0.12);">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="color: #4a154b;">Plataforma GESMujer</h6>
+                        <p class="small text-muted mb-3">
+                            Ingresa la contraseña de administración para acceder al panel de control y edición de datos:
+                        </p>
+                        <form onsubmit="event.preventDefault(); AdminDatosUI.verificarPin();">
+                            <div class="mb-3 text-start">
+                                <label for="inputAdminPin" class="form-label small fw-bold text-muted mb-1">Contraseña:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white" style="border-right: none; color: #682260;">
+                                        <i class="fa-solid fa-key"></i>
+                                    </span>
+                                    <input type="password" id="inputAdminPin" class="form-control" style="border-left: none; border-right: none;" placeholder="Ingresa contraseña" autocomplete="current-password" autofocus>
+                                    <button type="button" class="btn input-group-text admin-password-toggle" onclick="AdminDatosUI.alternarVisibilidadPassword('inputAdminPin', 'togglePasswordIcon')" title="Mostrar u ocultar contraseña">
+                                        <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                                    </button>
+                                </div>
+                                <div id="adminPinError" class="text-danger small mt-2 d-none fw-semibold">
+                                    <i class="fa-solid fa-circle-exclamation me-1"></i> Contraseña incorrecta. Inténtalo nuevamente.
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn text-white fw-bold py-2 shadow-sm" style="background: linear-gradient(135deg, #4a154b, #c2185b); border-radius: 8px;">
+                                    Ingresar al Panel <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="mt-3 text-center">
+                            <a href="javascript:void(0)" onclick="AdminDatosUI.mostrarVistaRestablecer()" class="small text-decoration-none" style="color: #c2185b; font-weight: 600;">
+                                <i class="fa-solid fa-unlock-keyhole me-1"></i> ¿Olvidaste tu contraseña? Restablecer aquí
+                            </a>
+                        </div>
+                        <div class="mt-3 pt-2 border-top">
+                            <small class="text-muted" style="font-size: 0.72rem;">
+                                <i class="fa-solid fa-circle-info me-1"></i> Atajo confidencial desde teclado: <code>Ctrl + Shift + A</code>
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- 2. VISTA DE RESTABLECIMIENTO DE CONTRASEÑA -->
+                    <div id="adminPinResetView" class="d-none text-start">
+                        <div class="text-center mb-3">
+                            <div style="width: 54px; height: 54px; background: #e0f2f1; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #00897b; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,137,123,0.15);">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h6 class="fw-bold mb-1 mt-2" style="color: #4a154b;">Restablecer Contraseña</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.8rem;">
+                                Verifica tu identidad institucional para definir tu nueva clave.
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted mb-1">
+                                <i class="fa-solid fa-building me-1 text-danger"></i> ¿Acrónimo de la organización?
+                            </label>
+                            <input type="text" id="inputResetSeguridad" class="form-control form-control-sm" placeholder="Ej. GESMUJER" autocomplete="off">
+                            <small class="text-muted" style="font-size: 0.7rem;">Grupo de Estudios sobre la Mujer Rosario Castellanos</small>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label small fw-bold text-muted mb-1">
+                                <i class="fa-solid fa-lock me-1" style="color: #c2185b;"></i> Nueva contraseña:
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <input type="password" id="inputResetNuevaPass" class="form-control" placeholder="Mínimo 8 caracteres" oninput="AdminDatosUI.validarRequisitosInput(this.value)">
+                                <button type="button" class="btn btn-outline-secondary" onclick="AdminDatosUI.alternarVisibilidadPassword('inputResetNuevaPass', 'toggleResetNewIcon')">
+                                    <i class="fa-solid fa-eye" id="toggleResetNewIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Indicadores de requisitos de contraseña -->
+                        <div class="p-2 rounded-2 mb-2" style="background: #fdf8fb; border: 1px solid #f2e1ed; font-size: 0.72rem;">
+                            <div class="fw-bold text-muted mb-1">Requisitos de seguridad:</div>
+                            <div id="reqMin8" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Mínimo 8 caracteres</div>
+                            <div id="reqMayus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra mayúscula</div>
+                            <div id="reqMinus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra minúscula</div>
+                            <div id="reqNum" class="text-muted"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos un número o símbolo</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted mb-1">
+                                <i class="fa-solid fa-circle-check me-1 text-success"></i> Confirmar nueva contraseña:
+                            </label>
+                            <input type="password" id="inputResetConfirmPass" class="form-control form-control-sm" placeholder="Repite tu nueva contraseña">
+                        </div>
+
+                        <div id="adminResetError" class="alert alert-danger py-1 px-2 small mb-2 d-none" style="font-size: 0.76rem;"></div>
+                        <div id="adminResetSuccess" class="alert alert-success py-1 px-2 small mb-2 d-none" style="font-size: 0.76rem;"></div>
+
+                        <div class="d-grid gap-2 mb-2">
+                            <button type="button" class="btn text-white fw-bold py-2 shadow-sm" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.procesarRestablecerPassword()">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Nueva Contraseña
+                            </button>
+                        </div>
+
+                        <div class="text-center pt-1">
+                            <a href="javascript:void(0)" onclick="AdminDatosUI.mostrarVistaLogin()" class="small text-decoration-none text-muted" style="font-size: 0.78rem;">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Volver al inicio de sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- MODAL PRINCIPAL: PANEL DE CONTROL Y ADMINISTRADOR SAAS  -->
+    <!-- ======================================================== -->
+    <div class="modal fade" id="modalAdmin" tabindex="-1" aria-labelledby="modalAdminLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content admin-fullscreen-content border-0 p-0">
+                
+                <div class="admin-dashboard-layout">
+
+                    <!-- SIDEBAR IZQUIERDA -->
+                    <aside class="admin-sidebar" id="adminSidebar">
+                        <!-- Perfil Administradora -->
+                        <div class="admin-sidebar-header-profile">
+                            <div class="admin-perfil-card mb-0">
+                                <div class="admin-avatar-container" onclick="document.getElementById('adminAvatarInput').click()" title="Haz clic para cambiar foto">
+                                    <img id="adminAvatarImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Ccircle cx='64' cy='64' r='64' fill='%23f3e8f1'/%3E%3Cpath d='M64 26a24 24 0 100 48 24 24 0 000-48zm0 58c-26.7 0-50 14.7-50 34v10h100v-10c0-19.3-23.3-34-50-34z' fill='%23c2185b'/%3E%3C/svg%3E" class="admin-avatar-img" alt="Foto Administradora">
+                                    <div class="admin-avatar-camera-badge" title="Cambiar foto">
+                                        <i class="fa-solid fa-camera"></i>
+                                    </div>
+                                    <input type="file" id="adminAvatarInput" accept="image/*" class="d-none" onchange="AdminDatosUI.subirFotoPerfil(event)">
+                                </div>
+                                <div class="admin-perfil-info">
+                                    <div class="admin-perfil-saludo">Bienvenida,</div>
+                                    <div class="admin-perfil-nombre" id="adminSidebarNombre">Soledad Venegas</div>
+                                    <span class="badge admin-perfil-rol">Administradora General</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buscador de categorías -->
+                        <div class="admin-sidebar-search">
+                            <div class="admin-search-wrapper">
+                                <i class="fa-solid fa-magnifying-glass admin-search-icon"></i>
+                                <input type="text" class="admin-search-input" placeholder="Buscar categoría..." oninput="AdminMenuDashboard.filtrarCategorias(this.value)">
+                            </div>
+                        </div>
+
+                        <!-- MENÚ LATERAL CON LOS 2 BOTONES INICIALES Y LAS 5 ÚLTIMAS TARJETAS -->
+                        <div class="admin-sidebar-nav">
+                            <div class="admin-nav-section-title">Navegación del Panel</div>
+                            <ul class="admin-menu-list" id="adminSidebarMenu">
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn active" data-cat="inicio" onclick="AdminMenuDashboard.seleccionar('inicio')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-house menu-icon"></i>
+                                            <span class="menu-label">Inicio</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <!-- 2 BOTONES INICIALES: NACIONAL Y ESTATAL -->
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="nacional" onclick="AdminMenuDashboard.seleccionar('nacional')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-earth-americas menu-icon"></i>
+                                            <span class="menu-label">Nivel Nacional</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="estatal" onclick="AdminMenuDashboard.seleccionar('estatal')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-location-dot menu-icon"></i>
+                                            <span class="menu-label">Nivel Estatal (Oaxaca)</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <!-- LAS 5 ÚLTIMAS TARJETAS: SALUD, EDUCACIÓN, VIVIENDA, INGRESO, LENGUAS -->
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="salud" onclick="AdminMenuDashboard.seleccionar('salud')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-heart-pulse menu-icon"></i>
+                                            <span class="menu-label">Salud (Mujeres y Niñas)</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="educacion" onclick="AdminMenuDashboard.seleccionar('educacion')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-graduation-cap menu-icon"></i>
+                                            <span class="menu-label">Educación y STEM</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="vivienda" onclick="AdminMenuDashboard.seleccionar('vivienda')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-house-chimney menu-icon"></i>
+                                            <span class="menu-label">Vivienda y Servicios</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="ingreso" onclick="AdminMenuDashboard.seleccionar('ingreso')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-hand-holding-dollar menu-icon"></i>
+                                            <span class="menu-label">Ingreso y Empleo</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="lenguas" onclick="AdminMenuDashboard.seleccionar('lenguas')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-language menu-icon"></i>
+                                            <span class="menu-label">Lenguas Indígenas</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="admin-sidebar-footer">
+                            <button type="button" class="btn-sidebar-logout" onclick="AdminDatosUI.cerrarSesion()" title="Cerrar sesión de administración">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
+                            </button>
+                        </div>
+                    </aside>
+
+                    <!-- WORKSPACE DERECHO -->
+                    <main class="admin-workspace">
+                        
+                        <header class="admin-workspace-topbar">
+                            <div>
+                                <h4 class="admin-topbar-title mb-0" id="adminWorkspaceTitle">
+                                    Panel de Administración General
+                                </h4>
+                                <div class="admin-topbar-subtitle" id="adminWorkspaceSubtitle">
+                                    Sincronización en tiempo real para Mapas Geoespaciales, Gráficas y Métricas
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="admin-topbar-quick-actions d-flex align-items-center gap-2">
+                                    <button type="button" class="btn-topbar-action" onclick="AdminDatosUI.deshacerCambioPrevio()" title="Deshacer último cambio">
+                                        <i class="fa-solid fa-rotate-left"></i> Deshacer
+                                    </button>
+                                    <button type="button" class="btn-topbar-action" onclick="AdminDatos.exportarJSON()" title="Respaldar en JSON">
+                                        <i class="fa-solid fa-download"></i> Respaldar
+                                    </button>
+                                    <button type="button" class="btn-topbar-action btn-topbar-reset" onclick="AdminDatosUI.solicitarRestablecer()" title="Restablecer datos INEGI">
+                                        <i class="fa-solid fa-arrows-rotate"></i> Restablecer
+                                    </button>
+                                </div>
+                                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Cerrar" title="Cerrar panel"></button>
+                            </div>
+                        </header>
+
+                        <!-- Toast Flotante de Acciones -->
+                        <div id="adminToastAuto" class="admin-toast-flotante d-none">
+                            <i class="fa-solid fa-circle-check text-success fs-4"></i>
+                            <span id="adminToastAutoTexto">¡Cambios guardados con éxito!</span>
+                        </div>
+
+                        <!-- Banner de Confirmación Restablecer -->
+                        <div id="adminConfirmBanner" class="admin-confirm-banner d-none mx-4 mt-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 44px; height: 44px; background: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #e65100; font-size: 1.3rem; flex-shrink: 0;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-dark d-block">¿Deseas restablecer los datos al Censo Oficial INEGI 2020?</strong>
+                                    <span class="small text-muted">Esta acción sustituirá las modificaciones por los datos originales de fábrica.</span>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="AdminDatosUI.cancelarRestablecer()">
+                                    Cancelar
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold" onclick="AdminDatosUI.confirmarRestablecer()">
+                                    <i class="fa-solid fa-arrows-rotate me-1"></i> Sí, Restablecer
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="admin-workspace-scroll">
+                            
+                            <!-- TARJETAS DE MÉTRICAS KPI -->
+                            <div class="row g-3 mb-4" id="adminKpiCardsRow">
+                                <div class="col-12 col-md-4">
+                                    <div class="admin-kpi-card">
+                                        <div>
+                                            <div class="admin-kpi-label" id="kpiCard1Title">Población Total Registrada</div>
+                                            <div class="admin-kpi-sub" id="kpiCard1Sub">Cifra acumulada de la dimensión</div>
+                                        </div>
+                                        <div class="admin-kpi-value" id="kpiCard1Val">126,014,024</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="admin-kpi-card">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="admin-kpi-label" id="kpiCard2Title" style="color: #c2185b;">Mujeres</div>
+                                                <div class="admin-kpi-sub" id="kpiCard2Sub">Cálculo porcentual automático</div>
+                                            </div>
+                                            <span class="badge rounded-pill fw-bold" id="kpiCard2Badge" style="background: #fce4ec; color: #c2185b; font-size: 0.85rem; padding: 6px 12px;">
+                                                51.2%
+                                            </span>
+                                        </div>
+                                        <div class="admin-kpi-value" id="kpiCard2Val" style="color: #c2185b !important;">64,540,634</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="admin-kpi-card">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="admin-kpi-label" id="kpiCard3Title" style="color: #00897b;">Hombres / Indicador Clave</div>
+                                                <div class="admin-kpi-sub" id="kpiCard3Sub">Cálculo porcentual automático</div>
+                                            </div>
+                                            <span class="badge rounded-pill fw-bold" id="kpiCard3Badge" style="background: #e0f2f1; color: #00695c; font-size: 0.85rem; padding: 6px 12px;">
+                                                48.8%
+                                            </span>
+                                        </div>
+                                        <div class="admin-kpi-value" id="kpiCard3Val" style="color: #00897b !important;">61,473,390</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PANTALLA DETALLE Y RECUADRO DE CATEGORÍA -->
+                            <div id="adminPantallaDetalle">
+                                <div class="d-flex justify-content-center mb-4">
+                                    <div class="admin-categoria-recuadro recuadro-nacional" id="adminDetalleRecuadro">
+                                        <span id="adminDetalleTitulo">
+                                            <i class="fa-solid fa-earth-americas me-2"></i>NIVEL NACIONAL
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- 1. VISTA: INICIO / DASHBOARD GENERAL -->
+                                <div id="adminView_inicio" class="admin-form-box">
+                                    <div class="text-center py-5" style="min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border-radius: 16px; border: 1.5px dashed #e2e8f0; padding: 2rem;">
+                                        <div style="width: 74px; height: 74px; border-radius: 50%; background: #fdf2f8; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                                            <i class="fa-solid fa-house" style="font-size: 2.2rem; color: #c2185b;"></i>
+                                        </div>
+                                        <h4 class="fw-bold text-dark mb-2">Panel de Administración General</h4>
+                                        <p class="text-muted fs-6 mb-4" style="max-width: 600px;">
+                                            Bienvenida, Soledad Venegas. Selecciona cualquiera de los <strong>2 botones iniciales</strong> (Nacional o Estatal) o las <strong>5 tarjetas temáticas</strong> (Salud, Educación, Vivienda, Ingreso, Lenguas) para consultar y administrar la información oficial en tiempo real.
+                                        </p>
+                                        <div class="row g-3 w-100 justify-content-center" style="max-width: 780px;">
+                                            <div class="col-6 col-md-3">
+                                                <button type="button" class="btn btn-outline-primary w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('nacional')">
+                                                    <i class="fa-solid fa-earth-americas me-2"></i> Nacional
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button type="button" class="btn btn-outline-danger w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('estatal')">
+                                                    <i class="fa-solid fa-location-dot me-2"></i> Estatal
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button type="button" class="btn btn-outline-success w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('salud')">
+                                                    <i class="fa-solid fa-heart-pulse me-2"></i> Salud
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <button type="button" class="btn btn-outline-info w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('educacion')">
+                                                    <i class="fa-solid fa-graduation-cap me-2"></i> Educación
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <button type="button" class="btn btn-outline-warning w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('vivienda')">
+                                                    <i class="fa-solid fa-house-chimney me-2"></i> Vivienda
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <button type="button" class="btn btn-outline-secondary w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('ingreso')">
+                                                    <i class="fa-solid fa-hand-holding-dollar me-2"></i> Ingreso
+                                                </button>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <button type="button" class="btn btn-outline-dark w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('lenguas')">
+                                                    <i class="fa-solid fa-language me-2"></i> Lenguas
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. VISTA: NIVEL NACIONAL (BOTÓN INICIAL 1) -->
+                                <div id="adminView_nacional" class="admin-form-box d-none">
+                                    <div class="row g-4 align-items-center mb-4">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label fw-bold text-dark mb-1" for="selectAdminEstado">
+                                                <i class="fa-solid fa-map-pin me-1 text-danger"></i> Selecciona la Entidad Federativa:
+                                            </label>
+                                            <select id="selectAdminEstado" class="form-select form-select-lg fw-bold" style="border: 2px solid #ebdbe9; border-radius: 12px; color: #4a154b;">
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="p-3 rounded-3" style="background: #fcf6fa; border: 1px dashed #d8b7d3;">
+                                                <div class="small text-muted">Entidad activa:</div>
+                                                <div class="fs-5 fw-bold" style="color: #4a154b;" id="lblAdminEntidadNombre">Estados Unidos Mexicanos (Total Nacional)</div>
+                                                <span class="badge" id="badgeAdminEntidadClave" style="background: #c2185b;">MX-NAC</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacPob">
+                                                <i class="fa-solid fa-users me-1"></i> Población Total:
+                                            </label>
+                                            <input type="number" id="inputNacPob" class="form-control form-control-lg fw-bold" style="color: #102a43; border-radius: 10px;">
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacMujeres" style="color: #c2185b !important;">
+                                                <i class="fa-solid fa-venus me-1"></i> Mujeres:
+                                            </label>
+                                            <input type="number" id="inputNacMujeres" class="form-control form-control-lg fw-bold" style="color: #c2185b; border-radius: 10px;">
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacHombres" style="color: #00897b !important;">
+                                                <i class="fa-solid fa-mars me-1"></i> Hombres:
+                                            </label>
+                                            <input type="number" id="inputNacHombres" class="form-control form-control-lg fw-bold" style="color: #00897b; border-radius: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                                        <button type="button" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #102a43, #c2185b);" onclick="AdminDatosUI.guardarCambiosNacional()">
+                                            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios Nivel Nacional
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 3. VISTA: NIVEL ESTATAL / OAXACA (BOTÓN INICIAL 2) -->
+                                <div id="adminView_estatal" class="admin-form-box d-none">
+                                    <div class="p-3 rounded-3 mb-4" style="background: #fdf6fa; border: 1px dashed #c2185b;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fa-solid fa-location-dot text-danger fs-4"></i>
+                                            <div>
+                                                <h6 class="fw-bold mb-0" style="color: #4a154b;">Estado de Oaxaca</h6>
+                                                <small class="text-muted">Indicadores Demográficos Oficiales INEGI 2020</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstPob">
+                                                <i class="fa-solid fa-users me-1"></i> Población Total en Oaxaca:
+                                            </label>
+                                            <input type="number" id="inputEstPob" class="form-control form-control-lg fw-bold" style="color: #102a43; border-radius: 10px;">
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstMujeres" style="color: #c2185b !important;">
+                                                <i class="fa-solid fa-venus me-1"></i> Mujeres en Oaxaca:
+                                            </label>
+                                            <input type="number" id="inputEstMujeres" class="form-control form-control-lg fw-bold" style="color: #c2185b; border-radius: 10px;">
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstHombres" style="color: #00897b !important;">
+                                                <i class="fa-solid fa-mars me-1"></i> Hombres en Oaxaca:
+                                            </label>
+                                            <input type="number" id="inputEstHombres" class="form-control form-control-lg fw-bold" style="color: #00897b; border-radius: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                                        <button type="button" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #102a43, #c2185b);" onclick="AdminDatosUI.guardarCambiosEstatal()">
+                                            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios Nivel Estatal
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 4. VISTA: SALUD (TARJETA 1 DE 5) -->
+                                <div id="adminView_salud" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-heart-pulse me-2" style="color: #c2185b;"></i> Indicadores de Salud (Mujeres y Niñas)
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · EDR 2024 / 2025</span>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">10 Principales Causas</div>
+                                                    <div class="fs-4 fw-bold text-danger">9,848</div>
+                                                    <small class="text-muted">Defunciones registradas en Oaxaca</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Defunciones Maternas</div>
+                                                    <div class="fs-4 fw-bold text-danger">32</div>
+                                                    <small class="text-muted">Causas obstétricas directas/indirectas</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Defunciones Infantiles (Niñas)</div>
+                                                    <div class="fs-4 fw-bold text-danger">227</div>
+                                                    <small class="text-muted">Afecciones perinatales y congénitas</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="small text-muted mt-3 mb-0">
+                                            Los 6 módulos de gráficas de salud están activos en la plataforma pública y sincronizados con las Estadísticas de Defunciones Registradas (EDR) del INEGI.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 5. VISTA: EDUCACIÓN (TARJETA 2 DE 5) -->
+                                <div id="adminView_educacion" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-graduation-cap me-2" style="color: #00897b;"></i> Educación y Participación STEM
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · Intercensal 2025</span>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Población de 6 a 14 Años</div>
+                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">330,116</div>
+                                                    <small class="text-muted">Aptitud para leer y escribir</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Asistencia Escolar (3 a 17 años)</div>
+                                                    <div class="fs-4 fw-bold" style="color: #00897b;">77.34%</div>
+                                                    <small class="text-muted">Tasa de escolarización activa</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Rezago Educativo (15+ años)</div>
+                                                    <div class="fs-4 fw-bold text-danger">36.3%</div>
+                                                    <small class="text-muted">Brecha que afecta a mujeres</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 6. VISTA: VIVIENDA (TARJETA 3 DE 5) -->
+                                <div id="adminView_vivienda" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-house-chimney me-2" style="color: #ff9800;"></i> Vivienda y Cobertura de Servicios
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Disponibilidad de Agua Entubada</div>
+                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">64.8%</div>
+                                                    <small class="text-muted">Cobertura estatal en viviendas habitadas</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Pisos de Tierra</div>
+                                                    <div class="fs-4 fw-bold text-warning">14.2%</div>
+                                                    <small class="text-muted">Viviendas en situación de vulnerabilidad</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 7. VISTA: INGRESO (TARJETA 4 DE 5) -->
+                                <div id="adminView_ingreso" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-hand-holding-dollar me-2" style="color: #00bcd4;"></i> Ingreso, Empleo y Ocupación
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · ENOE Trimestral</span>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Ingreso del Trabajo (Mujeres)</div>
+                                                    <div class="fs-4 fw-bold" style="color: #00897b;">$11,850</div>
+                                                    <small class="text-muted">Ingreso promedio trimestral ENIGH</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Desocupación 2023-2026</div>
+                                                    <div class="fs-4 fw-bold" style="color: #c2185b;">Paleta Pastel Activa</div>
+                                                    <small class="text-muted">Series trimestrales por año con visualización suave</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 8. VISTA: LENGUAS INDÍGENAS (TARJETA 5 DE 5) -->
+                                <div id="adminView_lenguas" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-language me-2" style="color: #682260;"></i> Población Hablante de Lenguas Indígenas
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020 / Intercensal 2025</span>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Población Hablante Total</div>
+                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">1,221,555</div>
+                                                    <small class="text-muted">31.2% de la población de 3 años y más</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Mujeres Hablantes</div>
+                                                    <div class="fs-4 fw-bold text-danger">641,200</div>
+                                                    <small class="text-muted">52.5% del total de hablantes</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-3 rounded-2 bg-light border">
+                                                    <div class="small fw-bold text-muted">Hombres Hablantes</div>
+                                                    <div class="fs-4 fw-bold" style="color: #00897b;">580,355</div>
+                                                    <small class="text-muted">47.5% del total de hablantes</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </main>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CONTROLADOR DEL DASHBOARD DE ADMINISTRACIÓN -->
     <script>
+        const AdminMenuDashboard = {
+            categoriaActiva: 'inicio',
+
+            metaCategorias: {
+                inicio: {
+                    label: '<i class="fa-solid fa-house me-2"></i>INICIO',
+                    clase: 'recuadro-nacional',
+                    titulo: 'Panel de Administración General',
+                    kpi1: { label: 'Categorías del Menú', sub: 'Módulos activos' },
+                    kpi2: { label: 'Sesión Activa', sub: 'Soledad Venegas' },
+                    kpi3: { label: 'Estado del Sistema', sub: 'Sincronizado' }
+                },
+                nacional: {
+                    label: '<i class="fa-solid fa-earth-americas me-2"></i>NIVEL NACIONAL',
+                    clase: 'recuadro-nacional',
+                    titulo: 'Nivel Nacional (México)',
+                    kpi1: { label: 'Población Total Registrada', sub: 'Censo Oficial INEGI' },
+                    kpi2: { label: 'Mujeres en el País', sub: 'Cálculo porcentual automático' },
+                    kpi3: { label: 'Hombres en el País', sub: 'Cálculo porcentual automático' }
+                },
+                estatal: {
+                    label: '<i class="fa-solid fa-location-dot me-2"></i>NIVEL ESTATAL (OAXACA)',
+                    clase: 'recuadro-estatal',
+                    titulo: 'Nivel Estatal (Oaxaca)',
+                    kpi1: { label: 'Población Total Oaxaca', sub: 'Censo Oficial INEGI' },
+                    kpi2: { label: 'Mujeres en Oaxaca', sub: 'Cálculo porcentual automático' },
+                    kpi3: { label: 'Hombres en Oaxaca', sub: 'Cálculo porcentual automático' }
+                },
+                salud: {
+                    label: '<i class="fa-solid fa-heart-pulse me-2"></i>SALUD (MUJERES Y NIÑAS)',
+                    clase: 'recuadro-tematico',
+                    titulo: 'Salud Integral: Oaxaca vs. Nacional',
+                    kpi1: { label: 'Defunciones Registradas', sub: 'EDR Preliminar INEGI' },
+                    kpi2: { label: 'Causas Cardiovasculares', sub: 'Mayor incidencia' },
+                    kpi3: { label: 'Cáncer de Mama', sub: 'Detección oportuna' }
+                },
+                educacion: {
+                    label: '<i class="fa-solid fa-graduation-cap me-2"></i>EDUCACIÓN Y STEM',
+                    clase: 'recuadro-tematico',
+                    titulo: 'Educación y Participación Académica',
+                    kpi1: { label: 'Población 6 a 14 Años', sub: 'Aptitud lectoescritura' },
+                    kpi2: { label: 'Asistencia Escolar', sub: 'Tasa estatal' },
+                    kpi3: { label: 'Rezago Educativo', sub: 'Brecha de género' }
+                },
+                vivienda: {
+                    label: '<i class="fa-solid fa-house-chimney me-2"></i>VIVIENDA Y SERVICIOS',
+                    clase: 'recuadro-tematico',
+                    titulo: 'Vivienda y Servicios Básicos',
+                    kpi1: { label: 'Viviendas Particulares', sub: 'Censo INEGI' },
+                    kpi2: { label: 'Agua Entubada', sub: 'Cobertura estatal' },
+                    kpi3: { label: 'Pisos de Tierra', sub: 'Condición vulnerable' }
+                },
+                ingreso: {
+                    label: '<i class="fa-solid fa-hand-holding-dollar me-2"></i>INGRESO Y EMPLEO',
+                    clase: 'recuadro-tematico',
+                    titulo: 'Ingreso, Empleo y Brecha Salarial',
+                    kpi1: { label: 'Ingreso Promedio Trimestral', sub: 'ENIGH INEGI' },
+                    kpi2: { label: 'Tasa de Desocupación', sub: 'ENOE Trimestral (Pastel)' },
+                    kpi3: { label: 'Brecha de Género', sub: 'Disparidad de ingreso' }
+                },
+                lenguas: {
+                    label: '<i class="fa-solid fa-language me-2"></i>LENGUAS INDÍGENAS',
+                    clase: 'recuadro-tematico',
+                    titulo: 'Población Hablante de Lengua Indígena',
+                    kpi1: { label: 'Población Hablante', sub: 'INEGI 2020' },
+                    kpi2: { label: 'Mujeres Hablantes', sub: '52.5% del total' },
+                    kpi3: { label: 'Hombres Hablantes', sub: '47.5% del total' }
+                }
+            },
+
+            formatearNumero(num) {
+                if (num === null || num === undefined || isNaN(num)) return '0';
+                return Number(num).toLocaleString('es-MX');
+            },
+
+            seleccionar(cat) {
+                this.categoriaActiva = cat;
+                sessionStorage.setItem('plataforma_admin_categoria', cat);
+
+                document.querySelectorAll('#adminSidebarMenu .admin-menu-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.cat === cat);
+                });
+
+                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas'];
+                vistas.forEach(v => {
+                    const el = document.getElementById('adminView_' + v);
+                    if (el) el.classList.toggle('d-none', v !== cat);
+                });
+
+                const kpiRow = document.getElementById('adminKpiCardsRow');
+                const recuadroWrap = document.getElementById('adminDetalleRecuadro')?.parentElement;
+                
+                if (kpiRow) kpiRow.classList.toggle('d-none', cat === 'inicio');
+                if (recuadroWrap) recuadroWrap.classList.toggle('d-none', cat === 'inicio');
+
+                const pantallaDetalle = document.getElementById('adminPantallaDetalle');
+                if (pantallaDetalle) {
+                    pantallaDetalle.classList.remove('d-none');
+                }
+
+                const meta = this.metaCategorias[cat];
+                const recuadro = document.getElementById('adminDetalleRecuadro');
+                const titulo = document.getElementById('adminDetalleTitulo');
+                if (recuadro && meta) {
+                    recuadro.className = 'admin-categoria-recuadro ' + meta.clase;
+                }
+                if (titulo && meta) {
+                    titulo.innerHTML = meta.label;
+                }
+
+                const wTitle = document.getElementById('adminWorkspaceTitle');
+                const wSub = document.getElementById('adminWorkspaceSubtitle');
+                if (wTitle && meta) wTitle.textContent = meta.titulo;
+                if (wSub && meta) wSub.textContent = meta.sub || 'Sincronización en tiempo real para Mapas Geoespaciales, Gráficas y Métricas';
+
+                if (window.AdminDatosUI && typeof window.AdminDatosUI.abrirCategoria === 'function' && cat !== 'inicio') {
+                    try {
+                        window.AdminDatosUI.abrirCategoria(cat);
+                    } catch (e) {
+                        console.warn('AdminDatosUI.abrirCategoria aviso:', e);
+                    }
+                }
+
+                if (cat !== 'inicio') {
+                    this.actualizarKpis(cat);
+                }
+            },
+
+            actualizarKpis(cat) {
+                const meta = this.metaCategorias[cat];
+                if (!meta) return;
+
+                const t1 = document.getElementById('kpiCard1Title');
+                const s1 = document.getElementById('kpiCard1Sub');
+                const v1 = document.getElementById('kpiCard1Val');
+
+                const t2 = document.getElementById('kpiCard2Title');
+                const s2 = document.getElementById('kpiCard2Sub');
+                const v2 = document.getElementById('kpiCard2Val');
+                const b2 = document.getElementById('kpiCard2Badge');
+
+                const t3 = document.getElementById('kpiCard3Title');
+                const s3 = document.getElementById('kpiCard3Sub');
+                const v3 = document.getElementById('kpiCard3Val');
+                const b3 = document.getElementById('kpiCard3Badge');
+
+                if (t1) t1.textContent = meta.kpi1.label;
+                if (s1) s1.textContent = meta.kpi1.sub;
+                if (t2) t2.textContent = meta.kpi2.label;
+                if (s2) s2.textContent = meta.kpi2.sub;
+                if (t3) t3.textContent = meta.kpi3.label;
+                if (s3) s3.textContent = meta.kpi3.sub;
+
+                if (cat === 'nacional') {
+                    const pob = parseFloat(document.getElementById('inputNacPob')?.value) || 126014024;
+                    const muj = parseFloat(document.getElementById('inputNacMujeres')?.value) || 64540634;
+                    const hom = parseFloat(document.getElementById('inputNacHombres')?.value) || 61473390;
+                    const pM = pob > 0 ? ((muj / pob) * 100).toFixed(1) + '%' : '0%';
+                    const pH = pob > 0 ? ((hom / pob) * 100).toFixed(1) + '%' : '0%';
+                    if (v1) v1.textContent = this.formatearNumero(pob);
+                    if (v2) v2.textContent = this.formatearNumero(muj);
+                    if (b2) b2.textContent = pM;
+                    if (v3) v3.textContent = this.formatearNumero(hom);
+                    if (b3) b3.textContent = pH;
+                } else if (cat === 'estatal') {
+                    const pob = parseFloat(document.getElementById('inputEstPob')?.value) || 4132148;
+                    const muj = parseFloat(document.getElementById('inputEstMujeres')?.value) || 2157305;
+                    const hom = parseFloat(document.getElementById('inputEstHombres')?.value) || 1974843;
+                    const pM = pob > 0 ? ((muj / pob) * 100).toFixed(1) + '%' : '0%';
+                    const pH = pob > 0 ? ((hom / pob) * 100).toFixed(1) + '%' : '0%';
+                    if (v1) v1.textContent = this.formatearNumero(pob);
+                    if (v2) v2.textContent = this.formatearNumero(muj);
+                    if (b2) b2.textContent = pM;
+                    if (v3) v3.textContent = this.formatearNumero(hom);
+                    if (b3) b3.textContent = pH;
+                } else if (cat === 'salud') {
+                    if (v1) v1.textContent = '9,848 defunciones';
+                    if (v2) v2.textContent = '2,521 diabetes';
+                    if (b2) b2.textContent = '25.6%';
+                    if (v3) v3.textContent = '210 mama';
+                    if (b3) b3.textContent = '2.1%';
+                } else if (cat === 'educacion') {
+                    if (v1) v1.textContent = '330,116 menores';
+                    if (v2) v2.textContent = '77.3% escolarización';
+                    if (b2) b2.textContent = 'Asistencia';
+                    if (v3) v3.textContent = '36.3% rezago';
+                    if (b3) b3.textContent = 'Crítico';
+                } else if (cat === 'vivienda') {
+                    if (v1) v1.textContent = '1,125,480 viv.';
+                    if (v2) v2.textContent = '64.8% agua entub.';
+                    if (b2) b2.textContent = 'Básico';
+                    if (v3) v3.textContent = '14.2% tierra';
+                    if (b3) b3.textContent = 'Rezago';
+                } else if (cat === 'ingreso') {
+                    if (v1) v1.textContent = '$11,850 trimestral';
+                    if (v2) v2.textContent = '1.16% desocupación';
+                    if (b2) b2.textContent = 'ENOE 2026';
+                    if (v3) v3.textContent = '32.4% brecha';
+                    if (b3) b3.textContent = 'Desigualdad';
+                } else if (cat === 'lenguas') {
+                    if (v1) v1.textContent = '1,221,555 hablantes';
+                    if (v2) v2.textContent = '641,200 mujeres';
+                    if (b2) b2.textContent = '52.5%';
+                    if (v3) v3.textContent = '580,355 hombres';
+                    if (b3) b3.textContent = '47.5%';
+                }
+            },
+
+            filtrarCategorias(term) {
+                term = (term || '').toLowerCase().trim();
+                const items = document.querySelectorAll('#adminSidebarMenu .admin-menu-item');
+                items.forEach(item => {
+                    const text = (item.textContent || '').toLowerCase();
+                    item.style.display = (!term || text.includes(term)) ? '' : 'none';
+                });
+            }
+        };
+
+        ['inputNacPob', 'inputNacMujeres', 'inputNacHombres'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', () => AdminMenuDashboard.actualizarKpis('nacional'));
+        });
+        ['inputEstPob', 'inputEstMujeres', 'inputEstHombres'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', () => AdminMenuDashboard.actualizarKpis('estatal'));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalAdminEl = document.getElementById('modalAdmin');
+            if (modalAdminEl) {
+                modalAdminEl.addEventListener('show.bs.modal', () => {
+                    sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
+                    try {
+                        history.replaceState(null, document.title, '#admin');
+                    } catch(e) {}
+                });
+                modalAdminEl.addEventListener('shown.bs.modal', () => {
+                    const catGuardada = sessionStorage.getItem('plataforma_admin_categoria');
+                    AdminMenuDashboard.seleccionar(catGuardada || 'inicio');
+                });
+                modalAdminEl.addEventListener('hidden.bs.modal', () => {
+                    sessionStorage.removeItem('plataforma_admin_sesion_activa');
+                    sessionStorage.removeItem('plataforma_admin_categoria');
+                    try {
+                        if (window.location.hash === '#admin') {
+                            history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                        }
+                    } catch(e) {}
+                });
+            }
+        });
+    </script>
+
+<script>
         let miGrafica = null;
         let mapaLeaflet = null;
         let temaActual = 'poblacion';
@@ -2024,6 +2951,28 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         });
 
         function restaurarVistaGuardada() {
+            const adminSesionActiva = sessionStorage.getItem('plataforma_admin_sesion_activa');
+            const adminCat = sessionStorage.getItem('plataforma_admin_categoria') || 'inicio';
+
+            const hash = window.location.hash;
+            if (hash === '#admin') {
+                if (window.AdminDatosUI) {
+                    AdminDatosUI.solicitarAccesoAdmin();
+                }
+                return;
+            }
+            if (adminSesionActiva === 'true') {
+                const modalAdminEl = document.getElementById('modalAdmin');
+                if (modalAdminEl && window.bootstrap && bootstrap.Modal) {
+                    const modalAdminInst = bootstrap.Modal.getOrCreateInstance(modalAdminEl);
+                    modalAdminInst.show();
+                    if (window.AdminMenuDashboard) {
+                        AdminMenuDashboard.seleccionar(adminCat);
+                    }
+                }
+                return;
+            }
+
             let vista = null;
             try {
                 const guardada = sessionStorage.getItem('plataforma_vista_activa');

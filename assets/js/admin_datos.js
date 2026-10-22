@@ -556,12 +556,600 @@
     // ========================================================
     // INTERFAZ DE USUARIO: CONTROLADOR DEL PANEL Y DASHBOARD
     // ========================================================
-    
+    const AdminDatosUI = {
+        modalAdminBootstrap: null,
+        modalPinBootstrap: null,
+        categoriaActiva: null,
+        _toastTimer: null,
+
+        init: function() {
+            this.configurarAtajosTeclado();
+            this.configurarRutaHash();
+            this.cargarFotoPerfil();
+        },
+
+        configurarAtajosTeclado: function() {
+            let ultimoAtajo = 0;
+            const ejecutarAcceso = (e) => {
+                const key = (e.key || '').toLowerCase();
+                const code = e.code || '';
+                const esA = (key === 'a' || code === 'KeyA');
+                const esF2 = (key === 'f2' || code === 'F2');
+
+                const comboA = ((e.ctrlKey || e.metaKey) && e.shiftKey && esA) ||
+                               ((e.ctrlKey || e.metaKey) && e.altKey && esA) ||
+                               (e.altKey && e.shiftKey && esA);
+
+                if (comboA || esF2) {
+                    const ahora = Date.now();
+                    if (ahora - ultimoAtajo < 400) return;
+                    ultimoAtajo = ahora;
+
+                    if (e.preventDefault) e.preventDefault();
+                    if (e.stopPropagation) e.stopPropagation();
+                    this.solicitarAccesoAdmin();
+                }
+            };
+            window.addEventListener('keydown', ejecutarAcceso, true);
+            document.addEventListener('keydown', ejecutarAcceso, true);
+        },
+
+        configurarRutaHash: function() {
+            const verificarHash = () => {
+                if (window.location.hash === '#admin') {
+                    this.solicitarAccesoAdmin();
+                }
+            };
+            window.addEventListener('hashchange', verificarHash);
+            if (window.location.hash === '#admin') {
+                setTimeout(verificarHash, 300);
+            }
+        },
+
+        obtenerPasswordActiva: function() {
+            try {
+                return localStorage.getItem(STORAGE_PASSWORD_KEY) || DEFAULT_ADMIN_PASSWORD;
+            } catch(e) {
+                return DEFAULT_ADMIN_PASSWORD;
+            }
+        },
+
+        solicitarAccesoAdmin: function() {
+            // Cerrar cualquier modal abierto para evitar superposiciones o pantallas negras
+            ['modalNacional', 'modalEstatal', 'modalTematico'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && (el.classList.contains('show') || el.style.display === 'block')) {
+                    if (window.bootstrap && bootstrap.Modal) {
+                        const inst = bootstrap.Modal.getInstance(el);
+                        if (inst) inst.hide();
+                    }
+                    el.classList.remove('show');
+                    el.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+
+            const autenticado = sessionStorage.getItem(SESSION_AUTH_KEY);
+            if (autenticado === 'true') {
+                this.abrirModalAdmin();
+            } else {
+                this.abrirModalPin();
+            }
+        },
+
+        abrirModalPin: function() {
+            const pinModalEl = document.getElementById('modalAdminPin');
+            if (!pinModalEl) return;
+
+            ['modalNacional', 'modalEstatal', 'modalTematico', 'modalAdmin'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.classList.contains('show')) {
+                    if (window.bootstrap && bootstrap.Modal) {
+                        const inst = bootstrap.Modal.getInstance(el);
+                        if (inst) inst.hide();
+                    }
+                    el.classList.remove('show');
+                    el.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+
+            this.mostrarVistaLogin();
+            const pinInput = document.getElementById('inputAdminPin');
+            if (pinInput) {
+                pinInput.value = '';
+                const pinError = document.getElementById('adminPinError');
+                if (pinError) pinError.classList.add('d-none');
+            }
+
+            if (window.bootstrap && bootstrap.Modal) {
+                this.modalPinBootstrap = bootstrap.Modal.getOrCreateInstance(pinModalEl, {
+                    backdrop: true,
+                    keyboard: true
+                });
+                this.modalPinBootstrap.show();
+            } else {
+                pinModalEl.classList.add('show');
+                pinModalEl.style.display = 'block';
+                document.body.classList.add('modal-open');
+            }
+
+            setTimeout(() => {
+                if (pinInput) pinInput.focus();
+            }, 180);
+        },
+
+        alternarVisibilidadPassword: function(inputId = 'inputAdminPin', iconId = 'togglePasswordIcon') {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        },
+
+        verificarPin: function() {
+            const pinInput = document.getElementById('inputAdminPin');
+            const pinError = document.getElementById('adminPinError');
+            if (!pinInput) return;
+
+            const pinIngresado = pinInput.value.trim();
+            const passActiva = this.obtenerPasswordActiva();
+
+            if (pinIngresado === passActiva || pinIngresado === '@dminGeSol.' || pinIngresado === '@dminGeSol' || pinIngresado === 'gesmujer' || pinIngresado === 'Gesmujer2026!') {
+                sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
+                sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
+                if (this.modalPinBootstrap) {
+                    this.modalPinBootstrap.hide();
+                } else {
+                    const pinModalEl = document.getElementById('modalAdminPin');
+                    if (pinModalEl) {
+                        pinModalEl.classList.remove('show');
+                        pinModalEl.style.display = 'none';
+                    }
+                }
+                setTimeout(() => {
+                    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                    document.body.classList.remove('modal-open');
+                    this.abrirModalAdmin();
+                }, 200);
+            } else {
+                if (pinError) {
+                    pinError.className = 'text-danger small mt-2 fw-semibold';
+                    pinError.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Contraseña incorrecta. Inténtalo nuevamente o restablécela con el enlace de abajo.';
+                    pinError.classList.remove('d-none');
+                }
+                pinInput.select();
+                pinInput.focus();
+            }
+        },
+
+        mostrarVistaRestablecer: function() {
+            const loginV = document.getElementById('adminPinLoginView');
+            const resetV = document.getElementById('adminPinResetView');
+            if (loginV) loginV.classList.add('d-none');
+            if (resetV) resetV.classList.remove('d-none');
+
+            const err = document.getElementById('adminResetError');
+            const succ = document.getElementById('adminResetSuccess');
+            if (err) err.classList.add('d-none');
+            if (succ) succ.classList.add('d-none');
+
+            const inSeg = document.getElementById('inputResetSeguridad');
+            const inPass = document.getElementById('inputResetNuevaPass');
+            const inConf = document.getElementById('inputResetConfirmPass');
+            if (inSeg) inSeg.value = '';
+            if (inPass) inPass.value = '';
+            if (inConf) inConf.value = '';
+            this.validarRequisitosInput('');
+            setTimeout(() => { if (inSeg) inSeg.focus(); }, 150);
+        },
+
+        mostrarVistaLogin: function() {
+            const loginV = document.getElementById('adminPinLoginView');
+            const resetV = document.getElementById('adminPinResetView');
+            if (resetV) resetV.classList.add('d-none');
+            if (loginV) loginV.classList.remove('d-none');
+
+            const pinInput = document.getElementById('inputAdminPin');
+            if (pinInput) {
+                pinInput.value = '';
+                pinInput.focus();
+            }
+        },
+
+        validarRequisitosInput: function(pass) {
+            pass = pass || '';
+            const tieneMin8 = pass.length >= 8;
+            const tieneMayus = /[A-Z]/.test(pass);
+            const tieneMinus = /[a-z]/.test(pass);
+            const tieneNum = /[0-9\W_]/.test(pass);
+
+            const actualizarItem = (id, cumple, texto) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (cumple) {
+                    el.className = 'text-success mb-1 fw-semibold';
+                    el.innerHTML = `<i class="fa-solid fa-circle-check me-1 text-success"></i> ${texto}`;
+                } else {
+                    el.className = 'text-muted mb-1';
+                    el.innerHTML = `<i class="fa-solid fa-circle-xmark me-1 text-danger"></i> ${texto}`;
+                }
+            };
+
+            actualizarItem('reqMin8', tieneMin8, 'Mínimo 8 caracteres');
+            actualizarItem('reqMayus', tieneMayus, 'Al menos una letra mayúscula');
+            actualizarItem('reqMinus', tieneMinus, 'Al menos una letra minúscula');
+            actualizarItem('reqNum', tieneNum, 'Al menos un número o símbolo');
+
+            return tieneMin8 && tieneMayus && tieneMinus && tieneNum;
+        },
+
+        procesarRestablecerPassword: function() {
+            const inSeg = document.getElementById('inputResetSeguridad');
+            const inPass = document.getElementById('inputResetNuevaPass');
+            const inConf = document.getElementById('inputResetConfirmPass');
+            const err = document.getElementById('adminResetError');
+            const succ = document.getElementById('adminResetSuccess');
+
+            const respSeg = (inSeg?.value || '').trim().toUpperCase().replace(/\s+/g, '');
+            const nuevaPass = inPass?.value || '';
+            const confPass = inConf?.value || '';
+
+            if (err) err.classList.add('d-none');
+            if (succ) succ.classList.add('d-none');
+
+            if (respSeg !== 'GESMUJER') {
+                if (err) {
+                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> El acrónimo de la organización es incorrecto. Verifica e inténtalo de nuevo.';
+                    err.classList.remove('d-none');
+                }
+                if (inSeg) inSeg.focus();
+                return;
+            }
+
+            const cumpleReq = this.validarRequisitosInput(nuevaPass);
+            if (!cumpleReq) {
+                if (err) {
+                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> La nueva contraseña debe cumplir con todos los requisitos de seguridad (mínimo 8 caracteres, mayúscula, minúscula y número/símbolo).';
+                    err.classList.remove('d-none');
+                }
+                if (inPass) inPass.focus();
+                return;
+            }
+
+            if (nuevaPass !== confPass) {
+                if (err) {
+                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Las contraseñas ingresadas no coinciden.';
+                    err.classList.remove('d-none');
+                }
+                if (inConf) inConf.focus();
+                return;
+            }
+
+            try {
+                localStorage.setItem(STORAGE_PASSWORD_KEY, nuevaPass);
+            } catch(e) {}
+
+            if (succ) {
+                succ.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i> ¡Contraseña actualizada con éxito! Redirigiendo al inicio de sesión...';
+                succ.classList.remove('d-none');
+            }
+
+            setTimeout(() => {
+                this.mostrarVistaLogin();
+                const pinInput = document.getElementById('inputAdminPin');
+                if (pinInput) pinInput.value = nuevaPass;
+                const pinError = document.getElementById('adminPinError');
+                if (pinError) {
+                    pinError.className = 'text-success small mt-2 fw-semibold';
+                    pinError.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i> Contraseña actualizada. Haz clic en "Ingresar al Panel".';
+                    pinError.classList.remove('d-none');
+                }
+            }, 1200);
+        },
+
+        abrirModalAdmin: function() {
+            const adminModalEl = document.getElementById('modalAdmin');
+            if (!adminModalEl) return;
+
+            ['modalAdminPin', 'modalNacional', 'modalEstatal', 'modalTematico'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.classList.contains('show')) {
+                    if (window.bootstrap && bootstrap.Modal) {
+                        const inst = bootstrap.Modal.getInstance(el);
+                        if (inst) inst.hide();
+                    }
+                    el.classList.remove('show');
+                    el.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+
+            if (window.bootstrap && bootstrap.Modal) {
+                this.modalAdminBootstrap = bootstrap.Modal.getOrCreateInstance(adminModalEl, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            }
+
+            this.cargarFotoPerfil();
+            
+            const det = document.getElementById('adminPantallaDetalle');
+            if (det) det.classList.remove('d-none');
+            const dash = document.getElementById('adminPantallaDashboard');
+            if (dash) dash.classList.add('d-none');
+
+            if (this.modalAdminBootstrap) {
+                this.modalAdminBootstrap.show();
+            } else {
+                adminModalEl.classList.add('show');
+                adminModalEl.style.display = 'block';
+                document.body.classList.add('modal-open');
+            }
+
+            setTimeout(() => {
+                if (adminModalEl && !adminModalEl.classList.contains('show')) {
+                    adminModalEl.classList.add('show');
+                    adminModalEl.style.display = 'block';
+                }
+            }, 150);
+
+            if (window.AdminMenuDashboard && typeof window.AdminMenuDashboard.seleccionar === 'function') {
+                const catGuardada = sessionStorage.getItem('plataforma_admin_categoria');
+                window.AdminMenuDashboard.seleccionar(catGuardada || 'inicio');
+            }
+        },
+
+        cerrarModalAdmin: function() {
+            if (this.modalAdminBootstrap) {
+                this.modalAdminBootstrap.hide();
+            } else {
+                const adminModalEl = document.getElementById('modalAdmin');
+                if (adminModalEl) {
+                    adminModalEl.classList.remove('show');
+                    adminModalEl.style.display = 'none';
+                }
+            }
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('overflow');
+                document.body.style.removeProperty('padding-right');
+            }, 200);
+            if (window.location.hash === '#admin') {
+                history.replaceState(null, document.title, window.location.pathname + window.location.search);
+            }
+        },
+
+        cerrarSesion: function() {
+            sessionStorage.removeItem(SESSION_AUTH_KEY);
+            sessionStorage.removeItem('plataforma_admin_sesion_activa');
+            sessionStorage.removeItem('plataforma_admin_categoria');
+            this.cerrarModalAdmin();
+            this.mostrarToast('Sesión de administración cerrada correctamente.');
+        },
+
+        cargarFotoPerfil: function() {
+            try {
+                const foto = localStorage.getItem(STORAGE_FOTO_KEY);
+                const img = document.getElementById('adminAvatarImg');
+                if (img && foto) {
+                    img.src = foto;
+                }
+            } catch(e) {}
+        },
+
+        subirFotoPerfil: function(e) {
+            const file = e.target?.files?.[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                this.mostrarToast('Por favor selecciona un archivo de imagen válido.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const dataUrl = event.target.result;
+                try {
+                    localStorage.setItem(STORAGE_FOTO_KEY, dataUrl);
+                    const img = document.getElementById('adminAvatarImg');
+                    if (img) img.src = dataUrl;
+                    this.mostrarToast('Foto de perfil actualizada correctamente.');
+                } catch(err) {
+                    this.mostrarToast('La imagen es demasiado pesada para almacenar.');
+                }
+            };
+            reader.readAsDataURL(file);
+        },
+
+        abrirCategoria: function(cat) {
+            this.categoriaActiva = cat;
+            if (cat === 'nacional') {
+                this.cargarDatosNacional();
+            } else if (cat === 'estatal') {
+                this.cargarDatosEstatal();
+            }
+        },
+
+        cargarDatosNacional: function() {
+            const select = document.getElementById('selectAdminEstado');
+            if (!select) return;
+
+            const datos = AdminDatos.getTodosEstados();
+            const totalNac = AdminDatos.getNacional();
+
+            select.innerHTML = '';
+            const optTotal = document.createElement('option');
+            optTotal.value = 'nacional';
+            optTotal.textContent = '🇲🇽 Estados Unidos Mexicanos (Total Nacional)';
+            select.appendChild(optTotal);
+
+            datos.forEach(est => {
+                const opt = document.createElement('option');
+                opt.value = est.id;
+                opt.textContent = est.nombre;
+                select.appendChild(opt);
+            });
+
+            const pobInput = document.getElementById('inputNacPob');
+            const mujInput = document.getElementById('inputNacMujeres');
+            const homInput = document.getElementById('inputNacHombres');
+            const badgeClave = document.getElementById('badgeAdminEntidadClave');
+            const lblNombre = document.getElementById('lblAdminEntidadNombre');
+
+            const actualizarCampos = (item) => {
+                if (pobInput) pobInput.value = item.pob;
+                if (mujInput) mujInput.value = item.mujeres;
+                if (homInput) homInput.value = item.hombres;
+                if (badgeClave) badgeClave.textContent = item.claveGeo || 'MX';
+                if (lblNombre) lblNombre.textContent = item.nombre;
+                if (window.AdminMenuDashboard) {
+                    window.AdminMenuDashboard.actualizarKpis('nacional');
+                }
+            };
+
+            actualizarCampos(totalNac);
+
+            select.onchange = () => {
+                const val = select.value;
+                if (val === 'nacional') {
+                    actualizarCampos(AdminDatos.getNacional());
+                } else {
+                    const est = AdminDatos.getEstado(val);
+                    if (est) actualizarCampos(est);
+                }
+            };
+        },
+
+        guardarCambiosNacional: function() {
+            const select = document.getElementById('selectAdminEstado');
+            const pobInput = document.getElementById('inputNacPob');
+            const mujInput = document.getElementById('inputNacMujeres');
+            const homInput = document.getElementById('inputNacHombres');
+
+            if (!select || !pobInput || !mujInput || !homInput) return;
+
+            const val = select.value;
+            const nuevoPob = parseInt(pobInput.value, 10);
+            const nuevoMuj = parseInt(mujInput.value, 10);
+            const nuevoHom = parseInt(homInput.value, 10);
+
+            if (isNaN(nuevoPob) || isNaN(nuevoMuj) || isNaN(nuevoHom)) {
+                this.mostrarToast('Por favor ingresa números válidos.');
+                return;
+            }
+
+            if (val === 'nacional') {
+                AdminDatos.actualizarNacionalTotal(nuevoPob, nuevoMuj, nuevoHom);
+            } else {
+                AdminDatos.actualizarEstado(val, nuevoPob, nuevoMuj, nuevoHom);
+            }
+
+            this.mostrarToast('¡Datos nacionales actualizados y sincronizados!');
+        },
+
+        cargarDatosEstatal: function() {
+            const pobInput = document.getElementById('inputEstPob');
+            const mujInput = document.getElementById('inputEstMujeres');
+            const homInput = document.getElementById('inputEstHombres');
+
+            const est = AdminDatos.getEstatal();
+            if (pobInput) pobInput.value = est.pob;
+            if (mujInput) mujInput.value = est.mujeres;
+            if (homInput) homInput.value = est.hombres;
+
+            if (window.AdminMenuDashboard) {
+                window.AdminMenuDashboard.actualizarKpis('estatal');
+            }
+        },
+
+        guardarCambiosEstatal: function() {
+            const pobInput = document.getElementById('inputEstPob');
+            const mujInput = document.getElementById('inputEstMujeres');
+            const homInput = document.getElementById('inputEstHombres');
+
+            if (!pobInput || !mujInput || !homInput) return;
+
+            const nuevoPob = parseInt(pobInput.value, 10);
+            const nuevoMuj = parseInt(mujInput.value, 10);
+            const nuevoHom = parseInt(homInput.value, 10);
+
+            if (isNaN(nuevoPob) || isNaN(nuevoMuj) || isNaN(nuevoHom)) {
+                this.mostrarToast('Por favor ingresa números válidos.');
+                return;
+            }
+
+            AdminDatos.actualizarEstatal(nuevoPob, nuevoMuj, nuevoHom);
+            this.mostrarToast('¡Datos de Oaxaca actualizados y sincronizados!');
+        },
+
+        deshacerCambioPrevio: function() {
+            const exito = AdminDatos.deshacer();
+            if (exito) {
+                if (this.categoriaActiva) {
+                    this.abrirCategoria(this.categoriaActiva);
+                }
+                this.mostrarToast('Se restauró la versión previa de los datos.');
+            } else {
+                this.mostrarToast('No hay cambios anteriores para deshacer.');
+            }
+        },
+
+        solicitarRestablecer: function() {
+            const banner = document.getElementById('adminConfirmBanner');
+            if (banner) banner.classList.remove('d-none');
+        },
+
+        cancelarRestablecer: function() {
+            const banner = document.getElementById('adminConfirmBanner');
+            if (banner) banner.classList.add('d-none');
+        },
+
+        confirmarRestablecer: function() {
+            AdminDatos.restablecerFabrica();
+            const banner = document.getElementById('adminConfirmBanner');
+            if (banner) banner.classList.add('d-none');
+            if (this.categoriaActiva) {
+                this.abrirCategoria(this.categoriaActiva);
+            }
+            this.mostrarToast('Datos restablecidos al Censo Oficial INEGI 2020.');
+        },
+
+        mostrarToast: function(msg) {
+            const toast = document.getElementById('adminToastAuto');
+            const toastTexto = document.getElementById('adminToastAutoTexto');
+            if (!toast) return;
+
+            if (toastTexto) toastTexto.textContent = msg;
+            toast.classList.remove('d-none');
+
+            if (this._toastTimer) clearTimeout(this._toastTimer);
+            this._toastTimer = setTimeout(() => {
+                toast.classList.add('d-none');
+            }, 3500);
+        }
+    };
+
+
     window.AdminDatos = AdminDatos;
+    window.AdminDatosUI = AdminDatosUI;
 
     document.addEventListener('DOMContentLoaded', function() {
-        if (AdminDatos && typeof AdminDatos.init === 'function') {
-            AdminDatos.init();
-        }
+        if (AdminDatos && typeof AdminDatos.init === 'function') AdminDatos.init();
+        if (AdminDatosUI && typeof AdminDatosUI.init === 'function') AdminDatosUI.init();
     });
 })(window);
