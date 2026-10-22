@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GESMujer | Plataforma Ciudadana de Transparencia e Indicadores de Género</title>
+    <script>
+        (function() {
+            try {
+                var guardada = sessionStorage.getItem('plataforma_vista_activa');
+                var hash = window.location.hash;
+                if (guardada || (hash && (hash === '#nacional' || hash === '#estatal' || hash.indexOf('#tema-') === 0))) {
+                    document.documentElement.classList.add('recarga-modal-activa');
+                }
+            } catch(e) {}
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/js/mexico_estados.js"></script>
+    <script src="assets/js/tarjetas.js"></script>
+    <script src="assets/js/admin_datos.js"></script>
+    <link rel="stylesheet" href="assets/css/estilos.css">
+
+    <!-- ESTILOS PARA LAS TARJETAS MINI SUPERIORES (BARRA STICKY) -->
+    <style>
+        #contenedorTarjetasModal {
+            width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #c2185b #f1f1f1;
+        }
+        #contenedorTarjetasModal::-webkit-scrollbar { height: 4px; }
+        #contenedorTarjetasModal::-webkit-scrollbar-thumb { background: #c2185b; border-radius: 10px; }
+        .tema-card-mini {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-width: 65px; padding: 4px 6px; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s ease; background: #f8f9fa; border: 1px solid #e2e8f0; flex-shrink: 0;
+        }
+        .tema-card-mini:hover { background: #f3e8f1; border-color: #c2185b; transform: translateY(-2px); }
+        .tema-card-mini.active { background: #f3e8f1; border-color: #c2185b; box-shadow: 0 2px 8px rgba(194, 24, 91, 0.25); }
+        .tema-card-mini .tema-icon-wrapper { width: 28px !important; height: 28px !important; font-size: 0.75rem !important; margin-bottom: 2px; border-radius: 8px; }
+        .tema-nombre-mini { font-size: 0.58rem; font-weight: 700; color: #4a154b; text-align: center; line-height: 1.1; white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-ges sticky-top">
+    <div class="container">
+        <div class="navbar-brand-container d-flex align-items-center justify-content-between w-100">
+            <div class="logo-ges-wrapper-izq">
+                <img src="assets/img/lo.png" alt="GESMujer emblema" class="navbar-logo-emblema" title="GESMujer">
+            </div>
+            <div class="brand-text-block text-center">
+                <span class="brand-titulo-superior">TRANSPARENCIA E INDICADORES PÚBLICOS</span>
+            </div>
+            <div class="logo-ges-wrapper-der">
+                <img src="assets/img/logo.png" alt="GESMujer Rosario Castellanos" class="navbar-logo-texto">
+            </div>
+        </div>
+    </div>
+</nav>
+    <header class="header-atlas text-center">
+         <div class="emblema-ges mx-auto mb-3" title="GESMujer">
+            <div class="emblema-interior">
+                <i class="fa-solid fa-chart-line emblema-icono"></i>
+                <span class="emblema-siglas">GES</span> 
+                <span class="emblema-sub">MUJER</span>
+            </div>
+        </div>
+        <div class="container">
+<h1 class="titulo-atlas-naranja">¿Quiénes Somos?</h1>
+<p class="descripcion-GES-oaxaca mx-auto ">El <strong>
+    Grupo de Estudios sobre la Mujer "Rosario Castellanos" A.C.</strong>
+    Es una organización feminista fundada en 1977 en Oaxaca de Juárez. 
+    Durante más de 45 años hemos acompañado a niñas,
+    jóvenes y mujeres en la defensa de sus derechos humanos,
+    ofreciendo atención psicológica,asesoría jurídica
+    y acompañamiento comunitario en las 8 regiones del estado.
+    Trabajamos por una sociedad libre de violencia,
+    con igualdad sustantiva y con las mujeres en el centro de la toma de decisiones.</p>
+
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 mt-4 mb-2">
+                <button class="btn btn-territorial btn-nacional" id="btnNacional" onclick="cambiarAmbito('NACIONAL', this)">
+                    <i class="fa-solid fa-earth-americas me-1"></i> NACIONAL
+                </button>
+                <button class="btn btn-territorial btn-estatal " id="btnEstatal" onclick="cambiarAmbito('ESTATAL', this)">
+                    <i class="fa-solid fa-location-dot me-1"></i> ESTATAL
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="cenefa-oaxaca"></div>
+    <main class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--ges-naranja-alerta); font-size: 1.50rem;">
+            SELECCIONA UNA DIMENSIÓN PARA EXPLORAR SUS INDICADORES EN GRÁFICAS 
+
+            </h2>
+            <p class="text-muted small mx-auto" style="max-width: 1100px; text-align: justify;">
+            Esta sección reúne información estadística sobre salud, 
+            educación, vivienda, ingresos en Oaxaca,así como datos sobre
+            las atenciones psicológicas y jurídicas,talleres,femicidios, proyectos 
+            y otras acciones realizadas por GESMujer Rosario Castellanos. Mediante gráficas facilita la
+            consulta y comprensión de información relevante sobre las 
+            condiciones de vida de la población y las actividades
+            de la organización, contribuyendo a la difusión de información de interés público.
+          </p>
+        </div>
+
+<div class="row g-3 justify-content-center mb-5" id="contenedorTarjetas">
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('atendidas', this)">
+            <div class="tema-icon-wrapper tema-atendidas">
+                <i class="fa-solid fa-people-group"></i>
+            </div>
+            <span class="tema-nombre">Atendidas</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('psicologia', this)">
+            <div class="tema-icon-wrapper tema-psicologia">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <span class="tema-nombre">Psicología </span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('juicios', this)">
+            <div class="tema-icon-wrapper tema-legal">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <span class="tema-nombre">Juicios  Legal </span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('feminicidios', this)">
+            <div class="tema-icon-wrapper tema-feminicidios">
+                <i class="fa-solid fa-ribbon"></i>
+            </div>
+            <span class="tema-nombre">Feminicidios</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('talleres', this)">
+            <div class="tema-icon-wrapper tema-talleres">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <span class="tema-nombre">Talleres</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-cisges">
+        <div class="tema-card" onclick="mostrarTema('proyectos', this)">
+            <div class="tema-icon-wrapper tema-proyectos">
+                <i class="fa-solid fa-diagram-project"></i>
+            </div>
+            <span class="tema-nombre">Proyectos</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card " onclick="mostrarTema('salud', this)">
+            <div class="tema-icon-wrapper tema-salud">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <span class="tema-nombre">Salud</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('educacion', this)">
+            <div class="tema-icon-wrapper tema-educacion">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+            <span class="tema-nombre">Educación</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('vivienda', this)">
+            <div class="tema-icon-wrapper tema-vivienda">
+                <i class="fa-solid fa-house-chimney"></i>
+            </div>
+            <span class="tema-nombre">Vivienda</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('ingreso', this)">
+            <div class="tema-icon-wrapper tema-ingreso">
+                <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <span class="tema-nombre">Ingreso</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('lenguas', this)">
+            <div class="tema-icon-wrapper tema-lenguas">
+                <i class="fa-solid fa-language"></i>
+            </div>
+            <span class="tema-nombre">Lenguas</span>
+        </div>
+    </div>
+
+    </div>
+
+    </main>
+    <div class="cenefa-oaxaca mb-0"></div>
+
+    <footer class="footer-ges py-4 text-center mt-0">
+        <div class="container">
+            <div class="row justify-content-center align-items-center mb-3">
+                <div class="col-12 col-md-10">
+                    <div class="footer-logo mb-2">
+                        <i class="fa-solid fa-ribbon text-warning me-2"></i> Grupo de Estudios sobre la Mujer "Rosario Castellanos" A.C.
+                    </div>
+                    <p class="mb-2 fst-italic small" style="color: #e3cfe0;">
+                        "Por la vida y la libertad de las mujeres de Oaxaca y México."
+                    </p>
+                    <p class="small opacity-75 mb-0" style="font-size: 0.78rem;">
+                        Tercera Privada de Guadalupe Victoria 107, Col. Libertad, Oaxaca de Juárez, Oax. · Teléfono: 951 516 6810
+                    </p>
+                </div>
+            </div>
+            
+            <hr class="my-3" style="border-color: rgba(255,255,255,0.12);">
+
+            <div class="text-center py-2">
+                <p class="small mb-0 opacity-75 text-white">&copy; 2026 GESMujer A.C. · Plataforma Pública</p>
+            </div>
+        </div>
+    </footer>
+
+   
+    <div class="modal fade" id="modalNacional" tabindex="-1" aria-labelledby="modalNacionalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content border-0">
+                
+                <div class="modal-header modal-nacional-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="modal-nacional-icon">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0 text-white" id="modalNacionalLabel">
+                               POBLACION TOTAL EN MÉXICO
+                            </h5>
+                            <small class="text-white-50"> INEGI   </small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body modal-nacional-body">
+                    <div class="row g-4 align-items-stretch">
+                        
+                        <div class="col-12 col-xl-7 col-lg-6">
+                            <div class="card modal-nacional-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="modal-nacional-titulo-seccion">
+                                    </i> Mapa de la  República Mexicana </i>
+                                    </h6>
+                                   
+                                </div>
+                                <p class="small text-muted mb-2">
+                                  Haz clic para consultar sus indicadores demográficos.
+                                </p>
+                                
+                                <div id="mapaMexico"></div>
+                                <div class="mapa-mexico-leyenda">
+                                    <span><i class="fa-solid fa-square me-1" style="color: #682260;"></i> Mapa de la República Mexicana</span>
+                                </div>
+                                <div class="mt-3 pt-2 border-top">
+                                    <div class="small fw-bold text-muted mb-2"><i class="fa-solid fa-arrows-left-right me-1"></i> Cambiar vista territorial:</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm rounded-pill px-3 fw-bold" style="background:#f3e8f1;color:#4a154b;border:1px solid #682260;" onclick="bootstrap.Modal.getInstance(document.getElementById('modalNacional'))?.hide(); setTimeout(()=>cambiarAmbito('ESTATAL',null),300);">
+                                            <i class="fa-solid fa-location-dot me-1"></i> Estatal
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-5 col-lg-6">
+                            <div class="card modal-nacional-card">
+
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="modal-nacional-icon" style="width:36px;height:36px;font-size:1rem;" id="iconoPanelNacional">
+                                        <i class="fa-solid fa-earth-americas"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold" style="color:#4a154b;font-size:1.05rem;" id="tituloPanelNacional">POBLACIÓN TOTAL EN MÉXICO</div>
+                                        <div class="small text-muted" id="subtituloPanelNacional">Haz clic en un estado para ver sus datos</div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12">
+                                        <div class="card-metrica-total">
+                                            <div class="small text-uppercase fw-bold opacity-75">
+                                                <i class="fa-solid fa-users me-1"></i> <span id="labelNacionalTotal">Población Total </span>
+                                            </div>
+                                            <div class="fs-2 fw-bold my-1" id="kpiNacionalTotal">126,014,024</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-metrica-mujeres">
+                                            <div class="small text-uppercase fw-bold text-danger">
+                                                <i class="fa-solid fa-venus me-1"></i> Mujeres
+                                            </div>
+                                            <div class="fs-4 fw-bold text-danger my-1" id="kpiNacionalMujeres">64,540,634</div>
+                                            <div class="badge bg-danger px-2 py-1 rounded-pill" id="kpiNacionalPctMujeres">51.22% del total</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-metrica-hombres">
+                                            <div class="small text-uppercase fw-bold" style="color: #00897b;">
+                                                <i class="fa-solid fa-mars me-1"></i> Hombres
+                                            </div>
+                                            <div class="fs-4 fw-bold my-1" style="color: #00897b;" id="kpiNacionalHombres">61,473,390</div>
+                                            <div class="badge px-2 py-1 rounded-pill text-white" style="background: #00897b;" id="kpiNacionalPctHombres">48.78% del total</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grafica-barras-contenedor">
+                                    <canvas id="canvasNacional"></canvas>
+                                </div>
+
+                                <div class="mt-2 text-center" id="btnVolverMexicoWrap" style="display:none;">
+                                    <button class="btn btn-sm rounded-pill px-3 fw-bold" style="background:#f3e8f1;color:#4a154b;border:1px solid #682260;" onclick="mostrarDatosMexicoNacional()">
+                                        <i class="fa-solid fa-earth-americas me-1"></i> Ver datos de México
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-end align-items-center">
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" data-bs-dismiss="modal">
+                        Cerrar <i class="fa-solid fa-arrow-down ms-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEstatal" tabindex="-1" aria-labelledby="modalEstatalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content border-0">
+                
+                <div class="modal-header modal-nacional-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="modal-nacional-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0 text-white" id="modalEstatalLabel">
+                                POBLACIÓN TOTAL EN OAXACA
+                            </h5>
+                            <small class="text-white-50">INEGI</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body modal-nacional-body">
+                    <div class="row g-4 align-items-stretch">
+                        
+                        <div class="col-12 col-xl-7 col-lg-6">
+                            <div class="card modal-nacional-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="modal-nacional-titulo-seccion">
+                                        <i class="fa-solid fa-map-location-dot me-1"></i> Mapa del Estado de Oaxaca
+                                    </h6>
+                                </div>
+                                <p class="small text-muted mb-2">
+                                    Haz clic para consultar sus indicadores demográficos.
+                                </p>
+                                <div id="mapaEstatal"></div>
+                                <div class="mapa-mexico-leyenda">
+                                    <span><i class="fa-solid fa-square me-1" style="color: #8e24aa;"></i> Estado de Oaxaca</span>
+                                </div>
+                                <div class="mt-3 pt-2 border-top">
+                                    <div class="small fw-bold text-muted mb-2"><i class="fa-solid fa-arrows-left-right me-1"></i> Cambiar vista territorial:</div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm rounded-pill px-3 fw-bold" style="background:#f3e8f1;color:#4a154b;border:1px solid #682260;" onclick="bootstrap.Modal.getInstance(document.getElementById('modalEstatal'))?.hide(); setTimeout(()=>cambiarAmbito('NACIONAL',null),300);">
+                                            <i class="fa-solid fa-earth-americas me-1"></i> Nacional
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-5 col-lg-6">
+                            <div class="card modal-nacional-card">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12">
+                                        <div class="card-metrica-total">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="small text-uppercase fw-bold opacity-75">
+                                                    <i class="fa-solid fa-users me-1"></i> Población Total en Oaxaca
+                                                </div>
+                                            </div>
+                                            <div class="fs-2 fw-bold my-1" id="kpiEstatalTotal">4,132,148</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-metrica-mujeres">
+                                            <div class="small text-uppercase fw-bold text-danger">
+                                                <i class="fa-solid fa-venus me-1"></i> Mujeres
+                                            </div>
+                                            <div class="fs-4 fw-bold text-danger my-1" id="kpiEstatalMujeres">2,157,305</div>
+                                            <div class="badge bg-danger px-2 py-1 rounded-pill" id="kpiEstatalPctMujeres">52.21% del total</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-metrica-hombres">
+                                            <div class="small text-uppercase fw-bold" style="color: #00897b;">
+                                                <i class="fa-solid fa-mars me-1"></i> Hombres
+                                            </div>
+                                            <div class="fs-4 fw-bold my-1" style="color: #00897b;" id="kpiEstatalHombres">1,974,843</div>
+                                            <div class="badge px-2 py-1 rounded-pill text-white" style="background: #00897b;" id="kpiEstatalPctHombres">47.79% del total</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2"></div>
+                                </div>
+                                <div class="grafica-barras-contenedor">
+                                    <canvas id="canvasEstatalModal"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-end align-items-center">
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" data-bs-dismiss="modal">
+                        Cerrar <i class="fa-solid fa-arrow-down ms-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalTematico" tabindex="-1" aria-labelledby="modalTematicoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content border-0">
+                
+                <div class="modal-header modal-nacional-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="modal-nacional-icon" id="modalTematicoIconoWrapper">
+                            <i class="fa-solid fa-heart-pulse" id="modalTematicoIcono"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h5 class="modal-title fw-bold mb-0 text-white" id="modalTematicoLabel">
+                                    DIMENSIÓN TEMÁTICA
+                                </h5>
+                                <span class="badge bg-warning text-dark fw-bold rounded-pill" id="modalTematicoBadge" style="font-size: 0.72rem;">INEGI 2020</span>
+                            </div>
+                            <small class="text-white-50" id="modalTematicoSubtitulo">Indicadores con Perspectiva de Género: Oaxaca vs. Nacional</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA FIJA STICKY SUPERIOR CON LAS 10 TARJETAS -->
+                <div class="tarjetas-modal-sticky-bar bg-white border-bottom py-2 px-3 shadow-sm d-flex align-items-center justify-content-between gap-2" style="position: sticky; top: 0; z-index: 1040;">
+                    <div class="d-flex flex-nowrap overflow-auto gap-1 justify-content-center align-items-center flex-grow-1" id="contenedorTarjetasModal"></div>
+                    <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="modal" aria-label="Cerrar" title="Cerrar modal" style="font-size: 0.95rem; opacity: 0.75; cursor: pointer;"></button>
+                </div>
+
+                <div class="modal-body modal-nacional-body">
+
+                    <!-- LAYOUT ESTÁNDAR (DIMENSIONES CISGES) -->
+                    <div id="layoutTematicoEstandar" class="row g-4 align-items-stretch">
+                        
+                        <div class="col-12 col-xl-7 col-lg-6">
+                            <div class="card modal-nacional-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="modal-nacional-titulo-seccion" id="modalTematicoGraficaTitulo">
+                                        <i class="fa-solid fa-chart-column me-1"></i> Comparativa Estratégica
+                                    </h6>
+                                    <span class="badge bg-light text-secondary border px-2 py-1" id="modalTematicoFuenteCorta">INEGI / SSA / ENOE</span>
+                                </div>
+                                <p class="small text-muted mb-3" id="modalTematicoGraficaDesc"></p>
+                                <div class="grafica-barras-contenedor mb-3" style="height: 350px;">
+                                    <canvas id="canvasTematicoPrincipal"></canvas>
+                                </div>
+
+                                <div class="border-top pt-3 mt-2" id="modalTematicoBloqueDetalle">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-5 col-lg-6">
+                            <div class="card modal-nacional-card">
+                                
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12">
+                                        <div class="card-metrica-total" id="cardTematicaTotal">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="small text-uppercase fw-bold opacity-75" id="labelTematicaTotal">
+                                                    <i class="fa-solid fa-users me-1"></i> Indicador Clave
+                                                </div>
+                                            </div>
+                                            <div class="fs-2 fw-bold my-1" id="valorTematicaTotal">--</div>
+                                            <div class="small opacity-75" id="notaTematicaTotal">Dato consolidado estatal</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="modalTematicoAnalisisCard" class="mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LAYOUT EXCLUSIVO PARA SALUD -->
+                    <div id="layoutTematicoSalud" class="d-none">
+
+                        <!-- 1. 10 PRINCIPALES CAUSAS DE DEFUNCIÓN EN MUJERES (INEGI EDR 2025) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chart-column me-2" style="color: #48b5c4;"></i>
+                                                10 Principales causas de defunción en mujeres en Oaxaca
+                                            </h6>
+                    
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 380px;">
+                                        <canvas id="canvasSaludCausas"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-chart-line me-1"></i> TOTAL DE DEFUNCIONES REGISTRADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">9,848</div>
+                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+                                           Las enfermedades endocrinas y metabólicas presentan el valor más alto entre las causas, 
+                                           seguidas por las enfermedades isquémicas del corazón. En conjunto, estas causas destacan
+                                         entre las principales causas de defunción de mujeres en Oaxaca. Las cifras corresponden a datos preliminares del INEGI (EDR 2025).
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente:INEGI. Estadísticas de Defunciones Registradas EDR 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. DEFUNCIONES POR SUICIDIO -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chart-column me-2" style="color: #60ced8;"></i>
+                                                Defunciones registradas por suicidio 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasSaludSuicidio"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-chart-line me-1"></i> TOTAL DE DEFUNCIONES REGISTRADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">41</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+                                     De acuerdo con las Estadísticas de Defunciones Registradas (EDR) del INEGI, se registraron defunciones por lesiones autoinfligidas intencionalmente en mujeres en Oaxaca. El principal mecanismo registrado fue ahorcamiento, estrangulamiento o sofocación, seguido por envenenamiento y disparo de arma de fuego.                                                 </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente INEGI. Estadísticas de Defunciones Registradas EDR 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. TUMOR MALIGNO DE LA MAMA -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chart-column me-2" style="color: #e67eb7;"></i>
+                                                Defunciones registradas por tumor maligno de la mama
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasSaludMama"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-chart-line me-1"></i> TOTAL DE DEFUNCIONES REGISTRADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">210</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+                                      Se contabilizaron defunciones de mujeres por tumor maligno de la mama (cifras preliminares INEGI EDR). La distribución por grupos de edad evidencia una concentración en edades adultas avanzadas, lo que resalta la urgencia de detección temprana y mastografías oportunas.
+                                      El tumor maligno de la mama representa una de las principales causas de mortalidad entre la población femenina, y su comportamiento por grupos de edad sugiere que el riesgo se incrementa conforme avanza la edad.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente INEGI. Estadísticas de Defunciones Registradas EDR 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. DIABETES MELLITUS -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chart-column me-2" style="color: #5aa348;"></i>
+                                                Defunciones registradas por diabetes mellitus
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasSaludDiabetes"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-chart-line me-1"></i> TOTAL DE DEFUNCIONES REGISTRADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">2,521</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+                             La diabetes mellitus representó un número importante de defunciones en mujeres  (EDR preliminar). La curva por grupos quinquenales refleja un incremento sostenido a partir de la edad adulta, con un impacto creciente conforme avanza la edad y concentrando el mayor efecto en edades adultas avanzadas, lo que la sitúa como una de las principales problemáticas de salud en la entidad.                                                    </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente INEGI. Estadísticas de Defunciones Registradas EDR 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. DEFUNCIONES MATERNAS REGISTRADAS -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-person-pregnant me-2" style="color: #d81b60;"></i>
+                                                Defunciones maternas registradas 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2024</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 380px;">
+                                        <canvas id="canvasSaludMaterna"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-heart-pulse me-1"></i>TOTAL DE DEFUNCIONES MATERNAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">32</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+                   Se registraron defunciones maternas distribuidas en las diversas causas y categorías clínicas del catálogo oficial (INEGI, EDR). El documento desglosa los tumores malignos de órganos genitourinarios, entre ellos el tumor maligno de la placenta; las causas obstétricas directas, que incluyen causas directas no abortivas, hemorragia postparto, trastornos hipertensivos y edema, otras complicaciones del parto, así como aborto, atención al feto, infección urinaria, diabetes gestacional y causa no especificada; y las causas obstétricas indirectas.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente INEGI.Estadisticas deDefunciones Registradas EDR  2024.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. DEFUNCIONES INFANTILES REGISTRADAS (PURAS NIÑAS) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-baby me-2" style="color: #ab47bc;"></i>
+                                               10 Principales  causas de defunciones infantil 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · EDR 2024</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 380px;">
+                                        <canvas id="canvasSaludInfantil"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-child-dress me-1"></i> TOTAL DE DEFUNCIONES INFANTILES 
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">227</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.5; text-align:justify;">
+Se registraron defunciones infantiles de niñas, de las cuales la mayoría se concentra en las principales causas del catálogo oficial (INEGI, EDR). La principal causa fue por afecciones en el período perinatal (dificultad respiratoria, asfixia o prematurez extrema). La segunda causa fueron malformaciones congénitas y anomalías cromosómicas, seguidas por enfermedades respiratorias, infecciones intestinales, accidentes, afecciones víricas y síntomas anormales, enfermedades bacterianas y endocrinas, y enfermedades del sistema nervioso.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Estadísticas de Defunciones Registradas (EDR) 2024.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        1. INEGI. Estadísticas de Defunciones Registradas (EDR) 2025 preliminar (Causas generales, suicidios, mama y diabetes en mujeres).
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        2. INEGI. Estadísticas de Defunciones Registradas (EDR) 2024 (Defunciones maternas totales y defunciones infantiles en niñas).
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- GRAFICAS DE EDUCACIÓN -->
+                    <div id="layoutTematicoEducacion" class="d-none">
+
+                        <!-- 1. POBLACIÓN DE 6 A 14 AÑOS  LEER Y ESCRIBIR -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-book-open me-2" style="color: #48b5c4;"></i>
+                                                Población de 6 a 14 años para leer y escribir
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Intercensal 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasEduAptitud"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-users me-1"></i> TOTAL DE POBLACIÓN DE 6 A 14 AÑOS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">330,116</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+De acuerdo con la Encuesta Intercensal del INEGI, en Oaxaca reside un número importante de mujeres de 6 a 14 años. De ellas, la mayoría sabe leer y escribir, mientras que una parte no cuenta con esta aptitud y otra no fue especificada. Cifras con nivel de precisión alta.
+La alfabetización en la infancia y la adolescencia constituye un indicador fundamental del desarrollo educativo y social de la entidad. Que la mayor parte de las niñas y adolescentes de este grupo de edad sepa leer y escribir refleja avances en el acceso a la educación básica; sin embargo, la existencia de un segmento que aún no desarrolla esta habilidad evidencia la necesidad de reforzar las estrategias de inclusión educativa, así como de atender las brechas que puedan derivarse de factores territoriales, económicos o de género.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Intercensal 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. POBLACIÓN DE 15 AÑOS Y MÁS SEGÚN CONDICIÓN DE ALFABETISMO -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-graduation-cap me-2" style="color: #5aa348;"></i>
+                                               Alfabetismo en personas de 15 años y más
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Intercensal 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasEduAlfabetismo"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-users me-1"></i>TOTAL DE LA POBLACIÓN DE 15 AÑOS Y MÁS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">1,709,226</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                             <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+             La población femenina de 15 años y más representa un segmento significativo de la entidad (INEGI, Encuesta Intercensal). La mayoría de estas mujeres es alfabeta, mientras que una parte se encuentra en condición de analfabetismo y otra no fue especificada. Erradicar el analfabetismo femenino persiste como un eje estratégico prioritario en la entidad.
+             El analfabetismo femenino constituye una expresión de desigualdad estructural que limita el ejercicio pleno de derechos y restringe el acceso a oportunidades educativas, laborales y de participación social.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Intercensal 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. MATRÍCULA ESCOLAR SEGÚN NIVEL EDUCATIVO -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chalkboard-user me-2" style="color: #60ced8;"></i>
+                                                Mujeres inscritas por nivel educativo
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">SEP / INEGI · 2024/2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasEduMatricula"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-school me-1"></i> TOTAL DE ALUMNAS MATRICULADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">513,769</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                               Durante el ciclo escolar se registraron alumnas en el esquema escolarizado (SEP / INEGI). La educación primaria concentra la mayor proporción, seguida por secundaria, preescolar, media superior, superior e inicial.
+                               La distribución de la matrícula femenina por nivel educativo refleja la trayectoria de las estudiantes a lo largo del sistema escolar y permite identificar en qué etapas se concentra la mayor participación.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: SEP. Sistema Interactivo de Consulta de Estadística Educativa / INEGI.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. POBLACIÓN DE 15 AÑOS Y MÁS SEGÚN NIVEL DE ESCOLARIDAD -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-award me-2" style="color: #7b1fa2;"></i>
+                                                Población de 15 años y más según nivel de escolaridad
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Intercensal 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasEduEscolaridad"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-user-graduate me-1"></i>  TOTAL DE LA POBLACIÓN 
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">1,709,226</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+         En la entidad, las mujeres de 15 años y más presentan distintos niveles de escolaridad. Más de la mitad tiene como máximo nivel la educación básica, mientras que una parte alcanzó educación media superior, otra educación superior y un segmento no cuenta con escolaridad, lo que denota la brecha de permanencia hacia niveles avanzados.
+        La concentración de la población femenina en los niveles básicos de escolaridad refleja tanto los avances en la cobertura educativa como los desafíos persistentes en la continuidad de las trayectorias escolares.                                                 </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Intercensal 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. POBLACIÓN DE 3 AÑOS Y MÁS SEGÚN ASISTENCIA ESCOLAR -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-user-check me-2" style="color: #f57c00;"></i>
+                                                Población de 3 años y más según asistencia escolar
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Intercensal 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasEduAsistencia"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-people-roof me-1"></i>TOTAL DE LA POBLACIÓN DE 3 AÑOS Y MÁS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">2,128,883</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+           La asistencia escolar constituye un indicador central para analizar el acceso efectivo a la educación a lo largo del ciclo de vida. Que una proporción minoritaria de la población femenina de 3 años y más se encuentre cursando estudios responde, en gran medida, a la estructura por edad de la población: la mayoría de las mujeres adultas y mayores ya concluyó su trayecto escolar o no tuvo oportunidad de continuarlo, por lo que su condición de no asistencia no necesariamente implica exclusión del sistema educativo en el presente                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Intercensal 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI / SEP -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        INEGI. Encuesta Intercensal 2025 · Actualización: 22 de septiembre de 2026.
+                                    </div>
+                                    <div style="font-size: 0.78rem; opacity: 0.88;">
+                                        SEP. Sistema Interactivo de Consulta de Estadística Educativa · Matrícula escolarizada ciclo 2024/2025.
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI / SEP
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- GRAFICAS DE VIVIENDA -->
+                    <div id="layoutTematicoVivienda" class="d-none">
+
+                        <!-- 1. VIVIENDAS PARTICULARES HABITADAS SEGÚN DISPONIBILIDAD DE SERVICIOS -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-faucet-drip me-2" style="color: #1565c0;"></i>
+                                                Viviendas particulares según disponibilidad de servicios
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Censo 2020</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasVivServicios"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-house-chimney me-1"></i> TOTAL DE VIVIENDAS HABITADAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">1,121,846</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+            La cobertura de energía eléctrica y sanitario presentan los niveles más altos. Una parte importante cuenta con drenaje, mientras que el acceso a agua entubada dentro de la vivienda registra una marcada brecha estructural, incidiendo directamente en las cargas de trabajo doméstico y cuidados asumidas preponderantemente por mujeres.
+            La disponibilidad de servicios básicos en la vivienda constituye un factor determinante para el bienestar de los hogares y, de manera particular, para la vida cotidiana de las mujeres, quienes asumen de forma desproporcionada las tareas domésticas y de cuidados.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Censo de Población y Vivienda 2020.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. VIVIENDAS PARTICULARES HABITADAS SEGÚN MATERIAL EN PISOS -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-layer-group me-2" style="color: #5aa348;"></i>
+                                                Viviendas particulares habitadas según material 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Censo 2020</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 330px;">
+                                        <canvas id="canvasVivPisos"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-mountain me-1"></i> TOTAL DE PISO DE TIERRA EN VIVIENDAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">149,170</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+    La calidad de los materiales de construcción de la vivienda constituye un indicador fundamental de las condiciones de habitabilidad y del bienestar de los hogares. Contar con pisos de material durable reduce los riesgos asociados a enfermedades, facilita la limpieza y el mantenimiento del hogar y contribuye a un entorno más seguro, especialmente para niñas, niños y personas adultas mayores.                                                  </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Censo de Población y Vivienda 2020.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI CENSO 2020 -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        INEGI. Censo de Población y Vivienda 2020 · Información referida al 15 de marzo de 2020.
+                                    </div>
+                                    <div style="font-size: 0.78rem; opacity: 0.88;">
+                                        Consulta de: Viviendas particulares habitadas según disponibilidad de servicios y material durable en pisos.
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- GRAFICAS DE  INGRESO -->
+                    <div id="layoutTematicoIngreso" class="d-none">
+
+                        <!-- 1. INGRESO CORRIENTE PROMEDIO TRIMESTRAL SEGÚN RUBROS (ENIGH / INEGI) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-sack-dollar me-2" style="color: #2e7d32;"></i>
+                                                Ingreso corriente promedio trimestral por hogar según rubros
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENIGH</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasIngresoRubros"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-wallet me-1"></i> TOTAL DE INGRESO CORRIENTE PROMEDIO TRIMESTRAL
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">$52,003</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+       La estructura del ingreso de los hogares refleja las condiciones económicas en las que se desenvuelven las familias y permite identificar su grado de dependencia de determinadas fuentes de recursos. Que el ingreso del trabajo represente la principal fuente indica que la participación en el mercado laboral constituye el pilar fundamental de la economía de los hogares; sin embargo, también evidencia la vulnerabilidad frente a condiciones como el desempleo, la informalidad o la precariedad salarial.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH).</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. TASA DE DESOCUPACIÓN TOTAL TRIMESTRAL EN OAXACA (ENOE / INEGI) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-chart-line me-2" style="color: #0288d1;"></i>
+                                                Tasa de desocupación total 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENOE</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasIngresoDesocupacion"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-user-clock me-1"></i> TOTAL DE LA TASA DE DESOCUPACIÓN 
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">20.24%</div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+   La interpretación de la desocupación requiere considerar el contexto estructural del mercado laboral en la entidad. Una tasa de desocupación abierta baja no necesariamente indica mejores condiciones de empleo, sino que puede reflejar la ausencia de mecanismos de protección al desempleo y la necesidad inmediata de las personas de obtener ingresos, aun en condiciones de precariedad.                                                 </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Nacional de Ocupación y Empleo (ENOE).</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI ENIGH & ENOE -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        1. INEGI. Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH) · Ingreso corriente promedio trimestral según rubros.
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        2. INEGI. Encuesta Nacional de Ocupación y Empleo (ENOE) · Desocupación: Tasa de desocupación total trimestral según entidad federativa (2023 - 2026).
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- LAYOUT TEMÁTICO LENGUAS INDÍGENAS (INEGI) -->
+                    <div id="layoutTematicoLenguas" class="d-none">
+
+                        <!-- 1. POBLACIÓN HABLANTE DE LENGUA INDÍGENA QUE NO HABLA ESPAÑOL (CENSOS 2010 Y 2020) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-language me-2" style="color: #7b1fa2;"></i>
+                                                Población de 3 años y más que no habla español
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Censos 2010 - 2020</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasLenguasMonolingues"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-users-line me-1"></i> TOTAL DE MUJERES QUE NO HABLAN ESPAÑOL
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">87,809</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+         El número de mujeres de 3 años y más hablantes de lengua indígena que no hablan español presentó variaciones entre los periodos censales comparados, lo que refleja cambios en la condición de monolingüismo indígena en ese lapso. Esta situación visibiliza la persistencia de una población significativa de mujeres que requiere atención pública, servicios de salud, justicia e iniciativas comunitarias con pertinencia cultural y lingüística.
+         El monolingüismo indígena constituye una condición que puede limitar el ejercicio pleno de derechos, especialmente cuando los servicios públicos no cuentan con personal hablante de las lenguas originarias ni con materiales traducidos.                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuentes: INEGI. Censo de Población y Vivienda 2010. INEGI. Censo de Población y Vivienda 2020.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. POBLACIÓN SEGÚN CONDICIÓN DE HABLA INDÍGENA (INTERCENSAL 2025) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-comments me-2" style="color: #00897b;"></i>
+                                               Hablantes de lenguas indígenas de 3 años y más
+                                            </h6>
+                                         </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Intercensal 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasLenguasCondicion"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-comment-dots me-1"></i> TOTAL MUJERES HABLANTES DE LENGUAS INDÍGENAS
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1">29.39%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+   El INEGI registra a mujeres de 3 años y más. De ellas, una parte habla alguna lengua indígena, mientras que la mayoría no habla lengua indígena y un segmento no lo especificó. Este panorama sociolingüístico confirma que una proporción significativa de mujeres son hablantes de una lengua originaria, sustentando la necesidad de proyectos y acompañamientos comunitarios con pertinencia intercultural.
+   La diversidad lingüística constituye uno de los rasgos más distintivos del territorio y de su población, y su reconocimiento resulta indispensable para el diseño de políticas públicas incluyentes.                                                 </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Intercensal 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        1. INEGI. Censo de Población y Vivienda 2010 y Censo de Población y Vivienda 2020.
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        2. INEGI. Encuesta Intercensal 2025.
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-end align-items-center" id="modalTematicoFooter">
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" data-bs-dismiss="modal">
+                        Cerrar <i class="fa-solid fa-arrow-down ms-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let miGrafica = null;
+        let mapaLeaflet = null;
+        let temaActual = 'poblacion';
+        let estadoSeleccionado = null;
+        let ambitoActual = 'ESTATAL';
+
+     function crearOpcionesBarras(titleY, colorX) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            datalabels: {
+                anchor: 'end',
+                align: 'end',
+                color: '#333',
+                font: { weight: 'bold', size: 10 },
+                formatter: function(value) {
+                    if (!value && value !== 0) return '';
+                    return Number(value).toLocaleString('es-MX');
+                },
+                clip: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(c) {
+                        return ' ' + Number(c.raw).toLocaleString('es-MX') + ' hab.';
+                    }
+                }
+            }
+        },
+        layout: { padding: { top: 24, bottom: 10 } },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(v) {
+                        return v >= 1000000 ? (v / 1000000).toFixed(1) + 'M'
+                             : v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v;
+                    },
+                    font: { size: 10 }
+                },
+                title: { display: true, text: titleY || 'Habitantes', font: { size: 11, weight: 'bold' } },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            x: {
+                ticks: { 
+                    font: { size: 9, weight: 'bold' },
+                    color: colorX || '#4a154b', 
+                    maxRotation: 0,
+                    minRotation: 0,
+                    autoSkip: false,
+                    padding: 5
+                },
+                grid: { display: false }
+            }
+        }
+    };
+}
+        const regionesOaxacaCoordenadas = [
+            { id: 1, clave: 'REG-01', nombre: 'Valles C', lat: 17.0732, lng: -96.7266, pob: '1,033,884', mujeresHab: '549,000', hombresHab: '484,884', mujeres: '53.1%', hombres: '46.9%', psic: 1147, juicios: 598, casos: 420 },
+            { id: 2, clave: 'REG-02', nombre: 'Istmo', lat: 16.4360, lng: -95.2400, pob: '622,464', mujeresHab: '322,000', hombresHab: '300,464', mujeres: '51.7%', hombres: '48.3%', psic: 185, juicios: 120, casos: 198 },
+            { id: 3, clave: 'REG-03', nombre: 'Tuxtepec', lat: 18.1000, lng: -96.1000, pob: '492,028', mujeresHab: '257,000', hombresHab: '235,028', mujeres: '52.2%', hombres: '47.8%', psic: 92, juicios: 45, casos: 99 },
+            { id: 4, clave: 'REG-04', nombre: 'Costa', lat: 15.8500, lng: -96.3200, pob: '597,975', mujeresHab: '309,000', hombresHab: '288,975', mujeres: '51.7%', hombres: '48.3%', psic: 148, juicios: 74, casos: 165 },
+            { id: 5, clave: 'REG-05', nombre: 'Mixteca', lat: 17.5000, lng: -97.5000, pob: '483,163', mujeresHab: '258,000', hombresHab: '225,163', mujeres: '53.4%', hombres: '46.6%', psic: 142, juicios: 82, casos: 121 },
+            { id: 6, clave: 'REG-06', nombre: 'Sierra S', lat: 16.2000, lng: -96.5000, pob: '341,202', mujeresHab: '177,000', hombresHab: '164,202', mujeres: '51.9%', hombres: '48.1%', psic: 74, juicios: 38, casos: 55 },
+            { id: 7, clave: 'REG-07', nombre: 'Sierra N', lat: 17.5000, lng: -96.3000, pob: '181,048', mujeresHab: '94,000', hombresHab: '87,048', mujeres: '51.9%', hombres: '48.1%', psic: 37, juicios: 18, casos: 44 },
+            { id: 8, clave: 'REG-08', nombre: 'Cañada', lat: 17.8000, lng: -96.8000, pob: '179,384', mujeresHab: '93,000', hombresHab: '86,384', mujeres: '51.8%', hombres: '48.2%', psic: 25, juicios: 15, casos: 33 }
+        ];
+
+        let timerBotonTerritorial = null;
+        function cambiarAmbito(ambito, elemento) {
+            ambitoActual = ambito;
+            try {
+                sessionStorage.setItem('plataforma_vista_activa', JSON.stringify({ tipo: 'territorial', id: ambito }));
+                history.replaceState(null, document.title, '#' + ambito.toLowerCase());
+            } catch(e) {}
+
+            document.querySelectorAll(".btn-territorial").forEach(btn => {
+                btn.classList.remove("active");
+                btn.blur();
+            });
+
+            if (elemento) {
+                elemento.classList.add("active");
+                if (timerBotonTerritorial) {
+                    clearTimeout(timerBotonTerritorial);
+                }
+                timerBotonTerritorial = setTimeout(function() {
+                    if (elemento) {
+                        elemento.classList.remove("active");
+                        elemento.blur();
+                    }
+                }, 1600);
+            }
+
+            if (ambito === "NACIONAL") {
+                abrirVentanaNacional();
+            } else if (ambito === "ESTATAL") {
+                abrirVentanaEstatal();
+            }
+        }
+
+        function configurarAutoCierrePopup(mapa) {
+            if (!mapa) return;
+            mapa.on('popupopen', function (e) {
+                const popup = e.popup;
+                if (popup && popup._timerAutoCierre) {
+                    clearTimeout(popup._timerAutoCierre);
+                }
+                if (popup) {
+                    popup._timerAutoCierre = setTimeout(function () {
+                        if (mapa && popup && mapa.hasLayer(popup)) {
+                            mapa.closePopup(popup);
+                        }
+                    }, 4500);
+                }
+            });
+        }
+
+        let modalNacionalBootstrap = null;
+        let mapaMexicoLeaflet = null;
+        let chartPoblacionNacional = null;
+
+        function abrirVentanaNacional() {
+            const modalEl = document.getElementById('modalNacional');
+            if (!modalEl) return;
+
+            if (!modalNacionalBootstrap) {
+                modalNacionalBootstrap = new bootstrap.Modal(modalEl);
+                modalEl.addEventListener('shown.bs.modal', function () {
+                    inicializarMapaMexico();
+                    renderizarGraficaNacional();
+                    if (mapaMexicoLeaflet) {
+                        mapaMexicoLeaflet.closePopup();
+                        mapaMexicoLeaflet.invalidateSize();
+                    }
+                });
+                modalEl.addEventListener('hidden.bs.modal', function () {
+                    if (mapaMexicoLeaflet) {
+                        mapaMexicoLeaflet.closePopup();
+                    }
+                });
+            } else {
+                if (mapaMexicoLeaflet) {
+                    mapaMexicoLeaflet.closePopup();
+                }
+            }
+            modalNacionalBootstrap.show();
+        }
+
+        function inicializarMapaMexico() {
+            if (!mapaMexicoLeaflet) {
+                mapaMexicoLeaflet = L.map('mapaMexico').setView([23.6345, -102.5528], 5);
+                configurarAutoCierrePopup(mapaMexicoLeaflet);
+
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '&copy; Esri | INEGI Censo 2020',
+                    maxZoom: 18
+                }).addTo(mapaMexicoLeaflet);
+
+                if (typeof geojsonEstadosMexico !== 'undefined') {
+                    L.geoJSON(geojsonEstadosMexico, {
+                        style: function (feature) {
+                            return {
+                                color: '#682260',
+                                weight: 1.5,
+                                fillColor: '#f3e8f1',
+                                fillOpacity: 0.25
+                            };
+                        },
+                    
+                        onEachFeature: function (feature, layer) {
+                            const nombreRaw = (feature.properties && feature.properties.name) ? feature.properties.name : "Entidad Federativa";
+                            
+                            layer.bindPopup(function() {
+                                return AdminDatos.generarHtmlPopupEstado(nombreRaw);
+                            });
+
+                            layer.on('mouseover', function () {
+                                if (this !== estadoSeleccionado) {
+                                    this.setStyle({ weight: 3, fillOpacity: 0.65 });
+                                }
+                            });
+
+                            layer.on('mouseout', function () {
+                                if (this !== estadoSeleccionado) {
+                                    this.setStyle({ weight: 1.5, fillOpacity: 0.25 });
+                                }
+                            });
+
+                            layer.on('click', function () {
+                                if (estadoSeleccionado && estadoSeleccionado !== this) {
+                                    estadoSeleccionado.setStyle({
+                                        color: '#682260',
+                                        weight: 1.5,
+                                        fillColor: '#f3e8f1',
+                                        fillOpacity: 0.25
+                                    });
+                                }
+                                this.setStyle({ weight: 3, fillColor: '#c2185b', fillOpacity: 0.45 });
+                                estadoSeleccionado = this;
+
+                                if (mapaMexicoLeaflet) mapaMexicoLeaflet.closePopup();
+                                actualizarPanelEstadoNacional(nombreRaw);
+                            });
+                        }
+                    }).addTo(mapaMexicoLeaflet);
+                }
+            }
+        }
+
+        function actualizarKpisNacional() {
+            if (!window.AdminDatos) return;
+            const nac = AdminDatos.getNacional();
+            const elTot = document.getElementById('kpiNacionalTotal');
+            const elMuj = document.getElementById('kpiNacionalMujeres');
+            const elPctM = document.getElementById('kpiNacionalPctMujeres');
+            const elHom = document.getElementById('kpiNacionalHombres');
+            const elPctH = document.getElementById('kpiNacionalPctHombres');
+
+            if (elTot) elTot.textContent = nac.pobFormateada;
+            if (elMuj) elMuj.textContent = nac.mujeresFormateada;
+            if (elPctM) elPctM.textContent = nac.pctMujeres + ' del total';
+            if (elHom) elHom.textContent = nac.hombresFormateada;
+            if (elPctH) elPctH.textContent = nac.pctHombres + ' del total';
+        }
+
+        function actualizarPanelEstadoNacional(nombreEstado) {
+            if (!window.AdminDatos) return;
+
+            var est = AdminDatos.getEstado(nombreEstado);
+
+            const titulo = document.getElementById('tituloPanelNacional');
+            const subtitulo = document.getElementById('subtituloPanelNacional');
+            const labelTotal = document.getElementById('labelNacionalTotal');
+            const iconoWrapper = document.getElementById('iconoPanelNacional');
+            const elTot = document.getElementById('kpiNacionalTotal');
+            const elMuj = document.getElementById('kpiNacionalMujeres');
+            const elPctM = document.getElementById('kpiNacionalPctMujeres');
+            const elHom = document.getElementById('kpiNacionalHombres');
+            const elPctH = document.getElementById('kpiNacionalPctHombres');
+            const btnWrap = document.getElementById('btnVolverMexicoWrap');
+
+            if (titulo) titulo.textContent = nombreEstado.toUpperCase();
+            if (subtitulo) subtitulo.textContent = 'Datos demográficos · INEGI Censo 2020';
+            if (labelTotal) labelTotal.textContent = 'Población Total';
+            if (iconoWrapper) iconoWrapper.innerHTML = '<i class="fa-solid fa-location-dot"></i>';
+            if (btnWrap) btnWrap.style.display = '';
+
+            var pobNum = 0, mujNum = 0, homNum = 0, pctM = '--', pctH = '--';
+
+            if (est) {
+                pobNum = Number(est.pob) || 0;
+                mujNum = Number(est.mujeres) || 0;
+                homNum = Number(est.hombres) || 0;
+                pctM = est.pctMujeres || (pobNum > 0 ? ((mujNum / pobNum) * 100).toFixed(1) + '%' : '--');
+                pctH = est.pctHombres || (pobNum > 0 ? ((homNum / pobNum) * 100).toFixed(1) + '%' : '--');
+            }
+
+            if (elTot) elTot.textContent = pobNum.toLocaleString('es-MX');
+            if (elMuj) elMuj.textContent = mujNum.toLocaleString('es-MX');
+            if (elPctM) elPctM.textContent = pctM;
+            if (elHom) elHom.textContent = homNum.toLocaleString('es-MX');
+            if (elPctH) elPctH.textContent = pctH;
+
+            if (chartPoblacionNacional) chartPoblacionNacional.destroy();
+            const ctx = document.getElementById('canvasNacional');
+            if (ctx) {
+                var opts = crearOpcionesBarras('Habitantes');
+                chartPoblacionNacional = new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Total ' + nombreEstado, 'Mujeres', 'Hombres'],
+                        datasets: [{
+                            label: nombreEstado,
+                            data: [pobNum, mujNum, homNum],
+                            backgroundColor: ['#4a154b', '#c2185b', '#00897b'],
+                            borderRadius: 8, borderWidth: 1, borderColor: '#ffffff', barPercentage: 0.65
+                        }]
+                    },
+                    options: opts
+                });
+            }
+        }
+
+        function mostrarDatosMexicoNacional() {
+            const titulo = document.getElementById('tituloPanelNacional');
+            const subtitulo = document.getElementById('subtituloPanelNacional');
+            const labelTotal = document.getElementById('labelNacionalTotal');
+            const iconoWrapper = document.getElementById('iconoPanelNacional');
+            const btnWrap = document.getElementById('btnVolverMexicoWrap');
+
+            if (titulo) titulo.textContent = 'MÉXICO';
+            if (subtitulo) subtitulo.textContent = 'Haz clic en un estado para ver sus datos';
+            if (labelTotal) labelTotal.textContent = ' México';
+            if (iconoWrapper) iconoWrapper.innerHTML = '<i class="fa-solid fa-earth-americas"></i>';
+            if (btnWrap) btnWrap.style.display = 'none';
+
+            if (estadoSeleccionado) {
+                estadoSeleccionado.setStyle({ color:'#682260', weight:1.5, fillColor:'#f3e8f1', fillOpacity:0.25 });
+                estadoSeleccionado = null;
+            }
+
+            actualizarKpisNacional();
+            renderizarGraficaNacional();
+        }
+
+        function actualizarKpisEstatal() {
+            if (!window.AdminDatos) return;
+            const est = AdminDatos.getEstatal();
+            const elTot = document.getElementById('kpiEstatalTotal');
+            const elMuj = document.getElementById('kpiEstatalMujeres');
+            const elPctM = document.getElementById('kpiEstatalPctMujeres');
+            const elHom = document.getElementById('kpiEstatalHombres');
+            const elPctH = document.getElementById('kpiEstatalPctHombres');
+
+            if (elTot) elTot.textContent = est.pobFormateada;
+            if (elMuj) elMuj.textContent = est.mujeresFormateada;
+            if (elPctM) elPctM.textContent = est.pctMujeres + ' del total';
+            if (elHom) elHom.textContent = est.hombresFormateada;
+            if (elPctH) elPctH.textContent = est.pctHombres + ' del total';
+        }
+
+        function renderizarGraficaNacional() {
+            actualizarKpisNacional();
+            if (chartPoblacionNacional) chartPoblacionNacional.destroy();
+            const ctxNacional = document.getElementById('canvasNacional').getContext('2d');
+            const nac = AdminDatos.getNacional();
+            const opts = crearOpcionesBarras('Millones de Habitantes');
+            opts.plugins.tooltip.callbacks.label = function(c) {
+                const nacCur = AdminDatos.getNacional();
+                const val = Number(c.raw).toLocaleString('es-MX');
+                let sub = '';
+                if (c.dataIndex === 1) sub = ' (' + nacCur.pctMujeres + ')';
+                if (c.dataIndex === 2) sub = ' (' + nacCur.pctHombres + ')';
+                return ' ' + val + ' hab.' + sub;
+            };
+            chartPoblacionNacional = new Chart(ctxNacional, {
+                type: 'bar',
+                data: {
+                    labels: ['Población Total', 'Mujeres en México', 'Hombres en México'],
+                    datasets: [{
+                        label: 'Habitantes',
+                        data: [nac.pob, nac.mujeres, nac.hombres],
+                        backgroundColor: ['#4a154b', '#c2185b', '#00897b'],
+                        borderRadius: 8, borderWidth: 1, borderColor: '#ffffff', barPercentage: 0.65
+                    }]
+                },
+                options: opts
+            });
+        }
+
+        let modalEstatalBootstrap = null;
+        let mapaEstatalLeaflet = null;
+        let chartPoblacionEstatalModal = null;
+
+        function abrirVentanaEstatal() {
+            const modalEl = document.getElementById('modalEstatal');
+            if (!modalEl) return;
+
+            if (!modalEstatalBootstrap) {
+                modalEstatalBootstrap = new bootstrap.Modal(modalEl);
+                modalEl.addEventListener('shown.bs.modal', function () {
+                    inicializarMapaEstatal();
+                    renderizarGraficaEstatalModal();
+                    if (mapaEstatalLeaflet) {
+                        mapaEstatalLeaflet.closePopup();
+                        mapaEstatalLeaflet.invalidateSize();
+                    }
+                });
+                modalEl.addEventListener('hidden.bs.modal', function () {
+                    if (mapaEstatalLeaflet) {
+                        mapaEstatalLeaflet.closePopup();
+                    }
+                });
+            } else {
+                if (mapaEstatalLeaflet) {
+                    mapaEstatalLeaflet.closePopup();
+                }
+            }
+            modalEstatalBootstrap.show();
+        }
+
+        function inicializarMapaEstatal() {
+            if (!mapaEstatalLeaflet) {
+                mapaEstatalLeaflet = L.map('mapaEstatal').setView([17.0732, -96.7266], 7);
+                configurarAutoCierrePopup(mapaEstatalLeaflet);
+
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: '&copy; Esri | INEGI Censo 2020',
+                    maxZoom: 18
+                }).addTo(mapaEstatalLeaflet);
+
+                if (typeof geojsonEstadosMexico !== 'undefined') {
+                    const featureOaxaca = geojsonEstadosMexico.features.filter(f => f.properties && f.properties.name && f.properties.name.toLowerCase().includes('oaxaca'));
+                    if (featureOaxaca.length > 0) {
+                        const capaOaxaca = L.geoJSON({ type: "FeatureCollection", features: featureOaxaca }, {
+                            style: {
+                                color: '#8e24aa',
+                                weight: 4,
+                                fillColor: '#ce93d8',
+                                fillOpacity: 0.35
+                            },
+                            onEachFeature: function(feature, layer) {
+                                layer.bindPopup(function() {
+                                    return AdminDatos.generarHtmlPopupEstatal();
+                                });
+                            }
+                        }).addTo(mapaEstatalLeaflet);
+
+                        try {
+                            mapaEstatalLeaflet.fitBounds(capaOaxaca.getBounds(), { padding: [15, 15] });
+                        } catch(e) {}
+                    }
+                }
+            } else {
+                setTimeout(() => { mapaEstatalLeaflet.invalidateSize(); }, 200);
+            }
+        }
+
+        function renderizarGraficaEstatalModal() {
+            actualizarKpisEstatal();
+            if (chartPoblacionEstatalModal) chartPoblacionEstatalModal.destroy();
+            const ctxEstatal = document.getElementById('canvasEstatalModal').getContext('2d');
+            const est = AdminDatos.getEstatal();
+            const opts = crearOpcionesBarras('Millones de Habitantes');
+            opts.plugins.tooltip.callbacks.label = function(c) {
+                const estCur = AdminDatos.getEstatal();
+                const val = Number(c.raw).toLocaleString('es-MX');
+                let sub = '';
+                if (c.dataIndex === 1) sub = ' (' + estCur.pctMujeres + ')';
+                if (c.dataIndex === 2) sub = ' (' + estCur.pctHombres + ')';
+                return ' ' + val + ' hab.' + sub;
+            };
+            chartPoblacionEstatalModal = new Chart(ctxEstatal, {
+                type: 'bar',
+                data: {
+                    labels: ['Población Total Oaxaca', 'Mujeres en Oaxaca', 'Hombres en Oaxaca'],
+                    datasets: [{
+                        label: 'Habitantes',
+                        data: [est.pob, est.mujeres, est.hombres],
+                        backgroundColor: ['#4a154b', '#c2185b', '#00897b'],
+                        borderRadius: 8, borderWidth: 1, borderColor: '#ffffff', barPercentage: 0.65
+                    }]
+                },
+                options: opts
+            });
+        }
+
+        if (window.AdminDatos) {
+            AdminDatos.onCambio(function(tipo, detalle) {
+                actualizarKpisNacional();
+                actualizarKpisEstatal();
+
+                const modalNacEl = document.getElementById('modalNacional');
+                if (modalNacEl && modalNacEl.classList.contains('show')) {
+                    renderizarGraficaNacional();
+                }
+
+                const modalEstEl = document.getElementById('modalEstatal');
+                if (modalEstEl && modalEstEl.classList.contains('show')) {
+                    renderizarGraficaEstatalModal();
+                }
+            });
+        }
+
+        document.addEventListener("show.bs.modal", function () {
+            document.documentElement.style.overflow = "hidden";
+        });
+        document.addEventListener("shown.bs.modal", function () {
+            document.querySelectorAll(".btn-territorial").forEach(btn => {
+                btn.classList.remove("active");
+                btn.blur();
+            });
+            document.querySelectorAll(".tema-card").forEach(card => {
+                card.classList.remove("active");
+                card.blur();
+            });
+        });
+        document.addEventListener("hidden.bs.modal", function (event) {
+            try {
+                sessionStorage.removeItem('plataforma_vista_activa');
+                
+                if (window.location.hash) {
+                    history.replaceState(null, document.title, window.location.pathname + window.location.search);
+                }
+            } catch(e) {}
+
+            document.querySelectorAll(".btn-territorial").forEach(btn => {
+                btn.classList.remove("active");
+                btn.blur();
+            });
+            document.querySelectorAll(".tema-card").forEach(card => {
+                card.classList.remove("active");
+                card.blur();
+            });
+            if (!document.querySelector(".modal.show")) {
+                document.documentElement.style.overflow = "";
+            }
+        });
+
+        function restaurarVistaGuardada() {
+            let vista = null;
+            try {
+                const guardada = sessionStorage.getItem('plataforma_vista_activa');
+                if (guardada) vista = JSON.parse(guardada);
+            } catch(e) {}
+
+            
+
+            if (hash) {
+                if (hash === '#nacional') vista = { tipo: 'territorial', id: 'NACIONAL' };
+                else if (hash === '#estatal') vista = { tipo: 'territorial', id: 'ESTATAL' };
+                else if (hash.startsWith('#tema-')) {
+                    vista = { tipo: 'tema', id: hash.replace('#tema-', '') };
+                }
+            }
+
+            if (vista) {
+                if (vista.tipo === 'territorial') {
+                    const btn = document.getElementById(vista.id === 'NACIONAL' ? 'btnNacional' : 'btnEstatal');
+                    cambiarAmbito(vista.id, btn);
+                } else if (vista.tipo === 'tema') {
+                    const card = document.querySelector(`.tema-card[onclick*="'${vista.id}'"]`);
+                    if (typeof mostrarTema === 'function') {
+                        mostrarTema(vista.id, card);
+                    }
+                }
+            }
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarKpisNacional();
+            actualizarKpisEstatal();
+
+            restaurarVistaGuardada();
+            requestAnimationFrame(function() {
+                setTimeout(function() {
+                    document.documentElement.classList.remove('recarga-modal-activa');
+                }, 100);
+            });
+        });
+    </script>
+<!-- SCRIPT OPTIMIZADO PARA GENERAR LAS TARJETAS MINI EN EL FOOTER -->
+<script>
+    const DIMENSIONES = [
+        { id: 'atendidas',    nombre: 'Atendidas',    icono: 'fa-people-group',       color: 'tema-atendidas' },
+        { id: 'psicologia',   nombre: 'Psicología',   icono: 'fa-hand-holding-heart', color: 'tema-psicologia' },
+        { id: 'juicios',      nombre: 'Juicios',      icono: 'fa-scale-balanced',     color: 'tema-legal' },
+        { id: 'feminicidios', nombre: 'Feminicidios', icono: 'fa-ribbon',             color: 'tema-feminicidios' },
+        { id: 'talleres',     nombre: 'Talleres',     icono: 'fa-chalkboard-user',    color: 'tema-talleres' },
+        { id: 'proyectos',    nombre: 'Proyectos',    icono: 'fa-diagram-project',    color: 'tema-proyectos' },
+        { id: 'salud',        nombre: 'Salud',        icono: 'fa-heart-pulse',        color: 'tema-salud' },
+        { id: 'educacion',    nombre: 'Educación',    icono: 'fa-book-open',          color: 'tema-educacion' },
+        { id: 'vivienda',     nombre: 'Vivienda',     icono: 'fa-house-chimney',      color: 'tema-vivienda' },
+        { id: 'ingreso',      nombre: 'Ingreso',      icono: 'fa-sack-dollar',        color: 'tema-ingreso' },
+        { id: 'lenguas',      nombre: 'Lenguas',      icono: 'fa-language',           color: 'tema-lenguas' }
+    ];
+
+    let timerTarjetaMiniActiva = null;
+
+    function crearTarjetaMini(dim) {
+        return `
+            <div class="tema-card-mini"
+                 data-dim="${dim.id}"
+                 onclick="seleccionarTarjetaMini('${dim.id}', this)"
+                 title="${dim.nombre}">
+                <div class="tema-icon-wrapper ${dim.color}">
+                    <i class="fa-solid ${dim.icono}"></i>
+                </div>
+                <span class="tema-nombre-mini">${dim.nombre}</span>
+            </div>
+        `;
+    }
+
+    function renderizarTarjetasFooter() {
+        const contenedores = document.querySelectorAll('#contenedorTarjetasModal');
+        contenedores.forEach(contenedor => {
+            contenedor.innerHTML = DIMENSIONES.map(d => crearTarjetaMini(d)).join('');
+        });
+    }
+
+    function seleccionarTarjetaMini(idDim, elemento) {
+        document.querySelectorAll('.tema-card-mini').forEach(t => t.classList.remove('active'));
+
+        if (elemento) {
+            elemento.classList.add('active');
+
+            if (timerTarjetaMiniActiva) clearTimeout(timerTarjetaMiniActiva);
+            timerTarjetaMiniActiva = setTimeout(function () {
+                if (elemento) {
+                    elemento.classList.remove('active');
+                    elemento.blur();
+                }
+            }, 1600);
+        }
+
+        if (typeof mostrarTema === 'function') {
+            mostrarTema(idDim, null);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderizarTarjetasFooter();
+
+        const modalTematicoEl = document.getElementById('modalTematico');
+        if (modalTematicoEl) {
+            modalTematicoEl.addEventListener('shown.bs.modal', function() {
+                renderizarTarjetasFooter();
+            });
+        }
+    });
+</script>
+</body>
+</html>
