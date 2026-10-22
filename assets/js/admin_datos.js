@@ -951,7 +951,379 @@
             this.mostrarToast('Sesión de administración cerrada correctamente.');
         },
 
-        cargarFotoPerfil: function() {
+        
+        // ========================================================
+        // RECALCULOS AUTOMATICOS Y GESTION DE VISTAS DEL ADMIN
+        // ========================================================
+        recalcularNacional: function(origen) {
+            const elTotal = document.getElementById('inputAdminPobTotal');
+            const elMujeres = document.getElementById('inputAdminMujeres');
+            const elHombres = document.getElementById('inputAdminHombres');
+            if (!elTotal || !elMujeres || !elHombres) return;
+
+            let total = parseFloat(elTotal.value) || 0;
+            let mujeres = parseFloat(elMujeres.value) || 0;
+            let hombres = parseFloat(elHombres.value) || 0;
+
+            if (origen === 'mujeres' && total > 0) {
+                hombres = Math.max(0, total - mujeres);
+                elHombres.value = Math.round(hombres);
+            } else if (origen === 'hombres' && total > 0) {
+                mujeres = Math.max(0, total - hombres);
+                elMujeres.value = Math.round(mujeres);
+            } else if (origen === 'total') {
+                if (mujeres > 0 && hombres > 0) {
+                    const ratio = mujeres / (mujeres + hombres);
+                    mujeres = Math.round(total * ratio);
+                    hombres = total - mujeres;
+                    elMujeres.value = mujeres;
+                    elHombres.value = hombres;
+                } else if (mujeres > 0) {
+                    hombres = Math.max(0, total - mujeres);
+                    elHombres.value = Math.round(hombres);
+                }
+            }
+
+            const pM = total > 0 ? ((mujeres / total) * 100).toFixed(1) + '%' : '0.0%';
+            const pH = total > 0 ? ((hombres / total) * 100).toFixed(1) + '%' : '0.0%';
+            const rel = mujeres > 0 ? ((hombres / mujeres) * 100).toFixed(1) : '100.0';
+
+            const spanM = document.getElementById('calcNacPctMujeres');
+            const spanH = document.getElementById('calcNacPctHombres');
+            const spanR = document.getElementById('calcNacRelacion');
+            if (spanM) spanM.textContent = pM;
+            if (spanH) spanH.textContent = pH;
+            if (spanR) spanR.textContent = rel;
+
+            if (window.AdminMenuDashboard) {
+                const k1 = document.getElementById('kpiCard1Val');
+                const k2 = document.getElementById('kpiCard2Val');
+                const k3 = document.getElementById('kpiCard3Val');
+                if (k1) k1.textContent = total.toLocaleString('es-MX');
+                if (k2) k2.textContent = mujeres.toLocaleString('es-MX');
+                if (k3) k3.textContent = hombres.toLocaleString('es-MX');
+            }
+        },
+
+        recalcularEstatal: function(origen) {
+            const elTotal = document.getElementById('inputAdminOaxTotal');
+            const elMujeres = document.getElementById('inputAdminOaxMujeres');
+            const elHombres = document.getElementById('inputAdminOaxHombres');
+            if (!elTotal || !elMujeres || !elHombres) return;
+
+            let total = parseFloat(elTotal.value) || 0;
+            let mujeres = parseFloat(elMujeres.value) || 0;
+            let hombres = parseFloat(elHombres.value) || 0;
+
+            if (origen === 'mujeres' && total > 0) {
+                hombres = Math.max(0, total - mujeres);
+                elHombres.value = Math.round(hombres);
+            } else if (origen === 'hombres' && total > 0) {
+                mujeres = Math.max(0, total - hombres);
+                elMujeres.value = Math.round(mujeres);
+            } else if (origen === 'total') {
+                if (mujeres > 0 && hombres > 0) {
+                    const ratio = mujeres / (mujeres + hombres);
+                    mujeres = Math.round(total * ratio);
+                    hombres = total - mujeres;
+                    elMujeres.value = mujeres;
+                    elHombres.value = hombres;
+                }
+            }
+
+            const pM = total > 0 ? ((mujeres / total) * 100).toFixed(1) + '%' : '0.0%';
+            const pH = total > 0 ? ((hombres / total) * 100).toFixed(1) + '%' : '0.0%';
+            const rel = mujeres > 0 ? ((hombres / mujeres) * 100).toFixed(1) : '100.0';
+
+            const spanM = document.getElementById('calcEstPctMujeres');
+            const spanH = document.getElementById('calcEstPctHombres');
+            const spanR = document.getElementById('calcEstRelacion');
+            if (spanM) spanM.textContent = pM;
+            if (spanH) spanH.textContent = pH;
+            if (spanR) spanR.textContent = rel;
+
+            if (window.AdminMenuDashboard) {
+                const k1 = document.getElementById('kpiCard1Val');
+                const k2 = document.getElementById('kpiCard2Val');
+                const k3 = document.getElementById('kpiCard3Val');
+                if (k1) k1.textContent = total.toLocaleString('es-MX');
+                if (k2) k2.textContent = mujeres.toLocaleString('es-MX');
+                if (k3) k3.textContent = hombres.toLocaleString('es-MX');
+            }
+        },
+
+        poblarSelectorEstados: function() {
+            const sel = document.getElementById('selectAdminEstado');
+            if (!sel || sel.options.length > 1) return;
+
+            sel.innerHTML = '';
+            const optTotal = document.createElement('option');
+            optTotal.value = 'nacional';
+            optTotal.textContent = 'Estados Unidos Mexicanos (Total Nacional)';
+            sel.appendChild(optTotal);
+
+            const estados = AdminDatos.obtenerEstados() || {};
+            const claves = Object.keys(estados).filter(k => k !== 'nacional' && k !== 'MX-NAC').sort((a,b) => {
+                const nA = estados[a].nombre || a;
+                const nB = estados[b].nombre || b;
+                return nA.localeCompare(nB, 'es');
+            });
+
+            claves.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = estados[c].nombre || c;
+                sel.appendChild(opt);
+            });
+        },
+
+        cambiarEstadoNacional: function(clave) {
+            const estados = AdminDatos.obtenerEstados() || {};
+            const totalNac = AdminDatos.obtenerNacional() || {};
+            const est = (clave === 'nacional' || clave === 'MX-NAC') ? totalNac : estados[clave];
+            if (!est) return;
+
+            const elTotal = document.getElementById('inputAdminPobTotal');
+            const elMujeres = document.getElementById('inputAdminMujeres');
+            const elHombres = document.getElementById('inputAdminHombres');
+            if (elTotal) elTotal.value = est.pob || est.poblacion || 0;
+            if (elMujeres) elMujeres.value = est.mujeres || 0;
+            if (elHombres) elHombres.value = est.hombres || 0;
+
+            this.recalcularNacional('total');
+        },
+
+        cargarNacionalEnFormulario: function() {
+            this.poblarSelectorEstados();
+            const sel = document.getElementById('selectAdminEstado');
+            const clave = sel ? sel.value : 'nacional';
+            this.cambiarEstadoNacional(clave);
+        },
+
+        cargarEstatalEnFormulario: function() {
+            const oax = AdminDatos.obtenerEstatal() || {};
+            const elTotal = document.getElementById('inputAdminOaxTotal');
+            const elMujeres = document.getElementById('inputAdminOaxMujeres');
+            const elHombres = document.getElementById('inputAdminOaxHombres');
+            if (elTotal) elTotal.value = oax.pob || oax.poblacion || 4132148;
+            if (elMujeres) elMujeres.value = oax.mujeres || 2156845;
+            if (elHombres) elHombres.value = oax.hombres || 1975303;
+            this.recalcularEstatal('total');
+        },
+
+        guardarNacional: function() {
+            const sel = document.getElementById('selectAdminEstado');
+            const clave = sel ? sel.value : 'nacional';
+            const total = parseFloat(document.getElementById('inputAdminPobTotal')?.value) || 0;
+            const mujeres = parseFloat(document.getElementById('inputAdminMujeres')?.value) || 0;
+            const hombres = parseFloat(document.getElementById('inputAdminHombres')?.value) || 0;
+
+            AdminDatos.guardarSnapshot();
+            if (clave === 'nacional' || clave === 'MX-NAC') {
+                const nac = AdminDatos.obtenerNacional() || {};
+                nac.pob = total;
+                nac.mujeres = mujeres;
+                nac.hombres = hombres;
+                AdminDatos._datos.nacionalTotal = nac;
+            } else {
+                const est = AdminDatos.obtenerEstado(clave) || { id: clave };
+                est.pob = total;
+                est.mujeres = mujeres;
+                est.hombres = hombres;
+                AdminDatos.actualizarEstado(clave, est);
+            }
+            AdminDatos.persistir();
+            this.mostrarToast('Datos de Nivel Nacional guardados con éxito.');
+        },
+
+        guardarEstatal: function() {
+            const total = parseFloat(document.getElementById('inputAdminOaxTotal')?.value) || 0;
+            const mujeres = parseFloat(document.getElementById('inputAdminOaxMujeres')?.value) || 0;
+            const hombres = parseFloat(document.getElementById('inputAdminOaxHombres')?.value) || 0;
+
+            AdminDatos.guardarSnapshot();
+            const oax = AdminDatos.obtenerEstatal() || {};
+            oax.pob = total;
+            oax.mujeres = mujeres;
+            oax.hombres = hombres;
+            AdminDatos.actualizarEstatal(oax);
+            AdminDatos.persistir();
+            this.mostrarToast('Datos de Nivel Estatal (Oaxaca) guardados con éxito.');
+        },
+
+        // Carga y guardado de Salud (6 categorías)
+        cargarSaludEnFormulario: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_salud_datos');
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    Object.keys(d).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = d[k];
+                    });
+                }
+            } catch(e) {}
+        },
+
+        guardarSalud: function() {
+            const ids = [
+                'salud_enf_endocrinas', 'salud_enf_corazon', 'salud_enf_digestivo', 'salud_enf_respiratorio',
+                'salud_enf_cerebrovascular', 'salud_enf_hipertensiva', 'salud_enf_tumores_dig',
+                'salud_enf_tumores_gen', 'salud_enf_urinario', 'salud_enf_tumores_mama',
+                'salud_suicidio_ahorcamiento', 'salud_suicidio_envenenamiento', 'salud_suicidio_arma',
+                'salud_mama_35_44', 'salud_mama_45_54', 'salud_mama_55_64', 'salud_mama_65_mas',
+                'salud_diabetes_sub50', 'salud_diabetes_50_64', 'salud_diabetes_65_79', 'salud_diabetes_80_mas',
+                'salud_materna_rmm', 'salud_materna_defunciones', 'salud_infantil_tasa', 'salud_infantil_defunciones'
+            ];
+            const data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+            localStorage.setItem('gesmujer_salud_datos', JSON.stringify(data));
+            this.mostrarToast('Datos de Salud (6 categorías) guardados con éxito.');
+        },
+
+        // Carga y guardado de Educación (5 categorías)
+        cargarEducacionEnFormulario: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_educacion_datos');
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    Object.keys(d).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = d[k];
+                    });
+                }
+            } catch(e) {}
+        },
+
+        guardarEducacion: function() {
+            const ids = [
+                'edu_aptitud_sabe', 'edu_aptitud_nosabe', 'edu_aptitud_noesp',
+                'edu_alfa_si', 'edu_alfa_no', 'edu_alfa_noesp',
+                'edu_mat_inicial', 'edu_mat_preescolar', 'edu_mat_primaria', 'edu_mat_secundaria', 'edu_mat_mediasup', 'edu_mat_superior',
+                'edu_esc_sinesc', 'edu_esc_basica', 'edu_esc_mediasup', 'edu_esc_superior',
+                'edu_asist_si', 'edu_asist_no', 'edu_asist_noesp'
+            ];
+            const data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+            localStorage.setItem('gesmujer_educacion_datos', JSON.stringify(data));
+            this.mostrarToast('Datos de Educación (5 categorías) guardados con éxito.');
+        },
+
+        // Carga y guardado de Vivienda (2 categorías)
+        cargarViviendaEnFormulario: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_vivienda_datos');
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    Object.keys(d).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = d[k];
+                    });
+                }
+            } catch(e) {}
+        },
+
+        guardarVivienda: function() {
+            const ids = [
+                'viv_serv_electricidad', 'viv_serv_sanitario', 'viv_serv_drenaje', 'viv_serv_agua',
+                'viv_pisos_firme', 'viv_pisos_tierra', 'viv_pisos_noesp'
+            ];
+            const data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+            localStorage.setItem('gesmujer_vivienda_datos', JSON.stringify(data));
+            this.mostrarToast('Datos de Vivienda (2 categorías) guardados con éxito.');
+        },
+
+        // Carga y guardado de Ingreso (2 categorías con ventana móvil de 16 trimestres)
+        cargarIngresoEnFormulario: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_ingreso_datos');
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    Object.keys(d).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = d[k];
+                    });
+                }
+            } catch(e) {}
+        },
+
+        guardarIngreso: function() {
+            const idsRubros = ['ing_rubro_trabajo', 'ing_rubro_renta', 'ing_rubro_transf', 'ing_rubro_alquiler', 'ing_rubro_otros'];
+            const data = {};
+            idsRubros.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+
+            // Ventana móvil de 16 trimestres (4 años)
+            // Si el año registrado es 2027 o superior con datos de trimestres, eliminamos automáticamente el año 2023
+            const nuevoAnio = parseInt(document.getElementById('desoc_nuevo_anio')?.value) || 0;
+            const q1 = document.getElementById('desoc_nuevo_q1')?.value;
+            const q2 = document.getElementById('desoc_nuevo_q2')?.value;
+            const q3 = document.getElementById('desoc_nuevo_q3')?.value;
+            const q4 = document.getElementById('desoc_nuevo_q4')?.value;
+
+            if (nuevoAnio >= 2027 && (q1 || q2 || q3 || q4)) {
+                // Al registrar 2027, el año 2023 se elimina automáticamente de la ventana de 16 trimestres
+                data.desoc_anios = [2024, 2025, 2026, nuevoAnio];
+                data.desoc_2023_eliminado = true;
+                data.desoc_nuevo = { anio: nuevoAnio, q1: parseFloat(q1)||0, q2: parseFloat(q2)||0, q3: parseFloat(q3)||0, q4: parseFloat(q4)||0 };
+            } else {
+                data.desoc_anios = [2023, 2024, 2025, 2026];
+                data.desoc_2023_eliminado = false;
+            }
+
+            // Guardar trimestres 2023 - 2026
+            ['2023', '2024', '2025', '2026'].forEach(yr => {
+                for (let q = 1; q <= 4; q++) {
+                    const id = 'desoc_' + yr + '_' + q;
+                    const el = document.getElementById(id);
+                    if (el && el.value !== '') data[id] = parseFloat(el.value);
+                }
+            });
+
+            localStorage.setItem('gesmujer_ingreso_datos', JSON.stringify(data));
+            this.mostrarToast('Datos de Ingreso y Desocupación (16 trimestres) guardados con éxito.');
+        },
+
+        // Carga y guardado de Lenguas Indígenas (2 categorías)
+        cargarLenguasEnFormulario: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_lenguas_datos');
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    Object.keys(d).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = d[k];
+                    });
+                }
+            } catch(e) {}
+        },
+
+        guardarLenguas: function() {
+            const ids = [
+                'lenguas_monolingues_2010', 'lenguas_monolingues_2020',
+                'lenguas_cond_si', 'lenguas_cond_no', 'lenguas_cond_noesp'
+            ];
+            const data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+            localStorage.setItem('gesmujer_lenguas_datos', JSON.stringify(data));
+            this.mostrarToast('Datos de Lenguas Indígenas (2 categorías) guardados con éxito.');
+        },
+cargarFotoPerfil: function() {
             try {
                 const foto = localStorage.getItem(STORAGE_FOTO_KEY);
                 const img = document.getElementById('adminAvatarImg');
@@ -986,9 +1358,19 @@
         abrirCategoria: function(cat) {
             this.categoriaActiva = cat;
             if (cat === 'nacional') {
-                this.cargarDatosNacional();
+                this.cargarNacionalEnFormulario();
             } else if (cat === 'estatal') {
-                this.cargarDatosEstatal();
+                this.cargarEstatalEnFormulario();
+            } else if (cat === 'salud') {
+                this.cargarSaludEnFormulario();
+            } else if (cat === 'educacion') {
+                this.cargarEducacionEnFormulario();
+            } else if (cat === 'vivienda') {
+                this.cargarViviendaEnFormulario();
+            } else if (cat === 'ingreso') {
+                this.cargarIngresoEnFormulario();
+            } else if (cat === 'lenguas') {
+                this.cargarLenguasEnFormulario();
             }
         },
 

@@ -1689,7 +1689,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
 
                         <!-- MENÚ LATERAL CON LOS 2 BOTONES INICIALES Y LAS 5 ÚLTIMAS TARJETAS -->
                         <div class="admin-sidebar-nav">
-                            <div class="admin-nav-section-title">Navegación del Panel</div>
+                            <div class="admin-nav-section-title">CATEGORÍAS DE DATOS</div>
                             <ul class="admin-menu-list" id="adminSidebarMenu">
                                 <li class="admin-menu-item">
                                     <button type="button" class="admin-menu-btn active" data-cat="inicio" onclick="AdminMenuDashboard.seleccionar('inicio')">
@@ -1884,305 +1884,697 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                 </div>
 
                                 <!-- 1. VISTA: INICIO / DASHBOARD GENERAL -->
+                                <!-- 1. VISTA: INICIO / BIENVENIDA -->
                                 <div id="adminView_inicio" class="admin-form-box">
-                                    <div class="text-center py-5" style="min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border-radius: 16px; border: 1.5px dashed #e2e8f0; padding: 2rem;">
-                                        <div style="width: 74px; height: 74px; border-radius: 50%; background: #fdf2f8; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                                    <div class="text-center py-5" style="min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border-radius: 16px; border: 1.5px dashed #cbd5e1; padding: 3rem 2rem;">
+                                        <div style="width: 76px; height: 76px; border-radius: 50%; background: #fce4ec; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15);">
                                             <i class="fa-solid fa-house" style="font-size: 2.2rem; color: #c2185b;"></i>
                                         </div>
                                         <h4 class="fw-bold text-dark mb-2">Panel de Administración General</h4>
-                                        <p class="text-muted fs-6 mb-4" style="max-width: 600px;">
-                                            Bienvenida, Soledad Venegas. Selecciona cualquiera de los <strong>2 botones iniciales</strong> (Nacional o Estatal) o las <strong>5 tarjetas temáticas</strong> (Salud, Educación, Vivienda, Ingreso, Lenguas) para consultar y administrar la información oficial en tiempo real.
+                                        <p class="text-muted fs-6 mb-0" style="max-width: 580px; line-height: 1.6;">
+                                            Bienvenida, Soledad Venegas. Selecciona una categoría del menú lateral para consultar o editar la información oficial en tiempo real.
                                         </p>
-                                        <div class="row g-3 w-100 justify-content-center" style="max-width: 780px;">
-                                            <div class="col-6 col-md-3">
-                                                <button type="button" class="btn btn-outline-primary w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('nacional')">
-                                                    <i class="fa-solid fa-earth-americas me-2"></i> Nacional
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <button type="button" class="btn btn-outline-danger w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('estatal')">
-                                                    <i class="fa-solid fa-location-dot me-2"></i> Estatal
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <button type="button" class="btn btn-outline-success w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('salud')">
-                                                    <i class="fa-solid fa-heart-pulse me-2"></i> Salud
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <button type="button" class="btn btn-outline-info w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('educacion')">
-                                                    <i class="fa-solid fa-graduation-cap me-2"></i> Educación
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-4">
-                                                <button type="button" class="btn btn-outline-warning w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('vivienda')">
-                                                    <i class="fa-solid fa-house-chimney me-2"></i> Vivienda
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-4">
-                                                <button type="button" class="btn btn-outline-secondary w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('ingreso')">
-                                                    <i class="fa-solid fa-hand-holding-dollar me-2"></i> Ingreso
-                                                </button>
-                                            </div>
-                                            <div class="col-6 col-md-4">
-                                                <button type="button" class="btn btn-outline-dark w-100 py-3 rounded-3 fw-bold text-start" onclick="AdminMenuDashboard.seleccionar('lenguas')">
-                                                    <i class="fa-solid fa-language me-2"></i> Lenguas
-                                                </button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- 2. VISTA: NIVEL NACIONAL (BOTÓN INICIAL 1) -->
+                                <!-- 2. VISTA: NIVEL NACIONAL (31 ESTADOS + TOTAL NACIONAL) -->
                                 <div id="adminView_nacional" class="admin-form-box d-none">
-                                    <div class="row g-4 align-items-center mb-4">
-                                        <div class="col-12 col-md-6">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-earth-americas me-2" style="color: #c2185b;"></i> Indicadores Demográficos - Nivel Nacional
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
+                                        </div>
+
+                                        <div class="mb-4">
                                             <label class="form-label fw-bold text-dark mb-1" for="selectAdminEstado">
-                                                <i class="fa-solid fa-map-pin me-1 text-danger"></i> Selecciona la Entidad Federativa:
+                                                <i class="fa-solid fa-map-pin me-1 text-danger"></i> Selecciona la Entidad Federativa (31 Estados o Total Nacional):
                                             </label>
-                                            <select id="selectAdminEstado" class="form-select form-select-lg fw-bold" style="border: 2px solid #ebdbe9; border-radius: 12px; color: #4a154b;">
+                                            <select id="selectAdminEstado" class="form-select form-select-lg fw-bold" style="border: 2px solid #ebdbe9; border-radius: 12px; color: #4a154b;" onchange="AdminDatosUI.cambiarEstadoNacional(this.value)">
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="p-3 rounded-3" style="background: #fcf6fa; border: 1px dashed #d8b7d3;">
-                                                <div class="small text-muted">Entidad activa:</div>
-                                                <div class="fs-5 fw-bold" style="color: #4a154b;" id="lblAdminEntidadNombre">Estados Unidos Mexicanos (Total Nacional)</div>
-                                                <span class="badge" id="badgeAdminEntidadClave" style="background: #c2185b;">MX-NAC</span>
+
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Población Total:</label>
+                                                <input type="number" step="1" id="inputAdminPobTotal" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularNacional('total')">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Población Mujeres:</label>
+                                                <input type="number" step="1" id="inputAdminMujeres" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularNacional('mujeres')">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Población Hombres:</label>
+                                                <input type="number" step="1" id="inputAdminHombres" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularNacional('hombres')">
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacPob">
-                                                <i class="fa-solid fa-users me-1"></i> Población Total:
-                                            </label>
-                                            <input type="number" id="inputNacPob" class="form-control form-control-lg fw-bold" style="color: #102a43; border-radius: 10px;">
+                                        <!-- Cálculo Automático -->
+                                        <div class="p-3 rounded-3 mb-4" style="background: #fdf8fb; border: 1px solid #ebdbe9;">
+                                            <div class="d-flex flex-wrap gap-4 align-items-center">
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Cálculo Automático % Mujeres:</span>
+                                                    <span id="calcNacPctMujeres" class="fs-5 fw-bold" style="color: #c2185b;">51.2%</span>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Cálculo Automático % Hombres:</span>
+                                                    <span id="calcNacPctHombres" class="fs-5 fw-bold text-primary">48.8%</span>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Relación Hombres / Mujeres:</span>
+                                                    <span id="calcNacRelacion" class="fs-5 fw-bold text-dark">95.2</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacMujeres" style="color: #c2185b !important;">
-                                                <i class="fa-solid fa-venus me-1"></i> Mujeres:
-                                            </label>
-                                            <input type="number" id="inputNacMujeres" class="form-control form-control-lg fw-bold" style="color: #c2185b; border-radius: 10px;">
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputNacHombres" style="color: #00897b !important;">
-                                                <i class="fa-solid fa-mars me-1"></i> Hombres:
-                                            </label>
-                                            <input type="number" id="inputNacHombres" class="form-control form-control-lg fw-bold" style="color: #00897b; border-radius: 10px;">
-                                        </div>
-                                    </div>
 
-                                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                                        <button type="button" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #102a43, #c2185b);" onclick="AdminDatosUI.guardarCambiosNacional()">
-                                            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios Nivel Nacional
-                                        </button>
+                                        <div class="mb-4">
+                                            <label class="form-label small fw-bold text-muted mb-1">Cargar Imagen / Infografía de la Entidad:</label>
+                                            <input type="file" id="inputAdminFotoNacional" accept="image/*" class="form-control mb-2" onchange="AdminDatosUI.cargarFotoNacionalLocal(event)">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img id="previewAdminFotoNacional" src="assets/img/image.png" alt="Previsualización" class="img-thumbnail" style="height: 75px; width: 110px; object-fit: cover;">
+                                                <small class="text-muted">La imagen se sincronizará con la tarjeta nacional.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarNacional()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- 3. VISTA: NIVEL ESTATAL / OAXACA (BOTÓN INICIAL 2) -->
+                                <!-- 3. VISTA: NIVEL ESTATAL (OAXACA) -->
                                 <div id="adminView_estatal" class="admin-form-box d-none">
-                                    <div class="p-3 rounded-3 mb-4" style="background: #fdf6fa; border: 1px dashed #c2185b;">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <i class="fa-solid fa-location-dot text-danger fs-4"></i>
-                                            <div>
-                                                <h6 class="fw-bold mb-0" style="color: #4a154b;">Estado de Oaxaca</h6>
-                                                <small class="text-muted">Indicadores Demográficos Oficiales INEGI 2020</small>
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-location-dot me-2 text-danger"></i> Indicadores Demográficos - Nivel Estatal (Oaxaca)
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
+                                        </div>
+
+                                        <div class="p-3 rounded-3 mb-4" style="background: #fdf6fa; border: 1px dashed #c2185b;">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-map-location-dot text-danger fs-4"></i>
+                                                <div>
+                                                    <h6 class="fw-bold mb-0" style="color: #4a154b;">Estado de Oaxaca</h6>
+                                                    <small class="text-muted">Cifras poblacionales oficiales para el modal estatal y sus gráficas</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstPob">
-                                                <i class="fa-solid fa-users me-1"></i> Población Total en Oaxaca:
-                                            </label>
-                                            <input type="number" id="inputEstPob" class="form-control form-control-lg fw-bold" style="color: #102a43; border-radius: 10px;">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Población Total Oaxaca:</label>
+                                                <input type="number" step="1" id="inputAdminOaxTotal" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularEstatal('total')">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Mujeres Oaxaca:</label>
+                                                <input type="number" step="1" id="inputAdminOaxMujeres" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularEstatal('mujeres')">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label small fw-bold text-muted mb-1">Hombres Oaxaca:</label>
+                                                <input type="number" step="1" id="inputAdminOaxHombres" class="form-control form-control-lg fw-bold" placeholder="0" oninput="AdminDatosUI.recalcularEstatal('hombres')">
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstMujeres" style="color: #c2185b !important;">
-                                                <i class="fa-solid fa-venus me-1"></i> Mujeres en Oaxaca:
-                                            </label>
-                                            <input type="number" id="inputEstMujeres" class="form-control form-control-lg fw-bold" style="color: #c2185b; border-radius: 10px;">
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label fw-bold text-muted small mb-1" for="inputEstHombres" style="color: #00897b !important;">
-                                                <i class="fa-solid fa-mars me-1"></i> Hombres en Oaxaca:
-                                            </label>
-                                            <input type="number" id="inputEstHombres" class="form-control form-control-lg fw-bold" style="color: #00897b; border-radius: 10px;">
-                                        </div>
-                                    </div>
 
-                                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                                        <button type="button" class="btn text-white fw-bold px-4 py-2 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #102a43, #c2185b);" onclick="AdminDatosUI.guardarCambiosEstatal()">
-                                            <i class="fa-solid fa-floppy-disk me-1"></i> Guardar Cambios Nivel Estatal
-                                        </button>
+                                        <!-- Cálculo Automático Estatal -->
+                                        <div class="p-3 rounded-3 mb-4" style="background: #fdf8fb; border: 1px solid #ebdbe9;">
+                                            <div class="d-flex flex-wrap gap-4 align-items-center">
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Cálculo Automático % Mujeres:</span>
+                                                    <span id="calcEstPctMujeres" class="fs-5 fw-bold" style="color: #c2185b;">52.2%</span>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Cálculo Automático % Hombres:</span>
+                                                    <span id="calcEstPctHombres" class="fs-5 fw-bold text-primary">47.8%</span>
+                                                </div>
+                                                <div>
+                                                    <span class="small text-muted fw-bold d-block">Relación Hombres / Mujeres:</span>
+                                                    <span id="calcEstRelacion" class="fs-5 fw-bold text-dark">91.6</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarEstatal()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- 4. VISTA: SALUD (TARJETA 1 DE 5) -->
+                                <!-- 4. VISTA: SALUD (6 CATEGORÍAS CON SUS RESPECTIVAS ENFERMEDADES) -->
                                 <div id="adminView_salud" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-heart-pulse me-2" style="color: #c2185b;"></i> Indicadores de Salud (Mujeres y Niñas)
+                                                <i class="fa-solid fa-heart-pulse me-2" style="color: #c2185b;"></i> Salud y Mortalidad en Mujeres (6 Categorías)
                                             </h5>
-                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · EDR 2024 / 2025</span>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · EDR 2025</span>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">10 Principales Causas</div>
-                                                    <div class="fs-4 fw-bold text-danger">9,848</div>
-                                                    <small class="text-muted">Defunciones registradas en Oaxaca</small>
+
+                                        <!-- Cat 1: Principales Causas de Defunción (10 Enfermedades) -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-danger me-2">1</span> 10 Principales Causas de Defunción en Mujeres (Cifras registradas)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Enfermedades endocrinas y metabólicas:</label>
+                                                    <input type="number" step="1" id="salud_enf_endocrinas" class="form-control form-control-sm fw-semibold" value="2622">
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Defunciones Maternas</div>
-                                                    <div class="fs-4 fw-bold text-danger">32</div>
-                                                    <small class="text-muted">Causas obstétricas directas/indirectas</small>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Enfermedades isquémicas del corazón:</label>
+                                                    <input type="number" step="1" id="salud_enf_corazon" class="form-control form-control-sm fw-semibold" value="2367">
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Defunciones Infantiles (Niñas)</div>
-                                                    <div class="fs-4 fw-bold text-danger">227</div>
-                                                    <small class="text-muted">Afecciones perinatales y congénitas</small>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Otras del aparato digestivo:</label>
+                                                    <input type="number" step="1" id="salud_enf_digestivo" class="form-control form-control-sm fw-semibold" value="894">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Otras del aparato respiratorio:</label>
+                                                    <input type="number" step="1" id="salud_enf_respiratorio" class="form-control form-control-sm fw-semibold" value="862">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Enfermedades cerebrovasculares:</label>
+                                                    <input type="number" step="1" id="salud_enf_cerebrovascular" class="form-control form-control-sm fw-semibold" value="799">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Enfermedades hipertensivas:</label>
+                                                    <input type="number" step="1" id="salud_enf_hipertensiva" class="form-control form-control-sm fw-semibold" value="707">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Tumores de órganos digestivos:</label>
+                                                    <input type="number" step="1" id="salud_enf_tumores_dig" class="form-control form-control-sm fw-semibold" value="606">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Tumores de órganos genitourinarios:</label>
+                                                    <input type="number" step="1" id="salud_enf_tumores_gen" class="form-control form-control-sm fw-semibold" value="367">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Enfermedades del aparato urinario:</label>
+                                                    <input type="number" step="1" id="salud_enf_urinario" class="form-control form-control-sm fw-semibold" value="337">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Tumores mama, piel y tejidos blandos:</label>
+                                                    <input type="number" step="1" id="salud_enf_tumores_mama" class="form-control form-control-sm fw-semibold" value="287">
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="small text-muted mt-3 mb-0">
-                                            Los 6 módulos de gráficas de salud están activos en la plataforma pública y sincronizados con las Estadísticas de Defunciones Registradas (EDR) del INEGI.
-                                        </p>
+
+                                        <!-- Cat 2: Suicidio en Mujeres -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-secondary me-2">2</span> Lesiones Autoinfligidas / Suicidio en Mujeres (Defunciones)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Ahorcamiento o sofocación:</label>
+                                                    <input type="number" step="1" id="salud_suicidio_ahorcamiento" class="form-control form-control-sm" value="33">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Envenenamiento:</label>
+                                                    <input type="number" step="1" id="salud_suicidio_envenenamiento" class="form-control form-control-sm" value="7">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Disparo de arma de fuego:</label>
+                                                    <input type="number" step="1" id="salud_suicidio_arma" class="form-control form-control-sm" value="1">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 3: Cáncer de Mama -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-primary me-2">3</span> Cáncer de Mama (Defunciones por Grupos de Edad)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">35 a 44 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">45 a 54 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_45_54" class="form-control form-control-sm" value="41">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">55 a 64 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_55_64" class="form-control form-control-sm" value="43">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">65 años y más:</label>
+                                                    <input type="number" step="1" id="salud_mama_65_mas" class="form-control form-control-sm" value="90">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 4: Diabetes Mellitus -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-warning text-dark me-2">4</span> Diabetes Mellitus (Defunciones por Grupos de Edad)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">Menores de 50 años:</label>
+                                                    <input type="number" step="1" id="salud_diabetes_sub50" class="form-control form-control-sm" value="177">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">50 a 64 años:</label>
+                                                    <input type="number" step="1" id="salud_diabetes_50_64" class="form-control form-control-sm" value="691">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">65 a 79 años:</label>
+                                                    <input type="number" step="1" id="salud_diabetes_65_79" class="form-control form-control-sm" value="1008">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">80 años y más:</label>
+                                                    <input type="number" step="1" id="salud_diabetes_80_mas" class="form-control form-control-sm" value="642">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 5: Mortalidad Materna -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-info text-dark me-2">5</span> Mortalidad Materna
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Razón de Mortalidad Materna (RMM por 100k nacidos):</label>
+                                                    <input type="number" step="0.1" id="salud_materna_rmm" class="form-control form-control-sm" value="38.4">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Defunciones maternas registradas:</label>
+                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 6: Mortalidad Infantil -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-success me-2">6</span> Mortalidad Infantil
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Tasa de Mortalidad Infantil (por cada 1,000 nacidos):</label>
+                                                    <input type="number" step="0.1" id="salud_infantil_tasa" class="form-control form-control-sm" value="11.8">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Defunciones en menores de 1 año:</label>
+                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarSalud()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- 5. VISTA: EDUCACIÓN (TARJETA 2 DE 5) -->
+                                <!-- 5. VISTA: EDUCACIÓN (5 CATEGORÍAS CON SUS DATOS) -->
                                 <div id="adminView_educacion" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-graduation-cap me-2" style="color: #00897b;"></i> Educación y Participación STEM
+                                                <i class="fa-solid fa-graduation-cap me-2" style="color: #f57c00;"></i> Educación y Trayectoria Académica (5 Categorías)
                                             </h5>
-                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · Intercensal 2025</span>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · SEP</span>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Población de 6 a 14 Años</div>
-                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">330,116</div>
-                                                    <small class="text-muted">Aptitud para leer y escribir</small>
+
+                                        <!-- Cat 1: Aptitud para leer y escribir (6 a 14 años) -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-primary me-2">1</span> Aptitud para Leer y Escribir (Población 6 a 14 años)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Sabe leer y escribir (%):</label>
+                                                    <input type="number" step="0.01" id="edu_aptitud_sabe" class="form-control form-control-sm" value="89.19">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No sabe leer y escribir (%):</label>
+                                                    <input type="number" step="0.01" id="edu_aptitud_nosabe" class="form-control form-control-sm" value="10.23">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="edu_aptitud_noesp" class="form-control form-control-sm" value="0.58">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Asistencia Escolar (3 a 17 años)</div>
-                                                    <div class="fs-4 fw-bold" style="color: #00897b;">77.34%</div>
-                                                    <small class="text-muted">Tasa de escolarización activa</small>
+                                        </div>
+
+                                        <!-- Cat 2: Tasa de Alfabetismo (15 años y más) -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-success me-2">2</span> Condición de Alfabetismo (Población 15 años y más)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Alfabeta (%):</label>
+                                                    <input type="number" step="0.01" id="edu_alfa_si" class="form-control form-control-sm" value="88.35">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Analfabeta (%):</label>
+                                                    <input type="number" step="0.01" id="edu_alfa_no" class="form-control form-control-sm" value="11.32">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="edu_alfa_noesp" class="form-control form-control-sm" value="0.33">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Rezago Educativo (15+ años)</div>
-                                                    <div class="fs-4 fw-bold text-danger">36.3%</div>
-                                                    <small class="text-muted">Brecha que afecta a mujeres</small>
+                                        </div>
+
+                                        <!-- Cat 3: Matrícula Escolar por Nivel -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-warning text-dark me-2">3</span> Matrícula Escolar por Nivel Educativo
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Inicial:</label>
+                                                    <input type="number" step="1" id="edu_mat_inicial" class="form-control form-control-sm" value="3938">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Preescolar:</label>
+                                                    <input type="number" step="1" id="edu_mat_preescolar" class="form-control form-control-sm" value="84019">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Primaria:</label>
+                                                    <input type="number" step="1" id="edu_mat_primaria" class="form-control form-control-sm" value="239800">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Secundaria:</label>
+                                                    <input type="number" step="1" id="edu_mat_secundaria" class="form-control form-control-sm" value="110641">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Media Superior:</label>
+                                                    <input type="number" step="1" id="edu_mat_mediasup" class="form-control form-control-sm" value="78735">
+                                                </div>
+                                                <div class="col-6 col-md-4">
+                                                    <label class="small text-muted">Superior:</label>
+                                                    <input type="number" step="1" id="edu_mat_superior" class="form-control form-control-sm" value="48973">
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <!-- Cat 4: Grado Promedio y Nivel de Escolaridad -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-info text-dark me-2">4</span> Nivel de Escolaridad (% de la población)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">Sin escolaridad (%):</label>
+                                                    <input type="number" step="0.01" id="edu_esc_sinesc" class="form-control form-control-sm" value="9.78">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">Educación básica (%):</label>
+                                                    <input type="number" step="0.01" id="edu_esc_basica" class="form-control form-control-sm" value="52.72">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">Media superior (%):</label>
+                                                    <input type="number" step="0.01" id="edu_esc_mediasup" class="form-control form-control-sm" value="20.19">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">Superior (%):</label>
+                                                    <input type="number" step="0.01" id="edu_esc_superior" class="form-control form-control-sm" value="16.98">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 5: Asistencia Escolar -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-dark me-2">5</span> Asistencia Escolar (Población de 3 años y más)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Asiste a la escuela (%):</label>
+                                                    <input type="number" step="0.01" id="edu_asist_si" class="form-control form-control-sm" value="25.55">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No asiste a la escuela (%):</label>
+                                                    <input type="number" step="0.01" id="edu_asist_no" class="form-control form-control-sm" value="74.13">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="edu_asist_noesp" class="form-control form-control-sm" value="0.32">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarEducacion()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- 6. VISTA: VIVIENDA (TARJETA 3 DE 5) -->
+                                <!-- 6. VISTA: VIVIENDA (2 CATEGORÍAS CON SUS DATOS) -->
                                 <div id="adminView_vivienda" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-house-chimney me-2" style="color: #ff9800;"></i> Vivienda y Cobertura de Servicios
+                                                <i class="fa-solid fa-house-chimney me-2" style="color: #1565c0;"></i> Vivienda y Servicios (2 Categorías)
                                             </h5>
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-6">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Disponibilidad de Agua Entubada</div>
-                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">64.8%</div>
-                                                    <small class="text-muted">Cobertura estatal en viviendas habitadas</small>
+
+                                        <!-- Cat 1: Disponibilidad de Servicios Básicos -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-primary me-2">1</span> Viviendas Particulares según Disponibilidad de Servicios
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Disponen de energía eléctrica:</label>
+                                                    <input type="number" step="1" id="viv_serv_electricidad" class="form-control form-control-sm" value="1093796">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Disponen de servicio sanitario:</label>
+                                                    <input type="number" step="1" id="viv_serv_sanitario" class="form-control form-control-sm" value="1090470">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Disponen de drenaje:</label>
+                                                    <input type="number" step="1" id="viv_serv_drenaje" class="form-control form-control-sm" value="901346">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Agua entubada dentro de la vivienda:</label>
+                                                    <input type="number" step="1" id="viv_serv_agua" class="form-control form-control-sm" value="455703">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Pisos de Tierra</div>
-                                                    <div class="fs-4 fw-bold text-warning">14.2%</div>
-                                                    <small class="text-muted">Viviendas en situación de vulnerabilidad</small>
+                                        </div>
+
+                                        <!-- Cat 2: Material Predominante en Pisos -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-secondary me-2">2</span> Material Predominante en Pisos de Vivienda
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Piso firme (cemento, madera, mosaico):</label>
+                                                    <input type="number" step="1" id="viv_pisos_firme" class="form-control form-control-sm" value="969778">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Piso de tierra:</label>
+                                                    <input type="number" step="1" id="viv_pisos_tierra" class="form-control form-control-sm" value="149170">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado:</label>
+                                                    <input type="number" step="1" id="viv_pisos_noesp" class="form-control form-control-sm" value="2898">
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarVivienda()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- 7. VISTA: INGRESO (TARJETA 4 DE 5) -->
+                                <!-- 7. VISTA: INGRESO (2 CATEGORÍAS CON SUS DATOS - VENTANA MÓVIL 16 TRIMESTRES) -->
                                 <div id="adminView_ingreso" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-hand-holding-dollar me-2" style="color: #00bcd4;"></i> Ingreso, Empleo y Ocupación
+                                                <i class="fa-solid fa-sack-dollar me-2" style="color: #2e7d32;"></i> Ingreso y Empleo (2 Categorías)
                                             </h5>
-                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · ENOE Trimestral</span>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · ENIGH & ENOE</span>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-6">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Ingreso del Trabajo (Mujeres)</div>
-                                                    <div class="fs-4 fw-bold" style="color: #00897b;">$11,850</div>
-                                                    <small class="text-muted">Ingreso promedio trimestral ENIGH</small>
+
+                                        <!-- Cat 1: Ingreso Promedio Trimestral por Rubro -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-primary me-2">1</span> Ingreso Promedio Trimestral Monetario por Rubro ($ MXN)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Ingreso del trabajo:</label>
+                                                    <input type="number" step="1" id="ing_rubro_trabajo" class="form-control form-control-sm" value="32613">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Renta de la propiedad:</label>
+                                                    <input type="number" step="1" id="ing_rubro_renta" class="form-control form-control-sm" value="1992">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Transferencias:</label>
+                                                    <input type="number" step="1" id="ing_rubro_transf" class="form-control form-control-sm" value="11587">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Estimación del alquiler de la vivienda:</label>
+                                                    <input type="number" step="1" id="ing_rubro_alquiler" class="form-control form-control-sm" value="5811">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Otros ingresos corrientes:</label>
+                                                    <input type="number" step="1" id="ing_rubro_otros" class="form-control form-control-sm" value="22">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Desocupación 2023-2026</div>
-                                                    <div class="fs-4 fw-bold" style="color: #c2185b;">Paleta Pastel Activa</div>
-                                                    <small class="text-muted">Series trimestrales por año con visualización suave</small>
-                                                </div>
+                                        </div>
+
+                                        <!-- Cat 2: Tasa de Desocupación Trimestral (Ventana de 16 trimestres: 4 años móviles) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge bg-success me-2">2</span> Tasa de Desocupación Trimestral (Ventana móvil de 16 barras)
+                                                </h6>
+                                                <span class="badge bg-warning text-dark small" style="font-size: 0.72rem;">
+                                                    <i class="fa-solid fa-clock-rotate-left me-1"></i> Al registrar 2027 se descarta 2023 automáticamente
+                                                </span>
                                             </div>
+
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-12 fw-bold small text-muted" style="color: #2b7a78;">Año 2023 (Trimestres I a IV):</div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2023_1" class="form-control form-control-sm" placeholder="2023-I" value="1.35"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2023_2" class="form-control form-control-sm" placeholder="2023-II" value="1.22"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2023_3" class="form-control form-control-sm" placeholder="2023-III" value="1.94"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2023_4" class="form-control form-control-sm" placeholder="2023-IV" value="1.54"></div>
+                                            </div>
+
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-12 fw-bold small text-muted" style="color: #0077b6;">Año 2024 (Trimestres I a IV):</div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2024_1" class="form-control form-control-sm" placeholder="2024-I" value="1.42"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2024_2" class="form-control form-control-sm" placeholder="2024-II" value="1.20"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2024_3" class="form-control form-control-sm" placeholder="2024-III" value="1.05"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2024_4" class="form-control form-control-sm" placeholder="2024-IV" value="1.87"></div>
+                                            </div>
+
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-12 fw-bold small text-muted" style="color: #7b1fa2;">Año 2025 (Trimestres I a IV):</div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2025_1" class="form-control form-control-sm" placeholder="2025-I" value="1.63"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2025_2" class="form-control form-control-sm" placeholder="2025-II" value="1.08"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2025_3" class="form-control form-control-sm" placeholder="2025-III" value="1.66"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2025_4" class="form-control form-control-sm" placeholder="2025-IV" value="1.32"></div>
+                                            </div>
+
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 fw-bold small text-muted" style="color: #e65100;">Año 2026 (Trimestres I y II vigentes):</div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_1" class="form-control form-control-sm" placeholder="2026-I" value="1.16"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_2" class="form-control form-control-sm" placeholder="2026-II" value="0.80"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_3" class="form-control form-control-sm" placeholder="2026-III" value=""></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_4" class="form-control form-control-sm" placeholder="2026-IV" value=""></div>
+                                            </div>
+
+                                            <!-- Formulario dinámico para registrar Año 2027 (con auto-depuración de 2023) -->
+                                            <div class="p-2 rounded-2 border" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-1" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año (Ej. 2027):
+                                                </div>
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-3">
+                                                        <input type="number" step="1" id="desoc_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2027)" value="2027">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.01" id="desoc_nuevo_q1" class="form-control form-control-sm" placeholder="Trim I">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.01" id="desoc_nuevo_q2" class="form-control form-control-sm" placeholder="Trim II">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.01" id="desoc_nuevo_q3" class="form-control form-control-sm" placeholder="Trim III">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.01" id="desoc_nuevo_q4" class="form-control form-control-sm" placeholder="Trim IV">
+                                                    </div>
+                                                </div>
+                                                <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">
+                                                    Al completar los datos de 2027, la gráfica eliminará automáticamente el bloque de 2023 manteniendo los 4 años más recientes.
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarIngreso()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- 8. VISTA: LENGUAS INDÍGENAS (TARJETA 5 DE 5) -->
+                                <!-- 8. VISTA: LENGUAS INDÍGENAS (2 CATEGORÍAS CON SUS DATOS) -->
                                 <div id="adminView_lenguas" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-language me-2" style="color: #682260;"></i> Población Hablante de Lenguas Indígenas
+                                                <i class="fa-solid fa-language me-2" style="color: #7b1fa2;"></i> Lenguas Indígenas (2 Categorías)
                                             </h5>
-                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020 / Intercensal 2025</span>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · Censos 2010 - 2025</span>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Población Hablante Total</div>
-                                                    <div class="fs-4 fw-bold" style="color: #4a154b;">1,221,555</div>
-                                                    <small class="text-muted">31.2% de la población de 3 años y más</small>
+
+                                        <!-- Cat 1: Población Monolingüe -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-primary me-2">1</span> Población de 3 años y más que no habla español (Censos 2010 y 2020)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2010 (Habla lengua indígena y no habla español):</label>
+                                                    <input type="number" step="1" id="lenguas_monolingues_2010" class="form-control form-control-sm" value="128050">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2020 (Habla lengua indígena y no habla español):</label>
+                                                    <input type="number" step="1" id="lenguas_monolingues_2020" class="form-control form-control-sm" value="87809">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Mujeres Hablantes</div>
-                                                    <div class="fs-4 fw-bold text-danger">641,200</div>
-                                                    <small class="text-muted">52.5% del total de hablantes</small>
+                                        </div>
+
+                                        <!-- Cat 2: Condición de habla de lengua indígena y español -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <h6 class="fw-bold mb-2 text-dark">
+                                                <span class="badge bg-secondary me-2">2</span> Condición de habla de lengua indígena (Censo 2020 / Intercensal 2025)
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Habla lengua indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_cond_si" class="form-control form-control-sm" value="29.39">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No habla lengua indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_cond_no" class="form-control form-control-sm" value="70.29">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_cond_noesp" class="form-control form-control-sm" value="0.32">
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-4">
-                                                <div class="p-3 rounded-2 bg-light border">
-                                                    <div class="small fw-bold text-muted">Hombres Hablantes</div>
-                                                    <div class="fs-4 fw-bold" style="color: #00897b;">580,355</div>
-                                                    <small class="text-muted">47.5% del total de hablantes</small>
-                                                </div>
-                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarLenguas()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+</div>
 
                             </div>
                         </div>
