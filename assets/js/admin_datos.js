@@ -581,6 +581,24 @@
         init: function() {
             this.configurarAtajosTeclado();
             this.configurarRutaHash();
+
+            // Auto-pérdida de selección en el buscador tras segundos de inactividad
+            setTimeout(() => {
+                const searchInp = document.getElementById('adminSidebarSearch');
+                if (searchInp && typeof searchInp.addEventListener === 'function') {
+                    let timerSearch = null;
+                    const limpiarFoco = () => {
+                        clearTimeout(timerSearch);
+                        timerSearch = setTimeout(() => {
+                            if (document.activeElement === searchInp) {
+                                searchInp.blur();
+                            }
+                        }, 2500);
+                    };
+                    searchInp.addEventListener('focus', limpiarFoco);
+                    searchInp.addEventListener('input', limpiarFoco);
+                }
+            }, 500);
             this.cargarFotoPerfil();
         },
 
@@ -990,9 +1008,12 @@
             const elHombres = document.getElementById('inputAdminHombres');
             if (!elTotal || !elMujeres || !elHombres) return;
 
-            let total = parseFloat(elTotal.value) || 0;
-            let mujeres = parseFloat(elMujeres.value) || 0;
-            let hombres = parseFloat(elHombres.value) || 0;
+            let total = parseFloat(elTotal.value);
+            if (isNaN(total)) total = 0;
+            let mujeres = parseFloat(elMujeres.value);
+            if (isNaN(mujeres)) mujeres = 0;
+            let hombres = parseFloat(elHombres.value);
+            if (isNaN(hombres)) hombres = 0;
 
             if (origen === 'mujeres' && total > 0) {
                 hombres = Math.max(0, total - mujeres);
@@ -1000,18 +1021,8 @@
             } else if (origen === 'hombres' && total > 0) {
                 mujeres = Math.max(0, total - hombres);
                 elMujeres.value = Math.round(mujeres);
-            } else if (origen === 'total') {
-                if (mujeres > 0 && hombres > 0) {
-                    const ratio = mujeres / (mujeres + hombres);
-                    mujeres = Math.round(total * ratio);
-                    hombres = total - mujeres;
-                    elMujeres.value = mujeres;
-                    elHombres.value = hombres;
-                } else if (mujeres > 0) {
-                    hombres = Math.max(0, total - mujeres);
-                    elHombres.value = Math.round(hombres);
-                }
             }
+
 
             const pM = total > 0 ? ((mujeres / total) * 100).toFixed(1) + '%' : '0.0%';
             const pH = total > 0 ? ((hombres / total) * 100).toFixed(1) + '%' : '0.0%';
@@ -1040,9 +1051,12 @@
             const elHombres = document.getElementById('inputAdminOaxHombres');
             if (!elTotal || !elMujeres || !elHombres) return;
 
-            let total = parseFloat(elTotal.value) || 0;
-            let mujeres = parseFloat(elMujeres.value) || 0;
-            let hombres = parseFloat(elHombres.value) || 0;
+            let total = parseFloat(elTotal.value);
+            if (isNaN(total)) total = 0;
+            let mujeres = parseFloat(elMujeres.value);
+            if (isNaN(mujeres)) mujeres = 0;
+            let hombres = parseFloat(elHombres.value);
+            if (isNaN(hombres)) hombres = 0;
 
             if (origen === 'mujeres' && total > 0) {
                 hombres = Math.max(0, total - mujeres);
@@ -1050,14 +1064,6 @@
             } else if (origen === 'hombres' && total > 0) {
                 mujeres = Math.max(0, total - hombres);
                 elMujeres.value = Math.round(mujeres);
-            } else if (origen === 'total') {
-                if (mujeres > 0 && hombres > 0) {
-                    const ratio = mujeres / (mujeres + hombres);
-                    mujeres = Math.round(total * ratio);
-                    hombres = total - mujeres;
-                    elMujeres.value = mujeres;
-                    elHombres.value = hombres;
-                }
             }
 
             const pM = total > 0 ? ((mujeres / total) * 100).toFixed(1) + '%' : '0.0%';
@@ -1269,56 +1275,144 @@
         },
 
         // Carga y guardado de Ingreso (2 categorías con ventana móvil de 16 trimestres)
+        renderizarDesocupacionAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorDesocupacionAnios');
+            if (!cont) return;
+
+            const colores = ['#2b7a78', '#0077b6', '#7b1fa2', '#e65100'];
+            let html = '';
+
+            anios.forEach((yr, idx) => {
+                const color = colores[idx % colores.length];
+                const esUltimo = (idx === anios.length - 1);
+                const etiqueta = esUltimo ? `Año ${yr} (Trimestres vigentes):` : `Año ${yr} (Trimestres I a IV):`;
+
+                html += `<div class="row g-2 mb-2">
+                    <div class="col-12 fw-bold small text-muted" style="color: ${color};">${etiqueta}</div>`;
+
+                for (let q = 1; q <= 4; q++) {
+                    const id = `desoc_${yr}_${q}`;
+                    let val = '';
+                    if (d && d[id] !== undefined && d[id] !== null) {
+                        val = d[id];
+                    } else {
+                        const elExistente = document.getElementById(id);
+                        if (elExistente) val = elExistente.value;
+                    }
+                    html += `<div class="col-3"><input type="number" step="0.01" id="${id}" class="form-control form-control-sm" placeholder="${yr}-${q===1?'I':q===2?'II':q===3?'III':'IV'}" value="${val !== undefined ? val : ''}"></div>`;
+                }
+                html += `</div>`;
+            });
+
+            cont.innerHTML = html;
+
+            // Actualizar el formulario dinámico para el siguiente año
+            const siguienteAnio = anios[anios.length - 1] + 1;
+            const inputNuevoAnio = document.getElementById('desoc_nuevo_anio');
+            if (inputNuevoAnio) {
+                inputNuevoAnio.value = siguienteAnio;
+                inputNuevoAnio.placeholder = `Año (ej. ${siguienteAnio})`;
+            }
+            const lblNuevoAnio = inputNuevoAnio?.closest('.p-2')?.querySelector('.fw-bold');
+            if (lblNuevoAnio) {
+                lblNuevoAnio.innerHTML = `<i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año (Ej. ${siguienteAnio}):`;
+            }
+            const smallDepuracion = inputNuevoAnio?.closest('.p-2')?.querySelector('small');
+            if (smallDepuracion) {
+                smallDepuracion.textContent = `Al completar los datos de ${siguienteAnio}, la gráfica eliminará automáticamente el bloque de ${anios[0]} manteniendo los 4 años más recientes.`;
+            }
+        },
+
         cargarIngresoEnFormulario: function() {
             try {
+                let d = {};
                 const raw = localStorage.getItem('gesmujer_ingreso_datos');
                 if (raw) {
-                    const d = JSON.parse(raw);
+                    d = JSON.parse(raw);
                     Object.keys(d).forEach(k => {
                         const el = document.getElementById(k);
-                        if (el) el.value = d[k];
+                        if (el && d[k] !== undefined && d[k] !== null) el.value = d[k];
                     });
                 }
-            } catch(e) {}
+
+                // Ventana de los 4 años activos
+                const anios = (d && Array.isArray(d.desoc_anios) && d.desoc_anios.length >= 4)
+                    ? d.desoc_anios.slice(-4)
+                    : [2023, 2024, 2025, 2026];
+
+                this.renderizarDesocupacionAnios(anios, d);
+            } catch(e) {
+                console.error('Error al cargar ingreso:', e);
+            }
         },
 
         guardarIngreso: function() {
             const idsRubros = ['ing_rubro_trabajo', 'ing_rubro_renta', 'ing_rubro_transf', 'ing_rubro_alquiler', 'ing_rubro_otros'];
-            const data = {};
+            let prevData = {};
+            try {
+                const rawPrev = localStorage.getItem('gesmujer_ingreso_datos');
+                if (rawPrev) prevData = JSON.parse(rawPrev);
+            } catch(e) {}
+
+            const data = Object.assign({}, prevData);
             idsRubros.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) data[id] = parseFloat(el.value) || 0;
-            });
-
-            // Ventana móvil de 16 trimestres (4 años)
-            // Si el año registrado es 2027 o superior con datos de trimestres, eliminamos automáticamente el año 2023
-            const nuevoAnio = parseInt(document.getElementById('desoc_nuevo_anio')?.value) || 0;
-            const q1 = document.getElementById('desoc_nuevo_q1')?.value;
-            const q2 = document.getElementById('desoc_nuevo_q2')?.value;
-            const q3 = document.getElementById('desoc_nuevo_q3')?.value;
-            const q4 = document.getElementById('desoc_nuevo_q4')?.value;
-
-            if (nuevoAnio >= 2027 && (q1 || q2 || q3 || q4)) {
-                // Al registrar 2027, el año 2023 se elimina automáticamente de la ventana de 16 trimestres
-                data.desoc_anios = [2024, 2025, 2026, nuevoAnio];
-                data.desoc_2023_eliminado = true;
-                data.desoc_nuevo = { anio: nuevoAnio, q1: parseFloat(q1)||0, q2: parseFloat(q2)||0, q3: parseFloat(q3)||0, q4: parseFloat(q4)||0 };
-            } else {
-                data.desoc_anios = [2023, 2024, 2025, 2026];
-                data.desoc_2023_eliminado = false;
-            }
-
-            // Guardar trimestres 2023 - 2026
-            ['2023', '2024', '2025', '2026'].forEach(yr => {
-                for (let q = 1; q <= 4; q++) {
-                    const id = 'desoc_' + yr + '_' + q;
-                    const el = document.getElementById(id);
-                    if (el && el.value !== '') data[id] = parseFloat(el.value);
+                if (el) {
+                    const val = parseFloat(el.value);
+                    data[id] = !isNaN(val) ? val : 0;
                 }
             });
 
+            // Obtener los años activos actuales
+            let aniosActivos = (Array.isArray(prevData.desoc_anios) && prevData.desoc_anios.length >= 4)
+                ? [...prevData.desoc_anios.slice(-4)]
+                : [2023, 2024, 2025, 2026];
+
+            // Guardar los valores de los trimestres actuales en pantalla
+            aniosActivos.forEach(yr => {
+                for (let q = 1; q <= 4; q++) {
+                    const id = 'desoc_' + yr + '_' + q;
+                    const el = document.getElementById(id);
+                    if (el && el.value !== '') {
+                        const v = parseFloat(el.value);
+                        data[id] = !isNaN(v) ? v : 0;
+                    }
+                }
+            });
+
+            // Verificar si se está registrando un nuevo año (Ej. 2027, 2028, etc.)
+            const nuevoAnio = parseInt(document.getElementById('desoc_nuevo_anio')?.value, 10);
+            const q1Val = document.getElementById('desoc_nuevo_q1')?.value;
+            const q2Val = document.getElementById('desoc_nuevo_q2')?.value;
+            const q3Val = document.getElementById('desoc_nuevo_q3')?.value;
+            const q4Val = document.getElementById('desoc_nuevo_q4')?.value;
+
+            if (nuevoAnio && nuevoAnio > aniosActivos[aniosActivos.length - 1] && (q1Val !== '' || q2Val !== '' || q3Val !== '' || q4Val !== '')) {
+                // Al registrar el nuevo año, este se incorpora y se descarta el más antiguo (desplazando la ventana de 4 años)
+                if (q1Val !== '') data['desoc_' + nuevoAnio + '_1'] = parseFloat(q1Val) || 0;
+                if (q2Val !== '') data['desoc_' + nuevoAnio + '_2'] = parseFloat(q2Val) || 0;
+                if (q3Val !== '') data['desoc_' + nuevoAnio + '_3'] = parseFloat(q3Val) || 0;
+                if (q4Val !== '') data['desoc_' + nuevoAnio + '_4'] = parseFloat(q4Val) || 0;
+
+                // Nueva ventana de 4 años con el año más nuevo al final y desplazando el primero
+                aniosActivos = [...aniosActivos, nuevoAnio].slice(-4);
+                data.desoc_anios = aniosActivos;
+
+                // Limpiar campos del nuevo año
+                ['desoc_nuevo_q1', 'desoc_nuevo_q2', 'desoc_nuevo_q3', 'desoc_nuevo_q4'].forEach(qid => {
+                    const elQ = document.getElementById(qid);
+                    if (elQ) elQ.value = '';
+                });
+            } else {
+                data.desoc_anios = aniosActivos;
+            }
+
             localStorage.setItem('gesmujer_ingreso_datos', JSON.stringify(data));
-            this.mostrarToast('Datos de Ingreso y Desocupación (16 trimestres) guardados con éxito.');
+
+            // Re-renderizar la vista de desocupación inmediatamente para reflejar el primer año rotado (ej. 2024 al frente)
+            this.renderizarDesocupacionAnios(aniosActivos, data);
+
+            this.mostrarToast('Datos de Ingreso y Desocupación (Ventana de 4 años) guardados con éxito.');
         },
 
         // Carga y guardado de Lenguas Indígenas (2 categorías)
