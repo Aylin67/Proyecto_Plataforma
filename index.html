@@ -8,8 +8,10 @@
         (function() {
             try {
                 var guardada = sessionStorage.getItem('plataforma_vista_activa');
+                var adminActivo = sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true' || 
+                                  sessionStorage.getItem('gesmujer_admin_autenticado') === 'true';
                 var hash = window.location.hash;
-                if (guardada || (hash && (hash === '#nacional' || hash === '#estatal' || hash.indexOf('#tema-') === 0))) {
+                if (adminActivo || guardada || (hash && (hash === '#admin' || hash === '#nacional' || hash === '#estatal' || hash.indexOf('#tema-') === 0))) {
                     document.documentElement.classList.add('recarga-modal-activa');
                 }
             } catch(e) {}
@@ -1545,7 +1547,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         </div>
                         <h6 class="fw-bold mb-1" style="color: #4a154b;">Plataforma GESMujer</h6>
                         <p class="small text-muted mb-3">
-                            Ingresa la contraseña de administración para acceder al panel de control y edición de datos:
+                            Ingresa la contraseña 
                         </p>
                         <form onsubmit="event.preventDefault(); AdminDatosUI.verificarPin();">
                             <div class="mb-3 text-start">
@@ -1571,7 +1573,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         </form>
                         <div class="mt-3 text-center">
                             <a href="javascript:void(0)" onclick="AdminDatosUI.mostrarVistaRestablecer()" class="small text-decoration-none" style="color: #c2185b; font-weight: 600;">
-                                <i class="fa-solid fa-unlock-keyhole me-1"></i> ¿Olvidaste tu contraseña? Restablecer aquí
+                                <i class="fa-solid fa-unlock-keyhole me-1"></i> ¿Olvidaste tu contraseña? 
                             </a>
                         </div>
                         <div class="mt-3 pt-2 border-top">
@@ -1689,20 +1691,11 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
 
                         <!-- MENÚ LATERAL CON LOS 2 BOTONES INICIALES Y LAS 5 ÚLTIMAS TARJETAS -->
                         <div class="admin-sidebar-nav">
-                            <div class="admin-nav-section-title">CATEGORÍAS DE DATOS</div>
                             <ul class="admin-menu-list" id="adminSidebarMenu">
-                                <li class="admin-menu-item">
-                                    <button type="button" class="admin-menu-btn active" data-cat="inicio" onclick="AdminMenuDashboard.seleccionar('inicio')">
-                                        <div class="admin-btn-left">
-                                            <i class="fa-solid fa-house menu-icon"></i>
-                                            <span class="menu-label">Inicio</span>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
-                                    </button>
-                                </li>
+                                
                                 <!-- 2 BOTONES INICIALES: NACIONAL Y ESTATAL -->
                                 <li class="admin-menu-item">
-                                    <button type="button" class="admin-menu-btn" data-cat="nacional" onclick="AdminMenuDashboard.seleccionar('nacional')">
+                                    <button type="button" class="admin-menu-btn active" data-cat="nacional" onclick="AdminMenuDashboard.seleccionar('nacional')">
                                         <div class="admin-btn-left">
                                             <i class="fa-solid fa-earth-americas menu-icon"></i>
                                             <span class="menu-label">Nivel Nacional</span>
@@ -1783,12 +1776,9 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                 <h4 class="admin-topbar-title mb-0" id="adminWorkspaceTitle">
                                     Panel de Administración General
                                 </h4>
-                                <div class="admin-topbar-subtitle" id="adminWorkspaceSubtitle">
-                                    Sincronización en tiempo real para Mapas Geoespaciales, Gráficas y Métricas
-                                </div>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <div class="admin-topbar-quick-actions d-flex align-items-center gap-2">
+                                <div class="admin-topbar-quick-actions d-flex align-items-center gap-2" id="adminQuickActionsGroup">
                                     <button type="button" class="btn-topbar-action" onclick="AdminDatosUI.deshacerCambioPrevio()" title="Deshacer último cambio">
                                         <i class="fa-solid fa-rotate-left"></i> Deshacer
                                     </button>
@@ -1833,45 +1823,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         <div class="admin-workspace-scroll">
                             
                             <!-- TARJETAS DE MÉTRICAS KPI -->
-                            <div class="row g-3 mb-4" id="adminKpiCardsRow">
-                                <div class="col-12 col-md-4">
-                                    <div class="admin-kpi-card">
-                                        <div>
-                                            <div class="admin-kpi-label" id="kpiCard1Title">Población Total Registrada</div>
-                                            <div class="admin-kpi-sub" id="kpiCard1Sub">Cifra acumulada de la dimensión</div>
-                                        </div>
-                                        <div class="admin-kpi-value" id="kpiCard1Val">126,014,024</div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <div class="admin-kpi-card">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <div class="admin-kpi-label" id="kpiCard2Title" style="color: #c2185b;">Mujeres</div>
-                                                <div class="admin-kpi-sub" id="kpiCard2Sub">Cálculo porcentual automático</div>
-                                            </div>
-                                            <span class="badge rounded-pill fw-bold" id="kpiCard2Badge" style="background: #fce4ec; color: #c2185b; font-size: 0.85rem; padding: 6px 12px;">
-                                                51.2%
-                                            </span>
-                                        </div>
-                                        <div class="admin-kpi-value" id="kpiCard2Val" style="color: #c2185b !important;">64,540,634</div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <div class="admin-kpi-card">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <div class="admin-kpi-label" id="kpiCard3Title" style="color: #00897b;">Hombres / Indicador Clave</div>
-                                                <div class="admin-kpi-sub" id="kpiCard3Sub">Cálculo porcentual automático</div>
-                                            </div>
-                                            <span class="badge rounded-pill fw-bold" id="kpiCard3Badge" style="background: #e0f2f1; color: #00695c; font-size: 0.85rem; padding: 6px 12px;">
-                                                48.8%
-                                            </span>
-                                        </div>
-                                        <div class="admin-kpi-value" id="kpiCard3Val" style="color: #00897b !important;">61,473,390</div>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                             <!-- PANTALLA DETALLE Y RECUADRO DE CATEGORÍA -->
                             <div id="adminPantallaDetalle">
@@ -1883,33 +1835,18 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                     </div>
                                 </div>
 
-                                <!-- 1. VISTA: INICIO / DASHBOARD GENERAL -->
-                                <!-- 1. VISTA: INICIO / BIENVENIDA -->
-                                <div id="adminView_inicio" class="admin-form-box">
-                                    <div class="text-center py-5" style="min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; border-radius: 16px; border: 1.5px dashed #cbd5e1; padding: 3rem 2rem;">
-                                        <div style="width: 76px; height: 76px; border-radius: 50%; background: #fce4ec; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15);">
-                                            <i class="fa-solid fa-house" style="font-size: 2.2rem; color: #c2185b;"></i>
-                                        </div>
-                                        <h4 class="fw-bold text-dark mb-2">Panel de Administración General</h4>
-                                        <p class="text-muted fs-6 mb-0" style="max-width: 580px; line-height: 1.6;">
-                                            Bienvenida, Soledad Venegas. Selecciona una categoría del menú lateral para consultar o editar la información oficial en tiempo real.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- 2. VISTA: NIVEL NACIONAL (31 ESTADOS + TOTAL NACIONAL) -->
-                                <div id="adminView_nacional" class="admin-form-box d-none">
+                                <!-- 1. VISTA: NIVEL NACIONAL (31 ESTADOS + TOTAL NACIONAL) -->
+                                <div id="adminView_nacional" class="admin-form-box">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-earth-americas me-2" style="color: #c2185b;"></i> Indicadores Demográficos - Nivel Nacional
+                                                <i class="fa-solid fa-earth-americas me-2" style="color: #c2185b;"></i> Selecciona la Entidad Federativa
                                             </h5>
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
                                         </div>
 
                                         <div class="mb-4">
                                             <label class="form-label fw-bold text-dark mb-1" for="selectAdminEstado">
-                                                <i class="fa-solid fa-map-pin me-1 text-danger"></i> Selecciona la Entidad Federativa (31 Estados o Total Nacional):
                                             </label>
                                             <select id="selectAdminEstado" class="form-select form-select-lg fw-bold" style="border: 2px solid #ebdbe9; border-radius: 12px; color: #4a154b;" onchange="AdminDatosUI.cambiarEstadoNacional(this.value)">
                                             </select>
@@ -1941,19 +1878,6 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                     <span class="small text-muted fw-bold d-block">Cálculo Automático % Hombres:</span>
                                                     <span id="calcNacPctHombres" class="fs-5 fw-bold text-primary">48.8%</span>
                                                 </div>
-                                                <div>
-                                                    <span class="small text-muted fw-bold d-block">Relación Hombres / Mujeres:</span>
-                                                    <span id="calcNacRelacion" class="fs-5 fw-bold text-dark">95.2</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label class="form-label small fw-bold text-muted mb-1">Cargar Imagen / Infografía de la Entidad:</label>
-                                            <input type="file" id="inputAdminFotoNacional" accept="image/*" class="form-control mb-2" onchange="AdminDatosUI.cargarFotoNacionalLocal(event)">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <img id="previewAdminFotoNacional" src="assets/img/image.png" alt="Previsualización" class="img-thumbnail" style="height: 75px; width: 110px; object-fit: cover;">
-                                                <small class="text-muted">La imagen se sincronizará con la tarjeta nacional.</small>
                                             </div>
                                         </div>
 
@@ -1974,17 +1898,6 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             </h5>
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI Censo 2020</span>
                                         </div>
-
-                                        <div class="p-3 rounded-3 mb-4" style="background: #fdf6fa; border: 1px dashed #c2185b;">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="fa-solid fa-map-location-dot text-danger fs-4"></i>
-                                                <div>
-                                                    <h6 class="fw-bold mb-0" style="color: #4a154b;">Estado de Oaxaca</h6>
-                                                    <small class="text-muted">Cifras poblacionales oficiales para el modal estatal y sus gráficas</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="row g-3 mb-3">
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label small fw-bold text-muted mb-1">Población Total Oaxaca:</label>
@@ -2011,10 +1924,6 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                     <span class="small text-muted fw-bold d-block">Cálculo Automático % Hombres:</span>
                                                     <span id="calcEstPctHombres" class="fs-5 fw-bold text-primary">47.8%</span>
                                                 </div>
-                                                <div>
-                                                    <span class="small text-muted fw-bold d-block">Relación Hombres / Mujeres:</span>
-                                                    <span id="calcEstRelacion" class="fs-5 fw-bold text-dark">91.6</span>
-                                                </div>
                                             </div>
                                         </div>
 
@@ -2026,12 +1935,12 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                     </div>
                                 </div>
 
-                                <!-- 4. VISTA: SALUD (6 CATEGORÍAS CON SUS RESPECTIVAS ENFERMEDADES) -->
+                                <!-- 4. VISTA: SALUD  -->
                                 <div id="adminView_salud" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h5 class="fw-bold mb-0" style="color: #4a154b;">
-                                                <i class="fa-solid fa-heart-pulse me-2" style="color: #c2185b;"></i> Salud y Mortalidad en Mujeres (6 Categorías)
+                                                <i class="fa-solid fa-heart-pulse me-2" style="color: #c2185b;"></i> Salud y Mortalidad en Mujeres 
                                             </h5>
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI · EDR 2025</span>
                                         </div>
@@ -2039,7 +1948,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         <!-- Cat 1: Principales Causas de Defunción (10 Enfermedades) -->
                                         <div class="p-3 rounded-3 mb-3 bg-light border">
                                             <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-danger me-2">1</span> 10 Principales Causas de Defunción en Mujeres (Cifras registradas)
+                                                <span class="badge bg-danger me-2">1</span> 10 Principales Causas de Defunción en Mujeres 
                                             </h6>
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-6">
@@ -2088,7 +1997,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         <!-- Cat 2: Suicidio en Mujeres -->
                                         <div class="p-3 rounded-3 mb-3 bg-light border">
                                             <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-secondary me-2">2</span> Lesiones Autoinfligidas / Suicidio en Mujeres (Defunciones)
+                                                <span class="badge bg-secondary me-2">2</span> Defunciones por Suicidio en Mujeres
                                             </h6>
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-4">
@@ -2103,30 +2012,82 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                     <label class="small text-muted">Disparo de arma de fuego:</label>
                                                     <input type="number" step="1" id="salud_suicidio_arma" class="form-control form-control-sm" value="1">
                                                 </div>
+                                                  <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Otra causa:</label>
+                                                    <input type="number" step="1" id="salud_Otra_causa" class="form-control form-control-sm" value="1">
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Cat 3: Cáncer de Mama -->
                                         <div class="p-3 rounded-3 mb-3 bg-light border">
                                             <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-primary me-2">3</span> Cáncer de Mama (Defunciones por Grupos de Edad)
+                                                <span class="badge bg-primary me-2">3</span> Defunciones registradas por tumor maligno de la mama
                                             </h6>
                                             <div class="row g-2">
                                                 <div class="col-6 col-md-3">
-                                                    <label class="small text-muted">35 a 44 años:</label>
+                                                    <label class="small text-muted">15-19 años:</label>
                                                     <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
                                                 </div>
                                                 <div class="col-6 col-md-3">
-                                                    <label class="small text-muted">45 a 54 años:</label>
+                                                    <label class="small text-muted">20 a 24 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">25 a 29 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">30 a 34 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">35 a 39años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">40 a 44 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">45 a 49 años:</label>
                                                     <input type="number" step="1" id="salud_mama_45_54" class="form-control form-control-sm" value="41">
                                                 </div>
                                                 <div class="col-6 col-md-3">
-                                                    <label class="small text-muted">55 a 64 años:</label>
+                                                    <label class="small text-muted">50 a 54 años:</label>
                                                     <input type="number" step="1" id="salud_mama_55_64" class="form-control form-control-sm" value="43">
                                                 </div>
                                                 <div class="col-6 col-md-3">
-                                                    <label class="small text-muted">65 años y más:</label>
+                                                    <label class="small text-muted">55 a 59 años:</label> 
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">60 a 64 años:</label> 
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">65 a 69 años:</label> 
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">70 a 74 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3"> 
+                                                    <label class="small text-muted">75 a 79 años:</labe>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">80 a 84 años:</label> 
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">85 años y más:</label>
                                                     <input type="number" step="1" id="salud_mama_65_mas" class="form-control form-control-sm" value="90">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">No especificado:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
                                                 </div>
                                             </div>
                                         </div>
@@ -2134,7 +2095,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         <!-- Cat 4: Diabetes Mellitus -->
                                         <div class="p-3 rounded-3 mb-3 bg-light border">
                                             <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-warning text-dark me-2">4</span> Diabetes Mellitus (Defunciones por Grupos de Edad)
+                                                <span class="badge bg-warning text-dark me-2">4</span> Defunciones registradas por Diabetes Mellitus en Mujeres
                                             </h6>
                                             <div class="row g-2">
                                                 <div class="col-6 col-md-3">
@@ -2590,7 +2551,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
     <!-- CONTROLADOR DEL DASHBOARD DE ADMINISTRACIÓN -->
     <script>
         const AdminMenuDashboard = {
-            categoriaActiva: 'inicio',
+            categoriaActiva: 'nacional',
 
             metaCategorias: {
                 inicio: {
@@ -2620,7 +2581,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 salud: {
                     label: '<i class="fa-solid fa-heart-pulse me-2"></i>SALUD (MUJERES Y NIÑAS)',
                     clase: 'recuadro-tematico',
-                    titulo: 'Salud Integral: Oaxaca vs. Nacional',
+                    titulo: 'Salud ',
                     kpi1: { label: 'Defunciones Registradas', sub: 'EDR Preliminar INEGI' },
                     kpi2: { label: 'Causas Cardiovasculares', sub: 'Mayor incidencia' },
                     kpi3: { label: 'Cáncer de Mama', sub: 'Detección oportuna' }
@@ -2665,6 +2626,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
             },
 
             seleccionar(cat) {
+                if (!cat || cat === 'inicio') cat = 'nacional';
                 this.categoriaActiva = cat;
                 sessionStorage.setItem('plataforma_admin_categoria', cat);
 
@@ -2672,7 +2634,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     btn.classList.toggle('active', btn.dataset.cat === cat);
                 });
 
-                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas'];
+                const vistas = ['nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas'];
                 vistas.forEach(v => {
                     const el = document.getElementById('adminView_' + v);
                     if (el) el.classList.toggle('d-none', v !== cat);
@@ -2680,9 +2642,12 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
 
                 const kpiRow = document.getElementById('adminKpiCardsRow');
                 const recuadroWrap = document.getElementById('adminDetalleRecuadro')?.parentElement;
+                const quickActions = document.getElementById('adminQuickActionsGroup');
                 
+                // En INICIO: ocultar KPIs, recuadro de categoría y los botones Deshacer, Respaldar, Restablecer
                 if (kpiRow) kpiRow.classList.toggle('d-none', cat === 'inicio');
                 if (recuadroWrap) recuadroWrap.classList.toggle('d-none', cat === 'inicio');
+                if (quickActions) quickActions.classList.toggle('d-none', cat === 'inicio');
 
                 const pantallaDetalle = document.getElementById('adminPantallaDetalle');
                 if (pantallaDetalle) {
@@ -2828,8 +2793,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     AdminMenuDashboard.seleccionar(catGuardada || 'inicio');
                 });
                 modalAdminEl.addEventListener('hidden.bs.modal', () => {
-                    sessionStorage.removeItem('plataforma_admin_sesion_activa');
-                    sessionStorage.removeItem('plataforma_admin_categoria');
+                    // Mantener la sesión activa para recarga rápida (F5). La sesión solo se destruye en Cerrar Sesión
                     try {
                         if (window.location.hash === '#admin') {
                             history.replaceState(null, document.title, window.location.pathname + window.location.search);
@@ -3344,24 +3308,32 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         });
 
         function restaurarVistaGuardada() {
-            const adminSesionActiva = sessionStorage.getItem('plataforma_admin_sesion_activa');
+            const adminSesionActiva = sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true' || 
+                                      sessionStorage.getItem('gesmujer_admin_autenticado') === 'true';
             const adminCat = sessionStorage.getItem('plataforma_admin_categoria') || 'inicio';
-
             const hash = window.location.hash;
-            if (hash === '#admin') {
-                if (window.AdminDatosUI) {
-                    AdminDatosUI.solicitarAccesoAdmin();
+
+            // Si hay sesión de admin activa, restaurar el panel directamente sin volver a pedir contraseña
+            if (adminSesionActiva) {
+                if (window.AdminDatosUI && typeof window.AdminDatosUI.abrirModalAdmin === 'function') {
+                    window.AdminDatosUI.abrirModalAdmin();
+                } else {
+                    const modalAdminEl = document.getElementById('modalAdmin');
+                    if (modalAdminEl) {
+                        modalAdminEl.classList.add('show');
+                        modalAdminEl.style.display = 'block';
+                        document.body.classList.add('modal-open');
+                    }
+                }
+                if (window.AdminMenuDashboard && typeof window.AdminMenuDashboard.seleccionar === 'function') {
+                    window.AdminMenuDashboard.seleccionar(adminCat);
                 }
                 return;
             }
-            if (adminSesionActiva === 'true') {
-                const modalAdminEl = document.getElementById('modalAdmin');
-                if (modalAdminEl && window.bootstrap && bootstrap.Modal) {
-                    const modalAdminInst = bootstrap.Modal.getOrCreateInstance(modalAdminEl);
-                    modalAdminInst.show();
-                    if (window.AdminMenuDashboard) {
-                        AdminMenuDashboard.seleccionar(adminCat);
-                    }
+
+            if (hash === '#admin') {
+                if (window.AdminDatosUI) {
+                    AdminDatosUI.solicitarAccesoAdmin(true);
                 }
                 return;
             }

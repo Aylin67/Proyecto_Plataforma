@@ -1,7 +1,3 @@
-// assets/js/admin_datos.js - Sistema Central de Gestión y Administración de Datos
-// Plataforma GESMujer: Sincronización en tiempo real para Mapas (Leaflet), Gráficas (Chart.js) y Tarjetas de Métricas.
-// Permite a personal no programador actualizar datos a nivel Nacional (32 Estados), Estatal (Oaxaca) y Regional (8 Regiones).
-
 (function(window) {
     'use strict';
 
@@ -143,6 +139,26 @@
         // ==========================================
         // MÉTODOS NIVEL NACIONAL Y ESTADOS
         // ==========================================
+        // Aliases de conveniencia y compatibilidad
+        obtenerEstados: function() {
+            return this.getEstados();
+        },
+        obtenerEstado: function(id) {
+            return this.getEstado(id);
+        },
+        obtenerNacional: function() {
+            return this.getNacional();
+        },
+        obtenerEstatal: function() {
+            return this.getEstatal();
+        },
+        actualizarEstado: function(id, data) {
+            return this.guardarEstado(id, data);
+        },
+        persistir: function() {
+            return this.guardarEnStorage();
+        },
+
         getNacional: function() {
             if (!this._datos) this.cargar();
             const n = this._datos.nacionalTotal;
@@ -609,12 +625,18 @@
         configurarRutaHash: function() {
             const verificarHash = () => {
                 if (window.location.hash === '#admin') {
-                    this.solicitarAccesoAdmin();
+                    const sesionActiva = sessionStorage.getItem(SESSION_AUTH_KEY) === 'true' || 
+                                         sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true';
+                    if (sesionActiva) {
+                        this.abrirModalAdmin();
+                    } else {
+                        this.solicitarAccesoAdmin(true);
+                    }
                 }
             };
             window.addEventListener('hashchange', verificarHash);
             if (window.location.hash === '#admin') {
-                setTimeout(verificarHash, 300);
+                setTimeout(verificarHash, 200);
             }
         },
 
@@ -626,7 +648,10 @@
             }
         },
 
-        solicitarAccesoAdmin: function() {
+        solicitarAccesoAdmin: function(forzarLogin = false) {
+            const sesionActiva = sessionStorage.getItem(SESSION_AUTH_KEY) === 'true' || 
+                                 sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true';
+
             // Cerrar cualquier modal público abierto para evitar superposiciones o pantallas oscuras
             ['modalNacional', 'modalEstatal', 'modalTematico'].forEach(id => {
                 const el = document.getElementById(id);
@@ -648,8 +673,12 @@
             document.body.style.removeProperty('overflow');
             document.body.style.removeProperty('padding-right');
 
-            // Abrir modal de login para pedir la contraseña
-            this.abrirModalPin();
+            // Si ya tiene sesión activa y no se fuerza el login, abrir el panel directamente sin pedir contraseña
+            if (sesionActiva && !forzarLogin) {
+                this.abrirModalAdmin();
+            } else {
+                this.abrirModalPin();
+            }
         },
 
         abrirModalPin: function() {
@@ -1054,7 +1083,7 @@
 
         poblarSelectorEstados: function() {
             const sel = document.getElementById('selectAdminEstado');
-            if (!sel || sel.options.length > 1) return;
+            if (!sel) return;
 
             sel.innerHTML = '';
             const optTotal = document.createElement('option');
@@ -1062,31 +1091,34 @@
             optTotal.textContent = 'Estados Unidos Mexicanos (Total Nacional)';
             sel.appendChild(optTotal);
 
-            const estados = AdminDatos.obtenerEstados() || {};
-            const claves = Object.keys(estados).filter(k => k !== 'nacional' && k !== 'MX-NAC').sort((a,b) => {
-                const nA = estados[a].nombre || a;
-                const nB = estados[b].nombre || b;
+            const estados = AdminDatos.getEstados() || [];
+            const sorted = [...estados].sort((a, b) => {
+                const nA = a.nombre || a.id;
+                const nB = b.nombre || b.id;
                 return nA.localeCompare(nB, 'es');
             });
 
-            claves.forEach(c => {
+            sorted.forEach(est => {
                 const opt = document.createElement('option');
-                opt.value = c;
-                opt.textContent = estados[c].nombre || c;
+                opt.value = est.id;
+                opt.textContent = est.nombre || est.id;
                 sel.appendChild(opt);
             });
         },
 
         cambiarEstadoNacional: function(clave) {
-            const estados = AdminDatos.obtenerEstados() || {};
-            const totalNac = AdminDatos.obtenerNacional() || {};
-            const est = (clave === 'nacional' || clave === 'MX-NAC') ? totalNac : estados[clave];
+            let est;
+            if (clave === 'nacional' || clave === 'MX-NAC') {
+                est = AdminDatos.getNacional();
+            } else {
+                est = AdminDatos.getEstado(clave);
+            }
             if (!est) return;
 
             const elTotal = document.getElementById('inputAdminPobTotal');
             const elMujeres = document.getElementById('inputAdminMujeres');
             const elHombres = document.getElementById('inputAdminHombres');
-            if (elTotal) elTotal.value = est.pob || est.poblacion || 0;
+            if (elTotal) elTotal.value = est.pob || 0;
             if (elMujeres) elMujeres.value = est.mujeres || 0;
             if (elHombres) elHombres.value = est.hombres || 0;
 
@@ -1101,13 +1133,13 @@
         },
 
         cargarEstatalEnFormulario: function() {
-            const oax = AdminDatos.obtenerEstatal() || {};
+            const oax = AdminDatos.getEstatal() || {};
             const elTotal = document.getElementById('inputAdminOaxTotal');
             const elMujeres = document.getElementById('inputAdminOaxMujeres');
             const elHombres = document.getElementById('inputAdminOaxHombres');
-            if (elTotal) elTotal.value = oax.pob || oax.poblacion || 4132148;
-            if (elMujeres) elMujeres.value = oax.mujeres || 2156845;
-            if (elHombres) elHombres.value = oax.hombres || 1975303;
+            if (elTotal) elTotal.value = oax.pob || 4132148;
+            if (elMujeres) elMujeres.value = oax.mujeres || 2157305;
+            if (elHombres) elHombres.value = oax.hombres || 1974843;
             this.recalcularEstatal('total');
         },
 
@@ -1118,22 +1150,15 @@
             const mujeres = parseFloat(document.getElementById('inputAdminMujeres')?.value) || 0;
             const hombres = parseFloat(document.getElementById('inputAdminHombres')?.value) || 0;
 
-            AdminDatos.guardarSnapshot();
             if (clave === 'nacional' || clave === 'MX-NAC') {
-                const nac = AdminDatos.obtenerNacional() || {};
-                nac.pob = total;
-                nac.mujeres = mujeres;
-                nac.hombres = hombres;
-                AdminDatos._datos.nacionalTotal = nac;
+                AdminDatos.guardarNacional(total, mujeres, hombres);
+                this.mostrarToast('Datos de Total Nacional guardados con éxito.');
             } else {
-                const est = AdminDatos.obtenerEstado(clave) || { id: clave };
-                est.pob = total;
-                est.mujeres = mujeres;
-                est.hombres = hombres;
-                AdminDatos.actualizarEstado(clave, est);
+                AdminDatos.guardarEstado(clave, { pob: total, mujeres: mujeres, hombres: hombres });
+                const est = AdminDatos.getEstado(clave);
+                const nombreEst = est ? est.nombre : clave;
+                this.mostrarToast('Datos de ' + nombreEst + ' guardados con éxito.');
             }
-            AdminDatos.persistir();
-            this.mostrarToast('Datos de Nivel Nacional guardados con éxito.');
         },
 
         guardarEstatal: function() {
