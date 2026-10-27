@@ -600,6 +600,7 @@
                 }
             }, 500);
             this.cargarFotoPerfil();
+            this.aplicarFuentesEnPlataforma();
         },
 
         configurarAtajosTeclado: function() {
@@ -1490,6 +1491,461 @@ cargarFotoPerfil: function() {
                 this.cargarIngresoEnFormulario();
             } else if (cat === 'lenguas') {
                 this.cargarLenguasEnFormulario();
+            } else if (cat === 'fuentes') {
+                this.cargarFuentesEnFormulario();
+            }
+        },
+
+        // ========================================================
+        // FUENTES Y METADATOS OFICIALES (LAS 5 DIMENSIONES)
+        // ========================================================
+        obtenerFuentesDefault: function() {
+            return {
+                salud: {
+                    badge_2025: 'INEGI · EDR 2025',
+                    desc_2025: 'Fuente: INEGI. Estadísticas de Defunciones Registradas EDR 2025.',
+                    badge_2024: 'INEGI · EDR 2024',
+                    desc_2024: 'Fuente: INEGI. Estadísticas de Defunciones Registradas EDR 2024.',
+                    cuadro1: '1. INEGI. Estadísticas de Defunciones Registradas (EDR) 2025 preliminar (Causas generales, suicidios, mama y diabetes en mujeres).',
+                    cuadro2: '2. INEGI. Estadísticas de Defunciones Registradas (EDR) 2024 (Defunciones maternas totales y defunciones infantiles en niñas).',
+                    derechos: 'Derechos Reservados © INEGI'
+                },
+                educacion: {
+                    badge_2025: 'INEGI · Intercensal 2025',
+                    desc_2025: 'Fuente: INEGI. Encuesta Intercensal 2025.',
+                    badge_2024: 'SEP / INEGI · 2024/2025',
+                    desc_2024: 'Fuente: SEP. Sistema Interactivo de Consulta de Estadística Educativa / INEGI.',
+                    cuadro1: 'INEGI. Encuesta Intercensal 2025 · Actualización: 22 de septiembre de 2026.',
+                    cuadro2: 'SEP. Sistema Interactivo de Consulta de Estadística Educativa · Matrícula escolarizada ciclo 2024/2025.',
+                    derechos: 'Derechos Reservados © INEGI / SEP'
+                },
+                vivienda: {
+                    badge: 'INEGI · Censo 2020',
+                    desc: 'Fuente: INEGI. Censo de Población y Vivienda 2020.',
+                    cuadro1: 'INEGI. Censo de Población y Vivienda 2020 · Información referida al 15 de marzo de 2020.',
+                    cuadro2: '',
+                    derechos: 'Derechos Reservados © INEGI'
+                },
+                ingreso: {
+                    badge: 'INEGI · ENIGH & ENOE',
+                    desc: 'Fuente: INEGI. Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH) / ENOE.',
+                    cuadro1: '1. INEGI. Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH) · Ingreso corriente promedio trimestral según rubros.',
+                    cuadro2: '2. INEGI. Encuesta Nacional de Ocupación y Empleo (ENOE) · Desocupación: Tasa de desocupación total trimestral según entidad federativa (2023 - 2026).',
+                    derechos: 'Derechos Reservados © INEGI'
+                },
+                lenguas: {
+                    badge: 'INEGI · Censos 2010 – 2020',
+                    desc: 'Fuentes: INEGI. Censo de Población y Vivienda 2010. INEGI. Censo de Población y Vivienda 2020.',
+                    cuadro1: '1. INEGI. Censo de Población y Vivienda 2010 y Censo de Población y Vivienda 2020.',
+                    cuadro2: '2. INEGI. Encuesta Intercensal 2025.',
+                    derechos: 'Derechos Reservados © INEGI'
+                }
+            };
+        },
+
+        sincronizarFuenteBadge: function(grupo, valor) {
+            if (grupo === 'salud_2025') {
+                const layout = document.getElementById('layoutTematicoSalud');
+                if (!layout) return;
+                const badges = layout.querySelectorAll('[data-salud-grupo="2025"] .badge.bg-light');
+                badges.forEach(b => b.textContent = valor);
+            } else if (grupo === 'salud_2024') {
+                const layout = document.getElementById('layoutTematicoSalud');
+                if (!layout) return;
+                const badges = layout.querySelectorAll('[data-salud-grupo="2024"] .badge.bg-light');
+                badges.forEach(b => b.textContent = valor);
+            } else if (grupo === 'educacion_2025') {
+                const layout = document.getElementById('layoutTematicoEducacion');
+                if (!layout) return;
+                const badges = layout.querySelectorAll('[data-edu-grupo="2025"] .badge.bg-light');
+                badges.forEach(b => b.textContent = valor);
+            } else if (grupo === 'educacion_2024') {
+                const layout = document.getElementById('layoutTematicoEducacion');
+                if (!layout) return;
+                const badges = layout.querySelectorAll('[data-edu-grupo="2024_2025"] .badge.bg-light');
+                badges.forEach(b => b.textContent = valor);
+            } else {
+                const layoutId = 'layoutTematico' + grupo.charAt(0).toUpperCase() + grupo.slice(1);
+                const layout = document.getElementById(layoutId);
+                if (layout) {
+                    const badges = layout.querySelectorAll('.badge.bg-light');
+                    badges.forEach(b => b.textContent = valor);
+                }
+            }
+        },
+
+        sincronizarFuenteDesc: function(grupo, valor) {
+            // Sincroniza en vivo al escribir con el texto debajo de las descripciones en la plataforma pública
+            if (grupo === 'salud_2025' || grupo === 'salud') {
+                const layout = document.getElementById('layoutTematicoSalud');
+                if (!layout) return;
+                const smalls = layout.querySelectorAll('[data-salud-grupo="2025"] small');
+                smalls.forEach(s => {
+                    const txt = s.textContent.trim();
+                    if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                        s.setAttribute('data-fuente-sinc', 'true');
+                        s.textContent = valor;
+                    }
+                });
+            } else if (grupo === 'salud_2024') {
+                const layout = document.getElementById('layoutTematicoSalud');
+                if (!layout) return;
+                const smalls = layout.querySelectorAll('[data-salud-grupo="2024"] small');
+                smalls.forEach(s => {
+                    const txt = s.textContent.trim();
+                    if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                        s.setAttribute('data-fuente-sinc', 'true');
+                        s.textContent = valor;
+                    }
+                });
+            } else if (grupo === 'educacion_2025' || grupo === 'educacion') {
+                const layout = document.getElementById('layoutTematicoEducacion');
+                if (!layout) return;
+                const smalls = layout.querySelectorAll('[data-edu-grupo="2025"] small');
+                smalls.forEach(s => {
+                    const txt = s.textContent.trim();
+                    if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                        s.setAttribute('data-fuente-sinc', 'true');
+                        s.textContent = valor;
+                    }
+                });
+            } else if (grupo === 'educacion_2024') {
+                const layout = document.getElementById('layoutTematicoEducacion');
+                if (!layout) return;
+                const smalls = layout.querySelectorAll('[data-edu-grupo="2024_2025"] small');
+                smalls.forEach(s => {
+                    const txt = s.textContent.trim();
+                    if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                        s.setAttribute('data-fuente-sinc', 'true');
+                        s.textContent = valor;
+                    }
+                });
+            } else {
+                const layoutId = 'layoutTematico' + grupo.charAt(0).toUpperCase() + grupo.slice(1);
+                const layout = document.getElementById(layoutId);
+                if (layout) {
+                    const smalls = layout.querySelectorAll('small');
+                    smalls.forEach(s => {
+                        const txt = s.textContent.trim();
+                        if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                            s.setAttribute('data-fuente-sinc', 'true');
+                            s.textContent = valor;
+                        }
+                    });
+                }
+            }
+        },
+
+        cargarFuentesEnFormulario: function() {
+            try {
+                const defaults = this.obtenerFuentesDefault();
+                let guardadas = {};
+                const raw = localStorage.getItem('gesmujer_fuentes_datos');
+                if (raw) {
+                    guardadas = JSON.parse(raw);
+                }
+
+                // Cargar datos de Salud (con división 2025 y 2024)
+                const saludItem = Object.assign({}, defaults.salud, guardadas.salud || {});
+                const b2025 = document.getElementById('fuente_badge_salud_2025');
+                const d2025 = document.getElementById('fuente_desc_salud_2025');
+                const b2024 = document.getElementById('fuente_badge_salud_2024');
+                const d2024 = document.getElementById('fuente_desc_salud_2024');
+                const c1Salud = document.getElementById('fuente_cuadro1_salud');
+                const c2Salud = document.getElementById('fuente_cuadro2_salud');
+                const derSalud = document.getElementById('fuente_cuadro_derechos_salud');
+
+                if (b2025) b2025.value = saludItem.badge_2025 || saludItem.badge || 'INEGI · EDR 2025';
+                if (d2025) d2025.value = saludItem.desc_2025 || saludItem.desc || 'Fuente: INEGI. Estadísticas de Defunciones Registradas EDR 2025.';
+                if (b2024) b2024.value = saludItem.badge_2024 || 'INEGI · EDR 2024';
+                if (d2024) d2024.value = saludItem.desc_2024 || 'Fuente: INEGI. Estadísticas de Defunciones Registradas EDR 2024.';
+                if (c1Salud && saludItem.cuadro1 !== undefined) c1Salud.value = saludItem.cuadro1;
+                if (c2Salud && saludItem.cuadro2 !== undefined) c2Salud.value = saludItem.cuadro2;
+                if (derSalud && saludItem.derechos !== undefined) derSalud.value = saludItem.derechos;
+
+                // Cargar datos de Educación
+                const eduItem = Object.assign({}, defaults.educacion, guardadas.educacion || {});
+                const bEdu2025 = document.getElementById('fuente_badge_educacion_2025');
+                const dEdu2025 = document.getElementById('fuente_desc_educacion_2025');
+                const bEdu2024 = document.getElementById('fuente_badge_educacion_2024');
+                const dEdu2024 = document.getElementById('fuente_desc_educacion_2024');
+                const c1Edu = document.getElementById('fuente_cuadro1_educacion');
+                const c2Edu = document.getElementById('fuente_cuadro2_educacion');
+                const derEdu = document.getElementById('fuente_cuadro_derechos_educacion');
+
+                if (bEdu2025) bEdu2025.value = eduItem.badge_2025 || eduItem.badge || 'INEGI · Intercensal 2025';
+                if (dEdu2025) dEdu2025.value = eduItem.desc_2025 || eduItem.desc || 'Fuente: INEGI. Encuesta Intercensal 2025.';
+                if (bEdu2024) bEdu2024.value = eduItem.badge_2024 || 'SEP / INEGI · 2024/2025';
+                if (dEdu2024) dEdu2024.value = eduItem.desc_2024 || 'Fuente: SEP. Sistema Interactivo de Consulta de Estadística Educativa / INEGI.';
+                if (c1Edu && eduItem.cuadro1 !== undefined) c1Edu.value = eduItem.cuadro1;
+                if (c2Edu && eduItem.cuadro2 !== undefined) c2Edu.value = eduItem.cuadro2;
+                if (derEdu && eduItem.derechos !== undefined) derEdu.value = eduItem.derechos;
+
+                // Cargar datos de las otras 3 dimensiones
+                ['vivienda', 'ingreso', 'lenguas'].forEach(dim => {
+                    const item = Object.assign({}, defaults[dim], guardadas[dim] || {});
+                    if (!item) return;
+
+                    const elBadge = document.getElementById('fuente_badge_' + dim);
+                    const elDesc = document.getElementById('fuente_desc_' + dim);
+                    const elC1 = document.getElementById('fuente_cuadro1_' + dim);
+                    const elC2 = document.getElementById('fuente_cuadro2_' + dim);
+                    const elDer = document.getElementById('fuente_cuadro_derechos_' + dim);
+
+                    if (elBadge && item.badge !== undefined) elBadge.value = item.badge;
+                    if (elDesc && item.desc !== undefined) elDesc.value = item.desc;
+                    if (elC1 && item.cuadro1 !== undefined) elC1.value = item.cuadro1;
+                    if (elC2 && item.cuadro2 !== undefined) elC2.value = item.cuadro2;
+                    if (elDer && item.derechos !== undefined) elDer.value = item.derechos;
+                });
+            } catch(e) {
+                console.error('Error al cargar fuentes en formulario:', e);
+            }
+        },
+
+        guardarFuentes: function(dim) {
+            try {
+                const defaults = this.obtenerFuentesDefault();
+                let todas = {};
+                const raw = localStorage.getItem('gesmujer_fuentes_datos');
+                if (raw) {
+                    todas = JSON.parse(raw);
+                }
+                todas = Object.assign({}, defaults, todas);
+
+                if (dim === 'salud') {
+                    const badge2025 = document.getElementById('fuente_badge_salud_2025')?.value || 'INEGI · EDR 2025';
+                    const desc2025 = document.getElementById('fuente_desc_salud_2025')?.value || '';
+                    const badge2024 = document.getElementById('fuente_badge_salud_2024')?.value || 'INEGI · EDR 2024';
+                    const desc2024 = document.getElementById('fuente_desc_salud_2024')?.value || '';
+                    const cuadro1 = document.getElementById('fuente_cuadro1_salud')?.value || '';
+                    const cuadro2 = document.getElementById('fuente_cuadro2_salud')?.value || '';
+                    const derechos = document.getElementById('fuente_cuadro_derechos_salud')?.value || '';
+
+                    todas.salud = {
+                        badge_2025: badge2025,
+                        desc_2025: desc2025,
+                        badge_2024: badge2024,
+                        desc_2024: desc2024,
+                        cuadro1: cuadro1,
+                        cuadro2: cuadro2,
+                        derechos: derechos
+                    };
+                } else if (dim === 'educacion') {
+                    const badge2025 = document.getElementById('fuente_badge_educacion_2025')?.value || 'INEGI · Intercensal 2025';
+                    const desc2025 = document.getElementById('fuente_desc_educacion_2025')?.value || '';
+                    const badge2024 = document.getElementById('fuente_badge_educacion_2024')?.value || 'SEP / INEGI · 2024/2025';
+                    const desc2024 = document.getElementById('fuente_desc_educacion_2024')?.value || '';
+                    const cuadro1 = document.getElementById('fuente_cuadro1_educacion')?.value || '';
+                    const cuadro2 = document.getElementById('fuente_cuadro2_educacion')?.value || '';
+                    const derechos = document.getElementById('fuente_cuadro_derechos_educacion')?.value || '';
+
+                    todas.educacion = {
+                        badge_2025: badge2025,
+                        desc_2025: desc2025,
+                        badge_2024: badge2024,
+                        desc_2024: desc2024,
+                        cuadro1: cuadro1,
+                        cuadro2: cuadro2,
+                        derechos: derechos
+                    };
+                } else {
+                    const badge = document.getElementById('fuente_badge_' + dim)?.value || '';
+                    const desc = document.getElementById('fuente_desc_' + dim)?.value || '';
+                    const cuadro1 = document.getElementById('fuente_cuadro1_' + dim)?.value || '';
+                    const cuadro2 = document.getElementById('fuente_cuadro2_' + dim)?.value || '';
+                    const derechos = document.getElementById('fuente_cuadro_derechos_' + dim)?.value || '';
+
+                    todas[dim] = {
+                        badge: badge,
+                        desc: desc,
+                        cuadro1: cuadro1,
+                        cuadro2: cuadro2,
+                        derechos: derechos
+                    };
+                }
+
+                localStorage.setItem('gesmujer_fuentes_datos', JSON.stringify(todas));
+
+                // Sincronizar en la plataforma en tiempo real
+                this.aplicarFuentesDimension(dim, todas[dim]);
+
+                const nombres = { salud: 'Salud', educacion: 'Educación', vivienda: 'Vivienda', ingreso: 'Ingreso', lenguas: 'Lenguas Indígenas' };
+                this.mostrarToast('¡Fuentes de ' + (nombres[dim] || dim) + ' guardadas y actualizadas!');
+            } catch(e) {
+                console.error('Error al guardar fuentes:', e);
+            }
+        },
+
+        aplicarFuentesDimension: function(dim, data) {
+            if (!data) return;
+            const layoutId = 'layoutTematico' + dim.charAt(0).toUpperCase() + dim.slice(1);
+            const layout = document.getElementById(layoutId);
+            if (!layout) return;
+
+            if (dim === 'salud') {
+                const badge2025 = data.badge_2025 || data.badge;
+                const desc2025 = data.desc_2025 || data.desc;
+                const badge2024 = data.badge_2024;
+                const desc2024 = data.desc_2024;
+
+                // 1. Gráficas 1, 2, 3 y 4 (2025)
+                if (badge2025) {
+                    const b2025s = layout.querySelectorAll('[data-salud-grupo="2025"] .badge.bg-light');
+                    b2025s.forEach(b => b.textContent = badge2025);
+                }
+                if (desc2025) {
+                    const s2025s = layout.querySelectorAll('[data-salud-grupo="2025"] small');
+                    s2025s.forEach(s => {
+                        const txt = s.textContent.trim();
+                        if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                            s.setAttribute('data-fuente-sinc', 'true');
+                            s.textContent = desc2025;
+                        }
+                    });
+                }
+
+                // 2. Gráficas 5 y 6 (2024)
+                if (badge2024) {
+                    const b2024s = layout.querySelectorAll('[data-salud-grupo="2024"] .badge.bg-light');
+                    b2024s.forEach(b => b.textContent = badge2024);
+                }
+                if (desc2024) {
+                    const s2024s = layout.querySelectorAll('[data-salud-grupo="2024"] small');
+                    s2024s.forEach(s => {
+                        const txt = s.textContent.trim();
+                        if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                            s.setAttribute('data-fuente-sinc', 'true');
+                            s.textContent = desc2024;
+                        }
+                    });
+                }
+
+                // 3. Cuadro inferior oficial de fuentes
+                const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
+                if (cuadro) {
+                    const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
+                    if (divs.length >= 1 && data.cuadro1) {
+                        divs[0].textContent = data.cuadro1;
+                    }
+                    if (divs.length >= 2 && data.cuadro2 !== undefined) {
+                        divs[1].textContent = data.cuadro2;
+                        divs[1].style.display = data.cuadro2 ? 'block' : 'none';
+                    }
+                    const der = cuadro.querySelector('.text-end');
+                    if (der && data.derechos) {
+                        der.textContent = data.derechos;
+                    }
+                }
+                return;
+            } else if (dim === 'educacion') {
+                const badge2025 = data.badge_2025 || data.badge;
+                const desc2025 = data.desc_2025 || data.desc;
+                const badge2024 = data.badge_2024;
+                const desc2024 = data.desc_2024;
+
+                // 1. Gráficas 1, 2, 4 y 5 (2025)
+                if (badge2025) {
+                    const b2025s = layout.querySelectorAll('[data-edu-grupo="2025"] .badge.bg-light');
+                    b2025s.forEach(b => b.textContent = badge2025);
+                }
+                if (desc2025) {
+                    const s2025s = layout.querySelectorAll('[data-edu-grupo="2025"] small');
+                    s2025s.forEach(s => {
+                        const txt = s.textContent.trim();
+                        if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                            s.setAttribute('data-fuente-sinc', 'true');
+                            s.textContent = desc2025;
+                        }
+                    });
+                }
+
+                // 2. Gráfica 3 (2024/2025)
+                if (badge2024) {
+                    const b2024s = layout.querySelectorAll('[data-edu-grupo="2024_2025"] .badge.bg-light');
+                    b2024s.forEach(b => b.textContent = badge2024);
+                }
+                if (desc2024) {
+                    const s2024s = layout.querySelectorAll('[data-edu-grupo="2024_2025"] small');
+                    s2024s.forEach(s => {
+                        const txt = s.textContent.trim();
+                        if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                            s.setAttribute('data-fuente-sinc', 'true');
+                            s.textContent = desc2024;
+                        }
+                    });
+                }
+
+                // 3. Cuadro inferior oficial de fuentes
+                const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
+                if (cuadro) {
+                    const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
+                    if (divs.length >= 1 && data.cuadro1) {
+                        divs[0].textContent = data.cuadro1;
+                    }
+                    if (divs.length >= 2 && data.cuadro2 !== undefined) {
+                        divs[1].textContent = data.cuadro2;
+                        divs[1].style.display = data.cuadro2 ? 'block' : 'none';
+                    }
+                    const der = cuadro.querySelector('.text-end');
+                    if (der && data.derechos) {
+                        der.textContent = data.derechos;
+                    }
+                }
+                return;
+            }
+
+            // Para las otras dimensiones (vivienda, ingreso, lenguas)
+            // 1. Actualizar Badges (Captura 2)
+            if (data.badge) {
+                const badges = layout.querySelectorAll('.badge.bg-light');
+                badges.forEach(b => {
+                    b.textContent = data.badge;
+                });
+            }
+
+            // 2. Actualizar Textos debajo de la descripción (Captura 3)
+            if (data.desc) {
+                const smalls = layout.querySelectorAll('small');
+                smalls.forEach(s => {
+                    const txt = s.textContent.trim();
+                    if (txt.startsWith('Fuente') || txt.startsWith('Fuentes:') || s.hasAttribute('data-fuente-sinc')) {
+                        s.setAttribute('data-fuente-sinc', 'true');
+                        s.textContent = data.desc;
+                    }
+                });
+            }
+
+            // 3. Actualizar Cuadro inferior oficial de fuentes (Captura 1)
+            const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
+            if (cuadro) {
+                const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
+                if (divs.length >= 1 && data.cuadro1) {
+                    divs[0].textContent = data.cuadro1;
+                }
+                if (divs.length >= 2 && data.cuadro2 !== undefined) {
+                    divs[1].textContent = data.cuadro2;
+                    divs[1].style.display = data.cuadro2 ? 'block' : 'none';
+                }
+                const der = cuadro.querySelector('.text-end');
+                if (der && data.derechos) {
+                    der.textContent = data.derechos;
+                }
+            }
+        },
+
+        aplicarFuentesEnPlataforma: function() {
+            try {
+                const raw = localStorage.getItem('gesmujer_fuentes_datos');
+                if (!raw) return;
+                const todas = JSON.parse(raw);
+                ['salud', 'educacion', 'vivienda', 'ingreso', 'lenguas'].forEach(dim => {
+                    if (todas[dim]) {
+                        this.aplicarFuentesDimension(dim, todas[dim]);
+                    }
+                });
+            } catch(e) {
+                console.error('Error al aplicar fuentes en plataforma:', e);
             }
         },
 

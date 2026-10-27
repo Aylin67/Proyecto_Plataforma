@@ -1,6 +1,5 @@
 <?php
 // admin/dashboard.php - Panel de control y auditoría para la administradora de GESMujer
-
 require_once __DIR__ . '/includes/sesion.php';
 verificarAutenticacion();
 

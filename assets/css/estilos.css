@@ -303,11 +303,84 @@ body { padding-top: 85px; }
 .tema-atendidas   { background: linear-gradient(135deg, #4a154b 0%, #c2185b 100%); }
 .tema-lenguas     { background: linear-gradient(135deg, #6a1b9a, #8e24aa); }
 
-/* 8. PIE DE PÁGINA INSTITUCIONAL */
+/* 8. PIE DE PÁGINA INSTITUCIONAL ENRIQUECIDO */
 .footer-ges {
-    background: var(--ges-morado-profundo);
+    background: linear-gradient(180deg, #380d38 0%, #4a154b 40%, #2f0931 100%);
     color: #ebdbe8;
-    padding: 0;
+    padding-top: 45px;
+    padding-bottom: 25px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+.footer-ges .footer-col-titulo {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+}
+.footer-ges a {
+    color: #f3e8f1;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.footer-ges a:hover {
+    color: #ffca28;
+    text-decoration: underline;
+}
+.footer-social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 0.95rem;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.footer-social-btn:hover {
+    background: #c2185b;
+    border-color: #e91e63;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 4px 12px rgba(194, 24, 91, 0.5);
+    color: #ffffff !important;
+}
+.footer-map-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    height: 195px;
+    background: #e5e3df;
+}
+.footer-map-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
+    background: #ffffff;
+    color: #1a73e8 !important;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none !important;
+}
+.footer-map-btn:hover {
+    background: #f8f9fa;
+    color: #1557b0 !important;
 }
 .footer-logo {
     font-size: 1.30rem;
