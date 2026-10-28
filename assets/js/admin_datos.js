@@ -1523,7 +1523,7 @@ cargarFotoPerfil: function() {
                     badge: 'INEGI · Censo 2020',
                     desc: 'Fuente: INEGI. Censo de Población y Vivienda 2020.',
                     cuadro1: 'INEGI. Censo de Población y Vivienda 2020 · Información referida al 15 de marzo de 2020.',
-                    cuadro2: '',
+                    cuadro2: 'Consulta de: Viviendas particulares habitadas según disponibilidad de servicios y material durable en pisos.',
                     derechos: 'Derechos Reservados © INEGI'
                 },
                 ingreso: {
@@ -1695,7 +1695,9 @@ cargarFotoPerfil: function() {
                     if (elBadge && item.badge !== undefined) elBadge.value = item.badge;
                     if (elDesc && item.desc !== undefined) elDesc.value = item.desc;
                     if (elC1 && item.cuadro1 !== undefined) elC1.value = item.cuadro1;
-                    if (elC2 && item.cuadro2 !== undefined) elC2.value = item.cuadro2;
+                    if (elC2) {
+                        elC2.value = (item.cuadro2 !== undefined && item.cuadro2 !== '') ? item.cuadro2 : (defaults[dim]?.cuadro2 || '');
+                    }
                     if (elDer && item.derechos !== undefined) elDer.value = item.derechos;
                 });
             } catch(e) {
