@@ -10,18 +10,28 @@ html, body {
 }
 
 :root {
-    --ges-morado-profundo: #4a154b;
-    --ges-morado-violeta: #682260;
-    --ges-violeta-acento: #84327c;
-    --ges-rosa-mexicano: #c2185b;
-    --ges-fucsia-sororo: #e91e63;
-    --ges-naranja-alerta: #e65100;
-    --ges-naranja-calido: #f57c00;
-    --ges-verde-esperanza: #00897b;
-    --ges-verde-esmeralda: #00695c;
+    /* PALETA OFICIAL GESMUJER ROSARIO CASTELLANOS 2024 */
+    --ges-morado: #521769;
+    --ges-lila: #721896;
+    --ges-turquesa: #23B8A9;
+    --ges-rosa: #EE7BA2;
+    --ges-cian: #08C4E9;
+    --ges-naranja: #FF8352;
+
+    /* Compatibilidad con clases y variables del sistema */
+    --ges-morado-profundo: #521769;
+    --ges-morado-violeta: #721896;
+    --ges-violeta-acento: #721896;
+    --ges-rosa-mexicano: #EE7BA2;
+    --ges-fucsia-sororo: #EE7BA2;
+    --ges-naranja-alerta: #FF8352;
+    --ges-naranja-calido: #FF8352;
+    --ges-verde-esperanza: #23B8A9;
+    --ges-verde-esmeralda: #1b8f84;
+    --ges-cian-acento: #08C4E9;
     --ges-fondo-crema: #fbf8fa;
     --ges-texto-oscuro: #2a1127;
-    --ges-lavanda-suave: #f3e8f1;
+    --ges-lavanda-suave: #f4eaf3;
 }
 
 /* 2. BARRA DE NAVEGACIÓN */
@@ -30,8 +40,8 @@ html, body {
     top: 0; left: 0; right: 0;
     width: 100%;
     z-index: 1030;
-    background: linear-gradient(90deg, #2b082d 0%, #4a154b 60%, #682260 100%);
-    box-shadow: 0 4px 20px rgba(43, 8, 45, 0.45);
+    background: linear-gradient(90deg, #3c0f4d 0%, #521769 50%, #721896 100%);
+    box-shadow: 0 4px 20px rgba(82, 23, 105, 0.45);
     padding: 12px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -171,7 +181,7 @@ body { padding-top: 85px; }
     text-align: center;
 }
 .titulo-atlas-naranja {
-    color: #f26522;
+    color: var(--ges-naranja); /* #FF8352 */
     font-size: 2.7rem;
     font-weight: 900;
     letter-spacing: -0.5px;
@@ -209,8 +219,8 @@ body { padding-top: 85px; }
     align-items: center;
     justify-content: center;
 }
-.btn-estatal  { background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%); }
-.btn-nacional { background: linear-gradient(135deg, #682260 0%, #8e24aa 100%); }
+.btn-estatal  { background: linear-gradient(135deg, #FF8352 0%, #EE7BA2 100%); box-shadow: 0 4px 15px rgba(255, 131, 82, 0.35); }
+.btn-nacional { background: linear-gradient(135deg, #521769 0%, #721896 100%); box-shadow: 0 4px 15px rgba(82, 23, 105, 0.35); }
 .btn-territorial:hover {
     transform: translateY(-2px) scale(1.04);
     box-shadow: 0 0 0 4px #ffffff, 0 0 0 7px var(--ges-morado-profundo);
@@ -232,7 +242,7 @@ body { padding-top: 85px; }
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="44" viewBox="0 0 60 48"><polygon points="30,8 48,24 30,40 12,24" fill="none" stroke="white" stroke-width="2.5"/><polygon points="30,16 38,24 30,32 22,24" fill="white"/><polygon points="0,0 12,0 0,12" fill="white"/><polygon points="60,0 48,0 60,12" fill="white"/><polygon points="0,48 12,48 0,36" fill="white"/><polygon points="60,48 48,48 60,36" fill="white"/></svg>');
     background-repeat: repeat-x;
     margin: 25px 0 35px 0;
-    box-shadow: 0 4px 14px rgba(74, 21, 75, 0.2);
+    box-shadow: 0 4px 14px rgba(82, 23, 105, 0.2);
 }
 
 /* 7. TARJETAS TEMÁTICAS */
@@ -291,26 +301,27 @@ body { padding-top: 85px; }
     line-height: 1.25;
     font-family: 'Georgia', 'Segoe UI', serif;
 }
-.tema-educacion   { background: linear-gradient(135deg, #f57c00, #ff9800); }
-.tema-salud       { background: linear-gradient(135deg, #00897b, #26a69a); }
-.tema-vivienda    { background: linear-gradient(135deg, #1565c0, #42a5f5); }
-.tema-ingreso     { background: linear-gradient(135deg, #2e7d32, #43a047); }
-.tema-psicologia  { background: linear-gradient(135deg, #4a154b, #682260); }
-.tema-legal       { background: linear-gradient(135deg, #880e4f, #c2185b); }
-.tema-feminicidios{ background: linear-gradient(135deg, #b71c1c, #e53935); }
-.tema-talleres    { background: linear-gradient(135deg, #e65100, #f57c00); }
-.tema-proyectos   { background: linear-gradient(135deg, #00695c, #00897b); }
-.tema-atendidas   { background: linear-gradient(135deg, #4a154b 0%, #c2185b 100%); }
-.tema-lenguas     { background: linear-gradient(135deg, #6a1b9a, #8e24aa); }
+.tema-educacion   { background: linear-gradient(135deg, #FF8352, #f57c00); }
+.tema-salud       { background: linear-gradient(135deg, #23B8A9, #00897b); }
+.tema-vivienda    { background: linear-gradient(135deg, #08C4E9, #1565c0); }
+.tema-ingreso     { background: linear-gradient(135deg, #2e7d32, #23B8A9); }
+.tema-psicologia  { background: linear-gradient(135deg, #721896, #EE7BA2); }
+.tema-legal       { background: linear-gradient(135deg, #EE7BA2, #c2185b); }
+.tema-feminicidios{ background: linear-gradient(135deg, #d32f2f, #EE7BA2); }
+.tema-talleres    { background: linear-gradient(135deg, #FF8352, #ffa726); }
+.tema-proyectos   { background: linear-gradient(135deg, #23B8A9, #08C4E9); }
+.tema-atendidas   { background: linear-gradient(135deg, #521769 0%, #721896 100%); }
+.tema-lenguas     { background: linear-gradient(135deg, #721896, #521769); }
 
 /* 8. PIE DE PÁGINA INSTITUCIONAL ENRIQUECIDO */
 .footer-ges {
-    background: linear-gradient(180deg, #380d38 0%, #4a154b 40%, #2f0931 100%);
+    background: linear-gradient(180deg, #3c0f4d 0%, #521769 45%, #2a0736 100%);
     color: #ebdbe8;
     padding-top: 45px;
     padding-bottom: 25px;
     font-size: 0.85rem;
     line-height: 1.55;
+    
 }
 .footer-ges .footer-col-titulo {
     color: #ffffff;
@@ -326,32 +337,43 @@ body { padding-top: 85px; }
     transition: color 0.2s ease;
 }
 .footer-ges a:hover {
-    color: #ffca28;
+    color: var(--ges-turquesa);
     text-decoration: underline;
+}
+.footer-social-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
 }
 .footer-social-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.22);
     color: #ffffff !important;
     text-decoration: none !important;
     font-size: 0.95rem;
-    margin-right: 6px;
-    margin-bottom: 6px;
+    flex-shrink: 0;
     transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .footer-social-btn:hover {
-    background: #c2185b;
-    border-color: #e91e63;
-    transform: translateY(-3px) scale(1.08);
-    box-shadow: 0 4px 12px rgba(194, 24, 91, 0.5);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     color: #ffffff !important;
 }
+.footer-social-btn.social-x:hover         { background: var(--ges-cian); border-color: var(--ges-cian); }
+.footer-social-btn.social-facebook:hover  { background: var(--ges-lila); border-color: var(--ges-lila); }
+.footer-social-btn.social-instagram:hover { background: var(--ges-rosa); border-color: var(--ges-rosa); }
+.footer-social-btn.social-youtube:hover   { background: var(--ges-naranja); border-color: var(--ges-naranja); }
+.footer-social-btn.social-tiktok:hover    { background: var(--ges-turquesa); border-color: var(--ges-turquesa); }
+.footer-social-btn.social-podcast:hover   { background: var(--ges-naranja); border-color: var(--ges-naranja); }
+
 .footer-map-wrapper {
     position: relative;
     border-radius: 12px;
@@ -377,10 +399,12 @@ body { padding-top: 85px; }
     align-items: center;
     gap: 4px;
     text-decoration: none !important;
+    transition: transform 0.2s ease;
 }
 .footer-map-btn:hover {
     background: #f8f9fa;
     color: #1557b0 !important;
+    transform: scale(1.04);
 }
 .footer-logo {
     font-size: 1.30rem;
@@ -390,10 +414,9 @@ body { padding-top: 85px; }
 
 /* 9. MODALES FULLSCREEN (Nacional / Estatal / Regional / Temático) */
 .modal-nacional-header {
-    background: linear-gradient(135deg, #2b082d 0%, #4a154b 60%, #682260 100%);
+    background: linear-gradient(135deg, #3c0f4d 0%, #521769 50%, #721896 100%);
     color: #ffffff;
     padding: 16px 24px;
-    border-bottom: none;
 }
 .modal-nacional-icon {
     width: 44px;
@@ -540,7 +563,7 @@ html.recarga-modal-activa .modal-backdrop {
     transition: none !important;
 }
 
-/* PANEL DE ADMINISTRACIÓN — DASHBOARD SAAS  */
+/* PANEL DE ADMINISTRACIÓN —  */
 
 .admin-discreto-trigger {
     background: transparent;
@@ -596,6 +619,10 @@ html.recarga-modal-activa .modal-backdrop {
 
 /* Tipografía formal del dashboard */
 .admin-fullscreen-content,
+.modal-admin-header {
+    background: linear-gradient(135deg, #102a43 0%, #0d1e30 100%);
+    border-bottom: 3px solid var(--ges-turquesa);
+}
 .admin-pin-card {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -611,7 +638,7 @@ h1, h2, h3, h4, h5, h6,
     max-width: 540px;
     height: 52px;
     margin: 0 auto;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 0 24px;
     display: flex;
     align-items: center;
@@ -619,69 +646,128 @@ h1, h2, h3, h4, h5, h6,
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    box-shadow: 0 4px 14px rgba(74, 21, 75, 0.08);
+    background: #ffffff;
+    color: #0d5c66;
+    border: 1.5px solid #82becb;
+    box-shadow: 0 4px 14px rgba(130, 190, 203, 0.25);
     transition: all 0.25s ease;
 }
+.admin-categoria-recuadro.recuadro-vivienda,
+.admin-categoria-recuadro.recuadro-tematico {
+    background: linear-gradient(135deg, #eaf6f8 0%, #daf0f3 100%);
+    color: #0d5c66;
+    border: 1.5px solid #82becb;
+    box-shadow: 0 4px 14px rgba(13, 92, 102, 0.12);
+}
 .admin-categoria-recuadro.recuadro-nacional {
-    background: linear-gradient(135deg, #f5eef4 0%, #ecdbe9 100%);
-    color: #4a154b; border: 1.5px solid #c99ec3;
+    background: linear-gradient(135deg, #fbf5fc 0%, #f4e6f6 100%);
+    color: #521769;
+    border: 1.5px solid #d8b7dc;
+    box-shadow: 0 4px 14px rgba(82, 23, 105, 0.12);
 }
 .admin-categoria-recuadro.recuadro-estatal {
-    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-    color: #ad1457; border: 1.5px solid #f48fb1;
+    background: linear-gradient(135deg, #fdf2f7 0%, #fbe4ee 100%);
+    color: #be185d;
+    border: 1.5px solid #f9a8d4;
+    box-shadow: 0 4px 14px rgba(190, 24, 93, 0.12);
 }
 .admin-categoria-recuadro.recuadro-salud {
-    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-    color: #c2185b; border: 1.5px solid #f48fb1;
+    background: linear-gradient(135deg, #fdf2f7 0%, #fbe4ee 100%);
+    color: #be185d;
+    border: 1.5px solid #f9a8d4;
+    box-shadow: 0 4px 14px rgba(190, 24, 93, 0.12);
 }
 .admin-categoria-recuadro.recuadro-educacion {
-    background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
-    color: #4527a0; border: 1.5px solid #b39ddb;
-}
-.admin-categoria-recuadro.recuadro-vivienda {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    color: #2e7d32; border: 1.5px solid #a5d6a7;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    color: #6d28d9;
+    border: 1.5px solid #c4b5fd;
+    box-shadow: 0 4px 14px rgba(109, 40, 217, 0.12);
 }
 .admin-categoria-recuadro.recuadro-ingreso {
-    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-    color: #d84315; border: 1.5px solid #ffe082;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    color: #b45309;
+    border: 1.5px solid #fde68a;
+    box-shadow: 0 4px 14px rgba(180, 83, 9, 0.12);
 }
-.admin-categoria-recuadro.recuadro-psicologia {
-    background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-    color: #7b1fa2; border: 1.5px solid #ce93d8;
+.admin-categoria-recuadro.recuadro-lenguas {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    color: #15803d;
+    border: 1.5px solid #86efac;
+    box-shadow: 0 4px 14px rgba(21, 128, 61, 0.12);
 }
-.admin-categoria-recuadro.recuadro-juicios {
-    background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
-    color: #283593; border: 1.5px solid #9fa8da;
-}
-.admin-categoria-recuadro.recuadro-atendidas {
-    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
-    color: #00838f; border: 1.5px solid #80deea;
-}
-.admin-categoria-recuadro.recuadro-feminicidios {
-    background: linear-gradient(135deg, #fbe9e7 0%, #ffccbc 100%);
-    color: #c62828; border: 1.5px solid #ffab91;
-}
-.admin-categoria-recuadro.recuadro-talleres {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    color: #e65100; border: 1.5px solid #ffcc80;
-}
-.admin-categoria-recuadro.recuadro-proyectos {
-    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
-    color: #00695c; border: 1.5px solid #80cbc4;
+.admin-categoria-recuadro.recuadro-fuentes {
+    background: linear-gradient(135deg, #f0f9fa 0%, #e0f2fe 100%);
+    color: #0369a1;
+    border: 1.5px solid #7dd3fc;
+    box-shadow: 0 4px 14px rgba(3, 105, 161, 0.12);
 }
 
 /* Caja de Formulario Admin */
 .admin-form-box {
     background: #ffffff;
-    border: 1px solid #ebdbe9;
-    border-radius: 16px;
+    border: 1px solid #d5e5eb;
+    border-radius: 18px;
     padding: 24px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 18px rgba(15, 61, 70, 0.05);
 }
+.admin-form-box .bg-light.border,
+.admin-form-box .p-3.rounded-3.bg-light {
+    background: #f8fafb !important;
+    border: 1px solid #e1ecf0 !important;
+    border-radius: 14px !important;
+}
+.admin-form-box .badge.bg-primary {
+    background: linear-gradient(135deg, #23B8A9 0%, #0d9488 100%) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 6px rgba(35, 184, 169, 0.35) !important;
+}
+.admin-form-box .badge.bg-secondary {
+    background: linear-gradient(135deg, #08C4E9 0%, #0284c7 100%) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 6px rgba(8, 196, 233, 0.35) !important;
+}
+.admin-form-box h5 i {
+    color: #0d9488 !important;
+}
+.admin-form-box .form-control {
+    border: 1.5px solid #cbdde3;
+    background: #ffffff;
+    color: #083344;
+    font-weight: 600;
+    border-radius: 9px;
+    transition: all 0.2s ease;
+}
+.admin-form-box .form-control:focus {
+    border-color: #23B8A9;
+    box-shadow: 0 0 0 3px rgba(35, 184, 169, 0.2);
+    background: #ffffff;
+}
+.admin-form-box .btn[onclick*="guardar"],
+.admin-form-box .btn[onclick*="Guardar"] {
+    background: linear-gradient(135deg, #23B8A9 0%, #147a70 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 12px rgba(35, 184, 169, 0.3) !important;
+    border-radius: 9px !important;
+    transition: all 0.2s ease;
+}
+.admin-form-box .btn[onclick*="guardar"]:hover,
+.admin-form-box .btn[onclick*="Guardar"]:hover {
+    background: linear-gradient(135deg, #1ea395 0%, #0e635b 100%) !important;
+    box-shadow: 0 6px 16px rgba(35, 184, 169, 0.4) !important;
+    transform: translateY(-1px);
+}
+
 .admin-input-big {
     font-size: 1.15rem;
     font-weight: 700;
@@ -769,14 +855,15 @@ h1, h2, h3, h4, h5, h6,
     min-width: 280px;
     min-height: 100vh;
     height: auto;
-    background: linear-gradient(180deg, #102a43 0%, #0d1e30 100%);
-    color: #ffffff;
+    background: linear-gradient(180deg, #82becb 0%, #68aab9 50%, #569eaebd 100%);
+    color: #083344;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid rgba(13, 92, 102, 0.15);
     position: relative;
     z-index: 1050;
     transition: all 0.3s ease;
+    box-shadow: 2px 0 16px rgba(13, 92, 102, 0.08);
 }
 /* Sidebar Header y Perfil */
 .admin-perfil-card {
@@ -784,7 +871,7 @@ h1, h2, h3, h4, h5, h6,
     align-items: center;
     gap: 14px;
     padding: 22px 20px 18px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(13, 92, 102, 0.15);
 }
 .admin-avatar-wrapper,
 .admin-avatar-container {
@@ -801,7 +888,7 @@ h1, h2, h3, h4, h5, h6,
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px rgba(13, 92, 102, 0.2);
     background-color: #f7eef5;
 }
 .admin-avatar-camera-badge {
@@ -810,7 +897,7 @@ h1, h2, h3, h4, h5, h6,
     right: -2px;
     width: 20px;
     height: 20px;
-    background-color: #c2185b;
+    background-color: #0d5c66;
     color: #ffffff;
     border-radius: 50%;
     display: flex;
@@ -818,27 +905,28 @@ h1, h2, h3, h4, h5, h6,
     justify-content: center;
     font-size: 10px;
     border: 1.5px solid #ffffff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
     transition: transform 0.15s ease;
 }
 .admin-avatar-wrapper:hover .admin-avatar-camera-badge,
 .admin-avatar-container:hover .admin-avatar-camera-badge {
     transform: scale(1.15);
-    background-color: #e91e63;
+    background-color: #083344;
 }
 .admin-perfil-info {
     overflow: hidden;
 }
 .admin-perfil-saludo {
     font-size: 0.76rem;
-    color: #94a3b8;
+    color: #13424c;
+    font-weight: 600;
     margin-bottom: 1px;
 }
 .admin-perfil-nombre {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
-    color: #ffffff;
+    color: #07262d;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -846,18 +934,19 @@ h1, h2, h3, h4, h5, h6,
 }
 .admin-perfil-rol {
     font-size: 0.72rem;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.12);
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-weight: 600;
+    color: #0d5c66;
+    background: #ffffff;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 700;
     display: inline-block;
-    margin-top: 3px;
+    margin-top: 4px;
+    box-shadow: 0 2px 6px rgba(13, 92, 102, 0.12);
 }
 
 /* Buscador de Categorías Moderno */
 .admin-sidebar-search {
-    margin: 20px 16px 24px 16px;
+    margin: 18px 16px 20px 16px;
     position: relative;
 }
 .admin-search-wrapper {
@@ -871,7 +960,7 @@ h1, h2, h3, h4, h5, h6,
     left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: #0e7490;
     font-size: 0.88rem;
     pointer-events: none;
     z-index: 2;
@@ -879,29 +968,31 @@ h1, h2, h3, h4, h5, h6,
 }
 .admin-search-input {
     width: 100%;
-    background: #15324d;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
     border-radius: 12px;
     padding: 10px 14px 10px 38px;
-    color: #ffffff;
+    color: #083344;
     font-size: 0.84rem;
+    font-weight: 600;
     font-family: 'Plus Jakarta Sans', sans-serif;
     outline: none;
     transition: all 0.25s ease;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 8px rgba(13, 92, 102, 0.08);
 }
 .admin-search-input:focus {
-    border-color: rgba(255, 255, 255, 0.35);
-    background: #163654;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-color: #0d5c66;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(13, 92, 102, 0.2);
 }
 .admin-search-input:focus + .admin-search-icon,
 .admin-search-wrapper:focus-within .admin-search-icon {
-    color: #94a3b8;
+    color: #0d5c66;
 }
 .admin-search-input::placeholder {
-    color: #94a3b8;
-    opacity: 0.85;
+    color: #3b6b75;
+    opacity: 0.9;
+    font-weight: 500;
 }
 
 /* Navegación y Menú */
@@ -913,7 +1004,7 @@ h1, h2, h3, h4, h5, h6,
     font-size: 0.70rem;
     font-weight: 800;
     letter-spacing: 0.1em;
-    color: #64748b;
+    color: #13424c;
     padding: 0 10px 10px 10px;
     text-transform: uppercase;
 }
@@ -926,7 +1017,7 @@ h1, h2, h3, h4, h5, h6,
     padding: 0 !important;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
 .admin-menu-item {
     list-style: none !important;
@@ -942,33 +1033,38 @@ h1, h2, h3, h4, h5, h6,
     padding: 11px 14px;
     border: 1.5px solid transparent;
     background: transparent;
-    border-radius: 10px;
-    color: #cbd5e1;
-    font-size: 0.86rem;
-    font-weight: 600;
+    border-radius: 12px;
+    color: #07262d;
+    font-size: 0.88rem;
+    font-weight: 700;
     text-align: left;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 .admin-menu-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.55);
+    color: #041c22;
+    transform: translateX(3px);
 }
 .admin-menu-btn:hover .menu-icon,
 .admin-menu-btn:hover .menu-chevron {
-    color: #ffffff;
+    color: #0d5c66;
 }
 .admin-menu-btn.active {
-    background: rgba(20, 184, 166, 0.15) !important;
-    color: #ffffff !important;
-    border: 1.5px solid #14b8a6 !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    background: #ffffff !important;
+    color: #0d5c66 !important;
+    border: 1.5px solid #ffffff !important;
+    border-left: 5px solid #0d5c66 !important;
+    box-shadow: 0 4px 14px rgba(13, 92, 102, 0.18) !important;
+    font-weight: 800 !important;
+    transform: translateX(4px);
 }
 .admin-menu-btn.active .menu-icon {
-    color: #14b8a6 !important;
+    color: #0d5c66 !important;
 }
 .admin-menu-btn.active .menu-chevron {
-    color: #14b8a6 !important;
+    color: #0d5c66 !important;
+    transform: translateX(2px);
 }
 .admin-btn-left {
     display: flex;
@@ -976,91 +1072,43 @@ h1, h2, h3, h4, h5, h6,
     gap: 12px;
 }
 .menu-icon {
-    font-size: 1rem;
-    width: 20px;
+    font-size: 1.05rem;
+    width: 22px;
     text-align: center;
-    color: #94a3b8;
+    color: #13424c;
     transition: color 0.2s ease;
 }
 .menu-chevron {
-    font-size: 0.72rem;
-    color: #64748b;
+    font-size: 0.74rem;
+    color: #13424c;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 .admin-sidebar-footer {
     padding: 16px;
-    background: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.25);
+    border-top: 1px solid rgba(13, 92, 102, 0.15);
 }
-.admin-perfil-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-.admin-avatar-container {
-    position: relative;
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-.admin-avatar-img {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    background-color: #f7eef5;
-}
-.admin-avatar-camera-badge {
-    position: absolute;
-    bottom: -2px; right: -2px;
-    width: 18px; height: 18px;
-    background-color: #c2185b;
-    color: #ffffff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    border: 1.5px solid #ffffff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    transition: transform 0.15s ease;
-}
-.admin-avatar-container:hover .admin-avatar-camera-badge {
-    transform: scale(1.15);
-    background-color: #e91e63;
-}
-.admin-perfil-info { overflow: hidden; }
-.admin-perfil-nombre {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 0.88rem;
-    color: #ffffff;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.admin-perfil-rol { font-size: 0.72rem; color: #94a3b8; }
 .btn-sidebar-logout {
     width: 100%;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    background: rgba(239, 68, 68, 0.12);
-    color: #fca5a5;
-    font-size: 0.80rem;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    background: #ffffff;
+    color: #dc2626;
+    font-size: 0.82rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
 }
 .btn-sidebar-logout:hover {
     background: #dc2626;
     color: #ffffff;
+    border-color: #dc2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
 
 /* Workspace */
@@ -1070,13 +1118,13 @@ h1, h2, h3, h4, h5, h6,
     height: auto;
     display: flex;
     flex-direction: column;
-    background: #f0f4f8;
+    background: #f1f7f9;
     overflow: visible;
 }
 .admin-workspace-topbar {
     padding: 16px 28px;
     background: #ffffff;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 3px solid var(--ges-turquesa);
     display: flex;
     align-items: center;
     justify-content: space-between;

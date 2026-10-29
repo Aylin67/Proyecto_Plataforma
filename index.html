@@ -8,9 +8,11 @@
         (function() {
             try {
                 var guardada = sessionStorage.getItem('plataforma_vista_activa');
-                var adminActivo = sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true' || 
-                                  sessionStorage.getItem('gesmujer_admin_autenticado') === 'true';
+                var adminModalAbierto = sessionStorage.getItem('plataforma_admin_modal_abierto') === 'true';
+                var adminAutenticado = sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true' || 
+                                       sessionStorage.getItem('gesmujer_admin_autenticado') === 'true';
                 var hash = window.location.hash;
+                var adminActivo = adminAutenticado && (adminModalAbierto || hash === '#admin');
                 if (adminActivo || guardada || (hash && (hash === '#admin' || hash === '#nacional' || hash === '#estatal' || hash.indexOf('#tema-') === 0))) {
                     document.documentElement.classList.add('recarga-modal-activa');
                 }
@@ -242,7 +244,7 @@
                 <!-- COLUMNA 2: SOMOS DONATARIAS AUTORIZADAS -->
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="footer-col-titulo">
-                        Somos Donatarias <span class="d-block text-warning" style="font-size: 0.95rem; font-weight: 700;">autorizadas</span>
+                        Somos Donatarias autorizadas
                     </div>
                     <p class="small mb-2" style="color: #ebdbe8; font-size: 0.82rem; line-height: 1.55; text-align: justify;">
                         Contamos con personalidad jurídica propia y autorizada por la Secretaría de Hacienda para recibir donativos libres de impuestos.
@@ -256,39 +258,39 @@
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="footer-col-titulo">Datos de contacto</div>
                     <p class="small mb-2 text-white-50" style="font-size: 0.8rem; line-height: 1.45;">
-                        <i class="fa-solid fa-location-dot me-1 text-warning"></i> Tercera privada de Guadalupe Victoria número 107, colonia Libertad, código postal 68090, Oaxaca, México.
+                        <i class="fa-solid fa-location-dot me-1" style="color: var(--ges-naranja);"></i> Tercera privada de Guadalupe Victoria número 107, colonia Libertad, código postal 68090, Oaxaca, México.
                     </p>
                     <p class="small mb-1 text-white-50" style="font-size: 0.8rem;">
-                        <i class="fa-solid fa-clock me-1 text-warning"></i> Horario: Lun-viernes de 9 a 3 pm.
+                        <i class="fa-solid fa-clock me-1" style="color: var(--ges-turquesa);"></i> Horario: Lun-viernes de 9 a 3 pm.
                     </p>
                     <p class="small mb-1" style="font-size: 0.8rem;">
-                        <i class="fa-solid fa-envelope me-1 text-warning"></i> <a href="mailto:contacto@gesmujer.org">contacto@gesmujer.org</a>
+                        <i class="fa-solid fa-envelope me-1" style="color: var(--ges-rosa);"></i> <a href="mailto:contacto@gesmujer.org">contacto@gesmujer.org</a>
                     </p>
                     <p class="small mb-1" style="font-size: 0.8rem;">
-                        <i class="fa-solid fa-phone me-1 text-warning"></i> Tel. oficina: <a href="tel:+529515166810">(+52) 951 516 6810</a>
+                        <i class="fa-solid fa-phone me-1" style="color: var(--ges-cian);"></i> Tel. oficina: <a href="tel:+529515166810">(+52) 951 516 6810</a>
                     </p>
                     <p class="small mb-3" style="font-size: 0.8rem;">
                         <i class="fa-brands fa-whatsapp me-1 text-success fw-bold"></i> WhatsApp: <a href="https://wa.me/529512722665" target="_blank" rel="noopener noreferrer">(+52) (951) 272 26 65</a>
                     </p>
 
                     <div class="fw-bold text-white small mb-2" style="font-size: 0.82rem;">Síguenos y comparte</div>
-                    <div class="d-flex flex-wrap gap-1">
-                        <a href="https://x.com/GES_Mujer" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="X (Twitter)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <div class="footer-social-row">
+                        <a href="https://x.com/GES_Mujer" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-x" title="X (Twitter)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
-                        <a href="https://www.facebook.com/gesmujer.rosario.castellanos.ac" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Facebook">
+                        <a href="https://www.facebook.com/gesmujer.rosario.castellanos.ac" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-facebook" title="Facebook">
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
-                        <a href="https://www.instagram.com/ges_mujer/?hl=es" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Instagram">
+                        <a href="https://www.instagram.com/ges_mujer/?hl=es" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-instagram" title="Instagram">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
-                        <a href="https://www.youtube.com/c/gesmujerrosariocastellanos" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="YouTube">
+                        <a href="https://www.youtube.com/c/gesmujerrosariocastellanos" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-youtube" title="YouTube">
                             <i class="fa-brands fa-youtube"></i>
                         </a>
-                        <a href="https://www.tiktok.com/@gesmujer" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="TikTok">
+                        <a href="https://www.tiktok.com/@gesmujer" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-tiktok" title="TikTok">
                             <i class="fa-brands fa-tiktok"></i>
                         </a>
-                        <a href="https://soundcloud.com/gesmujerac" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Podcast / Soundcloud">
+                        <a href="https://soundcloud.com/gesmujerac" target="_blank" rel="noopener noreferrer" class="footer-social-btn social-podcast" title="Podcast / Soundcloud">
                             <i class="fa-brands fa-soundcloud"></i>
                         </a>
                     </div>
@@ -3097,7 +3099,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 salud: {
                     label: '<i class="fa-solid fa-heart-pulse me-2"></i>SALUD (MUJERES Y NIÑAS)',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-salud',
                     titulo: 'Salud ',
                     kpi1: { label: 'Defunciones Registradas', sub: 'EDR Preliminar INEGI' },
                     kpi2: { label: 'Causas Cardiovasculares', sub: 'Mayor incidencia' },
@@ -3105,7 +3107,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 educacion: {
                     label: '<i class="fa-solid fa-graduation-cap me-2"></i>EDUCACIÓN ',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-educacion',
                     titulo: 'Educación y Participación Académica',
                     kpi1: { label: 'Población 6 a 14 Años', sub: 'Aptitud lectoescritura' },
                     kpi2: { label: 'Asistencia Escolar', sub: 'Tasa estatal' },
@@ -3113,7 +3115,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 vivienda: {
                     label: '<i class="fa-solid fa-house-chimney me-2"></i>VIVIENDA Y SERVICIOS',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-vivienda',
                     titulo: 'Vivienda y Servicios Básicos',
                     kpi1: { label: 'Viviendas Particulares', sub: 'Censo INEGI' },
                     kpi2: { label: 'Agua Entubada', sub: 'Cobertura estatal' },
@@ -3121,7 +3123,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 ingreso: {
                     label: '<i class="fa-solid fa-hand-holding-dollar me-2"></i>INGRESO Y EMPLEO',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-ingreso',
                     titulo: 'Ingresos y Tasa de Desocupación',
                     kpi1: { label: 'Ingreso Promedio Trimestral', sub: 'ENIGH INEGI' },
                     kpi2: { label: 'Tasa de Desocupación', sub: 'ENOE Trimestral (Pastel)' },
@@ -3129,7 +3131,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 lenguas: {
                     label: '<i class="fa-solid fa-language me-2"></i>LENGUAS INDÍGENAS',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-lenguas',
                     titulo: 'Población Hablante de Lengua Indígena',
                     kpi1: { label: 'Población Hablante', sub: 'INEGI 2020' },
                     kpi2: { label: 'Mujeres Hablantes', sub: '52.5% del total' },
@@ -3137,7 +3139,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                 },
                 fuentes: {
                     label: '<i class="fa-solid fa-book-bookmark me-2"></i>FUENTES OFICIALES',
-                    clase: 'recuadro-tematico',
+                    clase: 'recuadro-fuentes',
                     titulo: 'Fuentes Oficiales',
                     sub: 'Gestión en tiempo real de badges, notas al pie y cuadros de fuentes de las 5 dimensiones'
                 }
@@ -3306,6 +3308,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
             const modalAdminEl = document.getElementById('modalAdmin');
             if (modalAdminEl) {
                 modalAdminEl.addEventListener('show.bs.modal', () => {
+                    sessionStorage.setItem('plataforma_admin_modal_abierto', 'true');
                     sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
                     try {
                         history.replaceState(null, document.title, '#admin');
@@ -3316,7 +3319,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     AdminMenuDashboard.seleccionar(catGuardada || 'inicio');
                 });
                 modalAdminEl.addEventListener('hidden.bs.modal', () => {
-                    // Mantener la sesión activa para recarga rápida (F5). La sesión solo se destruye en Cerrar Sesión
+                    sessionStorage.setItem('plataforma_admin_modal_abierto', 'false');
                     try {
                         if (window.location.hash === '#admin') {
                             history.replaceState(null, document.title, window.location.pathname + window.location.search);
@@ -3833,11 +3836,12 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         function restaurarVistaGuardada() {
             const adminSesionActiva = sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true' || 
                                       sessionStorage.getItem('gesmujer_admin_autenticado') === 'true';
+            const adminModalAbierto = sessionStorage.getItem('plataforma_admin_modal_abierto') === 'true';
             const adminCat = sessionStorage.getItem('plataforma_admin_categoria') || 'inicio';
             const hash = window.location.hash;
 
-            // Si hay sesión de admin activa, restaurar el panel directamente sin volver a pedir contraseña
-            if (adminSesionActiva) {
+            // SOLO restaurar el panel de admin si estaba efectivamente abierto al momento de recargar
+            if (adminSesionActiva && (adminModalAbierto || hash === '#admin')) {
                 if (window.AdminDatosUI && typeof window.AdminDatosUI.abrirModalAdmin === 'function') {
                     window.AdminDatosUI.abrirModalAdmin();
                 } else {

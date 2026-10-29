@@ -916,6 +916,8 @@
         },
 
         abrirModalAdmin: function() {
+            sessionStorage.setItem('plataforma_admin_modal_abierto', 'true');
+            try { history.replaceState(null, document.title, '#admin'); } catch(e) {}
             this.cerrarModalPin();
 
             const adminModalEl = document.getElementById('modalAdmin');
@@ -967,6 +969,7 @@
         },
 
         cerrarModalAdmin: function() {
+            sessionStorage.setItem('plataforma_admin_modal_abierto', 'false');
             const adminModalEl = document.getElementById('modalAdmin');
             if (adminModalEl) {
                 if (window.bootstrap && bootstrap.Modal) {
@@ -995,6 +998,7 @@
             sessionStorage.removeItem(SESSION_AUTH_KEY);
             sessionStorage.removeItem('plataforma_admin_sesion_activa');
             sessionStorage.removeItem('plataforma_admin_categoria');
+            sessionStorage.removeItem('plataforma_admin_modal_abierto');
             this.cerrarModalAdmin();
             this.mostrarToast('Sesión de administración cerrada correctamente.');
         },
