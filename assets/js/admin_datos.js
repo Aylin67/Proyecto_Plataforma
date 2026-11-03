@@ -833,6 +833,83 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             }
         },
 
+        mostrarVistaRestablecer: function() {
+            const loginV = document.getElementById('adminPinLoginView');
+            const resetV = document.getElementById('adminPinResetView');
+            if (loginV) loginV.classList.add('d-none');
+            if (resetV) resetV.classList.remove('d-none');
+
+            // Limpiar campos y alertas
+            const inPass = document.getElementById('inputResetNuevaPass');
+            const inConf = document.getElementById('inputResetConfirmPass');
+            const err = document.getElementById('adminResetError');
+            const succ = document.getElementById('adminResetSuccess');
+
+            if (inPass) inPass.value = '';
+            if (inConf) inConf.value = '';
+            if (err) err.classList.add('d-none');
+            if (succ) succ.classList.add('d-none');
+
+            this.validarRequisitosInput('');
+            this.validarCoincidenciaPassword();
+
+            setTimeout(() => {
+                if (inPass) inPass.focus();
+            }, 100);
+        },
+
+        validarCoincidenciaPassword: function() {
+            const inPass = document.getElementById('inputResetNuevaPass');
+            const inConf = document.getElementById('inputResetConfirmPass');
+            const icon = document.getElementById('iconConfirmPass');
+            const badge = document.getElementById('badgeCoincidenciaPass');
+            const msg = document.getElementById('msgCoincidenciaPass');
+
+            const pass = inPass ? inPass.value : '';
+            const conf = inConf ? inConf.value : '';
+
+            if (!inConf || conf.length === 0) {
+                if (icon) {
+                    icon.className = 'fa-solid fa-shield-halved me-1 text-secondary';
+                }
+                if (badge) badge.classList.add('d-none');
+                if (msg) msg.classList.add('d-none');
+                return false;
+            }
+
+            if (pass === conf) {
+                if (icon) {
+                    icon.className = 'fa-solid fa-circle-check me-1 text-success';
+                }
+                if (badge) {
+                    badge.className = 'badge bg-success-subtle text-success border border-success-subtle fw-semibold';
+                    badge.innerHTML = '<i class="fa-solid fa-check me-1"></i> Coinciden';
+                    badge.classList.remove('d-none');
+                }
+                if (msg) {
+                    msg.className = 'small mt-1 text-success fw-semibold';
+                    msg.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i> Las contraseñas coinciden correctamente.';
+                    msg.classList.remove('d-none');
+                }
+                return true;
+            } else {
+                if (icon) {
+                    icon.className = 'fa-solid fa-circle-xmark me-1 text-danger';
+                }
+                if (badge) {
+                    badge.className = 'badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold';
+                    badge.innerHTML = '<i class="fa-solid fa-xmark me-1"></i> No coinciden';
+                    badge.classList.remove('d-none');
+                }
+                if (msg) {
+                    msg.className = 'small mt-1 text-danger fw-semibold';
+                    msg.innerHTML = '<i class="fa-solid fa-circle-xmark me-1"></i> Las contraseñas aún no coinciden.';
+                    msg.classList.remove('d-none');
+                }
+                return false;
+            }
+        },
+
         mostrarVistaLogin: function() {
             const loginV = document.getElementById('adminPinLoginView');
             const resetV = document.getElementById('adminPinResetView');
@@ -840,27 +917,21 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             if (loginV) loginV.classList.remove('d-none');
 
             const pinInput = document.getElementById('inputAdminPin');
-            const checkRecordar = document.getElementById('checkRecordarPin');
             const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
 
             if (pinInput) {
-                if (pinRecordado) {
-                    pinInput.value = pinRecordado;
-                    if (checkRecordar) checkRecordar.checked = true;
-                } else {
-                    pinInput.value = '';
-                    if (checkRecordar) checkRecordar.checked = false;
-                }
+                pinInput.value = pinRecordado || '';
                 pinInput.focus();
             }
         },
 
-        validarRequisitosInput: function(pass) {
+                validarRequisitosInput: function(pass) {
             pass = pass || '';
             const tieneMin8 = pass.length >= 8;
             const tieneMayus = /[A-Z]/.test(pass);
             const tieneMinus = /[a-z]/.test(pass);
-            const tieneNum = /[0-9\W_]/.test(pass);
+            const tieneNum = /[0-9]/.test(pass);
+            const tieneSimbolo = /[^A-Za-z0-9]/.test(pass);
 
             const actualizarItem = (id, cumple, texto) => {
                 const el = document.getElementById(id);
@@ -875,43 +946,42 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             };
 
             actualizarItem('reqMin8', tieneMin8, 'Mínimo 8 caracteres');
-            actualizarItem('reqMayus', tieneMayus, 'Al menos una letra mayúscula');
-            actualizarItem('reqMinus', tieneMinus, 'Al menos una letra minúscula');
-            actualizarItem('reqNum', tieneNum, 'Al menos un número o símbolo');
+            actualizarItem('reqMayus', tieneMayus, 'Al menos una letra mayúscula (A-Z)');
+            actualizarItem('reqMinus', tieneMinus, 'Al menos una letra minúscula (a-z)');
+            actualizarItem('reqNum', tieneNum, 'Al menos un número (0-9)');
+            actualizarItem('reqSimbolo', tieneSimbolo, 'Al menos un símbolo o carácter especial (!@#$%...)');
 
-            return tieneMin8 && tieneMayus && tieneMinus && tieneNum;
+            return tieneMin8 && tieneMayus && tieneMinus && tieneNum && tieneSimbolo;
         },
 
         procesarRestablecerPassword: function() {
-            const inSeg = document.getElementById('inputResetSeguridad');
             const inPass = document.getElementById('inputResetNuevaPass');
             const inConf = document.getElementById('inputResetConfirmPass');
             const err = document.getElementById('adminResetError');
             const succ = document.getElementById('adminResetSuccess');
 
-            const respSeg = (inSeg?.value || '').trim().toUpperCase().replace(/\s+/g, '');
             const nuevaPass = inPass?.value || '';
             const confPass = inConf?.value || '';
 
             if (err) err.classList.add('d-none');
             if (succ) succ.classList.add('d-none');
 
-            if (respSeg !== 'GESMUJER') {
-                if (err) {
-                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> El acrónimo de la organización es incorrecto. Verifica e inténtalo de nuevo.';
-                    err.classList.remove('d-none');
-                }
-                if (inSeg) inSeg.focus();
-                return;
-            }
-
             const cumpleReq = this.validarRequisitosInput(nuevaPass);
             if (!cumpleReq) {
                 if (err) {
-                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> La nueva contraseña debe cumplir con todos los requisitos de seguridad (mínimo 8 caracteres, mayúscula, minúscula y número/símbolo).';
+                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> La nueva contraseña debe cumplir con todos los requisitos de seguridad de Google.';
                     err.classList.remove('d-none');
                 }
                 if (inPass) inPass.focus();
+                return;
+            }
+
+            if (!confPass) {
+                if (err) {
+                    err.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Por favor repite la nueva contraseña en el campo de confirmación.';
+                    err.classList.remove('d-none');
+                }
+                if (inConf) inConf.focus();
                 return;
             }
 
@@ -926,6 +996,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
 
             try {
                 localStorage.setItem(STORAGE_PASSWORD_KEY, nuevaPass);
+                localStorage.setItem(STORAGE_REMEMBER_PIN_KEY, nuevaPass);
             } catch(e) {}
 
             if (succ) {

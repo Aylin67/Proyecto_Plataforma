@@ -1678,20 +1678,12 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                             </p>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted mb-1">
-                                <i class="fa-solid fa-building me-1 text-danger"></i> ¿Acrónimo de la organización?
-                            </label>
-                            <input type="text" id="inputResetSeguridad" class="form-control form-control-sm" placeholder="Ej. GESMUJER" autocomplete="off">
-                            <small class="text-muted" style="font-size: 0.7rem;">Grupo de Estudios sobre la Mujer Rosario Castellanos</small>
-                        </div>
-
                         <div class="mb-2">
                             <label class="form-label small fw-bold text-muted mb-1">
                                 <i class="fa-solid fa-lock me-1" style="color: #c2185b;"></i> Nueva contraseña:
                             </label>
                             <div class="input-group input-group-sm">
-                                <input type="password" id="inputResetNuevaPass" class="form-control" placeholder="Mínimo 8 caracteres" oninput="AdminDatosUI.validarRequisitosInput(this.value)">
+                                <input type="password" id="inputResetNuevaPass" class="form-control" placeholder="Mínimo 8 caracteres" oninput="AdminDatosUI.validarRequisitosInput(this.value); AdminDatosUI.validarCoincidenciaPassword();">
                                 <button type="button" class="btn btn-outline-secondary" onclick="AdminDatosUI.alternarVisibilidadPassword('inputResetNuevaPass', 'toggleResetNewIcon')">
                                     <i class="fa-solid fa-eye" id="toggleResetNewIcon"></i>
                                 </button>
@@ -1700,18 +1692,26 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
 
                         <!-- Indicadores de requisitos de contraseña -->
                         <div class="p-2 rounded-2 mb-2" style="background: #fdf8fb; border: 1px solid #f2e1ed; font-size: 0.72rem;">
-                            <div class="fw-bold text-muted mb-1">Requisitos de seguridad:</div>
+                            <div class="fw-bold text-muted mb-1">Requisitos de seguridad (estándar Google):</div>
                             <div id="reqMin8" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Mínimo 8 caracteres</div>
-                            <div id="reqMayus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra mayúscula</div>
-                            <div id="reqMinus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra minúscula</div>
-                            <div id="reqNum" class="text-muted"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos un número o símbolo</div>
+                            <div id="reqMayus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra mayúscula (A-Z)</div>
+                            <div id="reqMinus" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos una letra minúscula (a-z)</div>
+                            <div id="reqNum" class="text-muted mb-1"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos un número (0-9)</div>
+                            <div id="reqSimbolo" class="text-muted"><i class="fa-solid fa-circle-xmark me-1 text-danger"></i> Al menos un símbolo o carácter especial (!@#$%...)</div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted mb-1">
-                                <i class="fa-solid fa-circle-check me-1 text-success"></i> Confirmar nueva contraseña:
+                            <label class="form-label small fw-bold text-muted mb-1 d-flex justify-content-between align-items-center">
+                                <span><i class="fa-solid fa-shield-halved me-1 text-secondary" id="iconConfirmPass"></i> Confirmar nueva contraseña:</span>
+                                <span id="badgeCoincidenciaPass" class="badge bg-light text-muted border d-none" style="font-size: 0.70rem;"></span>
                             </label>
-                            <input type="password" id="inputResetConfirmPass" class="form-control form-control-sm" placeholder="Repite tu nueva contraseña">
+                            <div class="input-group input-group-sm">
+                                <input type="password" id="inputResetConfirmPass" class="form-control" placeholder="Repite tu nueva contraseña" oninput="AdminDatosUI.validarCoincidenciaPassword()">
+                                <button type="button" class="btn btn-outline-secondary" onclick="AdminDatosUI.alternarVisibilidadPassword('inputResetConfirmPass', 'toggleResetConfirmIcon')">
+                                    <i class="fa-solid fa-eye" id="toggleResetConfirmIcon"></i>
+                                </button>
+                            </div>
+                            <div id="msgCoincidenciaPass" class="small mt-1 d-none" style="font-size: 0.74rem;"></div>
                         </div>
 
                         <div id="adminResetError" class="alert alert-danger py-1 px-2 small mb-2 d-none" style="font-size: 0.76rem;"></div>
