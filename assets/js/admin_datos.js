@@ -6,6 +6,7 @@
     const STORAGE_SNAPSHOT_KEY = 'gesmujer_admin_version_anterior';
     const STORAGE_FOTO_KEY = 'gesmujer_admin_foto';
     const STORAGE_PASSWORD_KEY = 'gesmujer_admin_password';
+const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
     const DEFAULT_ADMIN_PASSWORD = 'Gesmujer2026!';
     const ADMIN_PASSWORD = DEFAULT_ADMIN_PASSWORD;
     const DEFAULT_PIN = ADMIN_PASSWORD;
@@ -725,8 +726,14 @@
 
             this.mostrarVistaLogin();
             const pinInput = document.getElementById('inputAdminPin');
+            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
+
             if (pinInput) {
-                pinInput.value = '';
+                if (pinRecordado) {
+                    pinInput.value = pinRecordado;
+                } else {
+                    pinInput.value = '';
+                }
                 const pinError = document.getElementById('adminPinError');
                 if (pinError) pinError.classList.add('d-none');
             }
@@ -796,6 +803,21 @@
             const passActiva = this.obtenerPasswordActiva();
 
             if (pinIngresado === passActiva || pinIngresado === '@dminGeSol.' || pinIngresado === '@dminGeSol' || pinIngresado === 'gesmujer' || pinIngresado === 'Gesmujer2026!') {
+                // 1. Guardar de forma persistente en la laptop (autocompletado directo de la plataforma)
+                localStorage.setItem(STORAGE_REMEMBER_PIN_KEY, pinIngresado);
+
+                // 2. Activar la ventana nativa de Google Chrome / Edge para guardar la contraseña en la laptop
+                if (window.PasswordCredential && navigator.credentials && navigator.credentials.store) {
+                    try {
+                        const cred = new window.PasswordCredential({
+                            id: 'soledad@studiomantis.com',
+                            password: pinIngresado,
+                            name: 'Soledad Venegas'
+                        });
+                        navigator.credentials.store(cred).catch(() => {});
+                    } catch(e) {}
+                }
+
                 sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
                 sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
                 this.cerrarModalPin();
@@ -818,8 +840,17 @@
             if (loginV) loginV.classList.remove('d-none');
 
             const pinInput = document.getElementById('inputAdminPin');
+            const checkRecordar = document.getElementById('checkRecordarPin');
+            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
+
             if (pinInput) {
-                pinInput.value = '';
+                if (pinRecordado) {
+                    pinInput.value = pinRecordado;
+                    if (checkRecordar) checkRecordar.checked = true;
+                } else {
+                    pinInput.value = '';
+                    if (checkRecordar) checkRecordar.checked = false;
+                }
                 pinInput.focus();
             }
         },

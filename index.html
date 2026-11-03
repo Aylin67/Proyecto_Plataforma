@@ -1632,13 +1632,14 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                             Ingresa la contraseña 
                         </p>
                         <form onsubmit="event.preventDefault(); AdminDatosUI.verificarPin();">
+                            <input type="text" name="username" id="inputAdminUsername" value="soledad@studiomantis.com" autocomplete="username" class="d-none" aria-hidden="true" tabindex="-1">
                             <div class="mb-3 text-start">
                                 <label for="inputAdminPin" class="form-label small fw-bold text-muted mb-1">Contraseña:</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white" style="border-right: none; color: #682260;">
                                         <i class="fa-solid fa-key"></i>
                                     </span>
-                                    <input type="password" id="inputAdminPin" class="form-control" style="border-left: none; border-right: none;" placeholder="Ingresa contraseña" autocomplete="current-password" autofocus>
+                                    <input type="password" name="password" id="inputAdminPin" class="form-control" style="border-left: none; border-right: none;" placeholder="Ingresa contraseña" autocomplete="current-password" required autofocus>
                                     <button type="button" class="btn input-group-text admin-password-toggle" onclick="AdminDatosUI.alternarVisibilidadPassword('inputAdminPin', 'togglePasswordIcon')" title="Mostrar u ocultar contraseña">
                                         <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
                                     </button>
