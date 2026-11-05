@@ -33,26 +33,6 @@
     <script src="assets/js/tarjetas.js"></script>
     <script src="assets/js/admin_datos.js"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
-
-    <!-- ESTILOS PARA LAS TARJETAS MINI SUPERIORES (BARRA STICKY) -->
-    <style>
-        #contenedorTarjetasModal {
-            width: 100%;
-            scrollbar-width: thin;
-            scrollbar-color: #c2185b #f1f1f1;
-        }
-        #contenedorTarjetasModal::-webkit-scrollbar { height: 4px; }
-        #contenedorTarjetasModal::-webkit-scrollbar-thumb { background: #c2185b; border-radius: 10px; }
-        .tema-card-mini {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-width: 65px; padding: 4px 6px; border-radius: 10px; cursor: pointer;
-            transition: all 0.2s ease; background: #f8f9fa; border: 1px solid #e2e8f0; flex-shrink: 0;
-        }
-        .tema-card-mini:hover { background: #f3e8f1; border-color: #c2185b; transform: translateY(-2px); }
-        .tema-card-mini.active { background: #f3e8f1; border-color: #c2185b; box-shadow: 0 2px 8px rgba(194, 24, 91, 0.25); }
-        .tema-card-mini .tema-icon-wrapper { width: 28px !important; height: 28px !important; font-size: 0.75rem !important; margin-bottom: 2px; border-radius: 8px; }
-        .tema-nombre-mini { font-size: 0.58rem; font-weight: 700; color: #4a154b; text-align: center; line-height: 1.1; white-space: nowrap; }
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-ges sticky-top">
@@ -2128,7 +2108,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                   <div class="col-12 col-md-4">
                                                     <label class="small text-muted">Otra causa:</label>
-                                                    <input type="number" step="1" id="salud_Otra_causa" class="form-control form-control-sm" value="1">
+                                                    <input type="number" step="1" id="salud_Otra_causa" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2141,67 +2121,67 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div class="row g-2">
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">15-19 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_15_19" class="form-control form-control-sm" value="0">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">20 a 24 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_20_24" class="form-control form-control-sm" value="0">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">25 a 29 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_25_29" class="form-control form-control-sm" value="2">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">30 a 34 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_30_34" class="form-control form-control-sm" value="4">
                                                 </div>
                                                 <div class="col-6 col-md-3">
-                                                    <label class="small text-muted">35 a 39años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <label class="small text-muted">35 a 39 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_35_39" class="form-control form-control-sm" value="11">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">40 a 44 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_40_44" class="form-control form-control-sm" value="19">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">45 a 49 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_45_54" class="form-control form-control-sm" value="41">
+                                                    <input type="number" step="1" id="salud_mama_45_49" class="form-control form-control-sm" value="18">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">50 a 54 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_55_64" class="form-control form-control-sm" value="43">
+                                                    <input type="number" step="1" id="salud_mama_50_54" class="form-control form-control-sm" value="23">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">55 a 59 años:</label> 
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_55_59" class="form-control form-control-sm" value="19">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">60 a 64 años:</label> 
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_60_64" class="form-control form-control-sm" value="24">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">65 a 69 años:</label> 
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_65_69" class="form-control form-control-sm" value="30">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">70 a 74 años:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_70_74" class="form-control form-control-sm" value="22">
                                                 </div>
                                                 <div class="col-6 col-md-3"> 
-                                                    <label class="small text-muted">75 a 79 años:</labe>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <label class="small text-muted">75 a 79 años:</label>
+                                                    <input type="number" step="1" id="salud_mama_75_79" class="form-control form-control-sm" value="10">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">80 a 84 años:</label> 
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_80_84" class="form-control form-control-sm" value="16">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">85 años y más:</label>
-                                                    <input type="number" step="1" id="salud_mama_65_mas" class="form-control form-control-sm" value="90">
+                                                    <input type="number" step="1" id="salud_mama_85_mas" class="form-control form-control-sm" value="12">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">No especificado:</label>
-                                                    <input type="number" step="1" id="salud_mama_35_44" class="form-control form-control-sm" value="30">
+                                                    <input type="number" step="1" id="salud_mama_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2214,75 +2194,79 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div class="row g-2">
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">0 a 4 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_0_4" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_0_4" class="form-control form-control-sm" value="0">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">5 a 9 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_5_9" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_5_9" class="form-control form-control-sm" value="0">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">10 a 14 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_10_14" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_10_14" class="form-control form-control-sm" value="0">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">15 a 19 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_15_19" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_15_19" class="form-control form-control-sm" value="3">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">20 a 24 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_20_24" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_20_24" class="form-control form-control-sm" value="3">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">25 a 29 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_25_29" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_25_29" class="form-control form-control-sm" value="8">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">30 a 34 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_30_34" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_30_34" class="form-control form-control-sm" value="10">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">35 a 39 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_35_39" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_35_39" class="form-control form-control-sm" value="17">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">40 a 44 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_40_44" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_40_44" class="form-control form-control-sm" value="59">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">45 a 49 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_45_49" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_45_49" class="form-control form-control-sm" value="80">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">50 a 54 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_50_54" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_50_54" class="form-control form-control-sm" value="170">
                                                 </div> 
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">55 a 59 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_55_59" class="form-control form-control-sm" value="691">
+                                                    <input type="number" step="1" id="salud_diabetes_55_59" class="form-control form-control-sm" value="230">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">60 a 64 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_60_64" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_60_64" class="form-control form-control-sm" value="291">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">65 a 69 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_65_69" class="form-control form-control-sm" value="1008">
+                                                    <input type="number" step="1" id="salud_diabetes_65_69" class="form-control form-control-sm" value="336">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">70 a 74 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_70_74" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_70_74" class="form-control form-control-sm" value="359">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">75 a 79 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_75_79" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_75_79" class="form-control form-control-sm" value="313">
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">80 a 84 años:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_80_84" class="form-control form-control-sm" value="642">
+                                                    <input type="number" step="1" id="salud_diabetes_80_84" class="form-control form-control-sm" value="294">
                                                 </div>
                                                  <div class="col-6 col-md-3">
                                                     <label class="small text-muted">85 y más:</label>
-                                                    <input type="number" step="1" id="salud_diabetes_85_mas" class="form-control form-control-sm" value="177">
+                                                    <input type="number" step="1" id="salud_diabetes_85_mas" class="form-control form-control-sm" value="347">
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <label class="small text-muted">No especificado:</label>
+                                                    <input type="number" step="1" id="salud_diabetes_noesp" class="form-control form-control-sm" value="1">
                                                 </div>
                                             </div>
                                         </div>
@@ -2295,55 +2279,55 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Tumores genitourinarios:</label>
-                                                    <input type="number" step="0.1" id="salud_materna_rmm" class="form-control form-control-sm" value="38.4">
+                                                    <input type="number" step="1" id="salud_materna_genitourinarios" class="form-control form-control-sm" value="2">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Tumor de la placenta:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_placenta" class="form-control form-control-sm" value="2">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Causas obstétricas directas:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_directas" class="form-control form-control-sm" value="24">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Otro aborto:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_aborto" class="form-control form-control-sm" value="1">
                                                 </div>
                                                  <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Edema, proteinuria y trastornos hipertensivos en el embarazo, parto y puerperio:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Edema, proteinuria y trastornos hipertensivos:</label>
+                                                    <input type="number" step="1" id="salud_materna_hipertensivos" class="form-control form-control-sm" value="3">
                                                 </div>
                                                  <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Otra atención materna relacionada con el feto y con la cavidad amniótica:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Atención al feto:</label>
+                                                    <input type="number" step="1" id="salud_materna_feto" class="form-control form-control-sm" value="1">
                                                 </div>
                                                  <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Infección de las vías genitourinarias en el embarazo:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Infección de las vías urinarias:</label>
+                                                    <input type="number" step="1" id="salud_materna_infeccion" class="form-control form-control-sm" value="1">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Diabetes mellitus en el embarazo:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_diabetes" class="form-control form-control-sm" value="1">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Hemorragia postparto:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_hemorragia" class="form-control form-control-sm" value="6">
                                                 </div>
                                                 <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Otras complicaciones del embarazo y del parto:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Otras complicaciones del parto:</label>
+                                                    <input type="number" step="1" id="salud_materna_complicaciones" class="form-control form-control-sm" value="3">
                                                 </div>
                                                 <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Causas obstétricas directas, excepto aborto:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Causas directas no aborto:</label>
+                                                    <input type="number" step="1" id="salud_materna_directas_no_aborto" class="form-control form-control-sm" value="7">
                                                 </div>
                                                 <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Muerte obstétrica de causa no especificada:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <label class="small text-muted">Muerte obstétrica no especificada:</label>
+                                                    <input type="number" step="1" id="salud_materna_no_especificada" class="form-control form-control-sm" value="1">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Causas obstétricas indirectas:</label>
-                                                    <input type="number" step="1" id="salud_materna_defunciones" class="form-control form-control-sm" value="28">
+                                                    <input type="number" step="1" id="salud_materna_indirectas" class="form-control form-control-sm" value="6">
                                                 </div>
 
                                             </div>
@@ -2357,42 +2341,42 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Afecciones período perinatal:</label>
-                                                    <input type="number" step="0.1" id="salud_infantil_tasa" class="form-control form-control-sm" value="11.8">
+                                                    <input type="number" step="1" id="salud_infantil_perinatal" class="form-control form-control-sm" value="105">
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Malformaciones congénitas:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_malformaciones" class="form-control form-control-sm" value="53">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Otras del aparato respiratorio:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_respiratorio" class="form-control form-control-sm" value="31">
                                                 </div>
                                                  <div class="col-12 col-md-6"> 
                                                     <label class="small text-muted">Infecciosas intestinales:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_intestinales" class="form-control form-control-sm" value="10">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Otros accidentes y tardíos:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_accidentes" class="form-control form-control-sm" value="7">
                                                 </div>
                                                  <div class="col-12 col-md-6"> 
                                                     <label class="small text-muted">Enfermedades víricas:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_viricas" class="form-control form-control-sm" value="5">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Síntomas y signos anormales:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_sintomas" class="form-control form-control-sm" value="5">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Otras enfermedades bacterianas:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_bacterianas" class="form-control form-control-sm" value="4">
                                                 </div>
                                                  <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Endocrinas y metabólicas:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_endocrinas" class="form-control form-control-sm" value="4">
                                                 </div> <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Enfermedades del sistema nervioso:</label>
-                                                    <input type="number" step="1" id="salud_infantil_defunciones" class="form-control form-control-sm" value="842">
+                                                    <input type="number" step="1" id="salud_infantil_nervioso" class="form-control form-control-sm" value="3">
                                                 </div>
                                             </div>
                                         </div>
@@ -2429,7 +2413,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado :</label>
-                                                    <input type="number" step="0.01" id="edu_aptitud_noesp" class="form-control form-control-sm" value="0.58">
+                                                    <input type="number" step="0.01" id="edu_aptitud_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2450,7 +2434,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado:</label>
-                                                    <input type="number" step="0.01" id="edu_alfa_noesp" class="form-control form-control-sm" value="0.33">
+                                                    <input type="number" step="0.01" id="edu_alfa_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2512,7 +2496,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-6 col-md-3">
                                                     <label class="small text-muted">No especificado:</label>
-                                                    <input type="number" step="0.01" id="edu_esc_noesp" class="form-control form-control-sm" value="16.98">
+                                                    <input type="number" step="0.01" id="edu_esc_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div> 
@@ -2533,7 +2517,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado:</label>
-                                                    <input type="number" step="0.01" id="edu_asist_noesp" class="form-control form-control-sm" value="0.32">
+                                                    <input type="number" step="0.01" id="edu_asist_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2597,7 +2581,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado:</label>
-                                                    <input type="number" step="1" id="viv_pisos_noesp" class="form-control form-control-sm" value="2898">
+                                                    <input type="number" step="1" id="viv_pisos_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2644,7 +2628,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <label class="small text-muted">Otros ingresos corrientes:</label>
-                                                    <input type="number" step="1" id="ing_rubro_otros" class="form-control form-control-sm" value="22">
+                                                    <input type="number" step="1" id="ing_rubro_otros" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -2688,8 +2672,8 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 <div class="col-12 fw-bold small text-muted" style="color: #e65100;">Año 2026 (Trimestres I y II vigentes):</div>
                                                 <div class="col-3"><input type="number" step="0.01" id="desoc_2026_1" class="form-control form-control-sm" placeholder="2026-I" value="1.16"></div>
                                                 <div class="col-3"><input type="number" step="0.01" id="desoc_2026_2" class="form-control form-control-sm" placeholder="2026-II" value="0.80"></div>
-                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_3" class="form-control form-control-sm" placeholder="2026-III" value=""></div>
-                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_4" class="form-control form-control-sm" placeholder="2026-IV" value=""></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_3" class="form-control form-control-sm" placeholder="2026-III" value="0"></div>
+                                                <div class="col-3"><input type="number" step="0.01" id="desoc_2026_4" class="form-control form-control-sm" placeholder="2026-IV" value="0"></div>
                                             </div>
                                             </div>
                                             <!-- Formulario dinámico para registrar Año 2027 (con auto-depuración de 2023) -->
@@ -2771,7 +2755,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado (%):</label>
-                                                    <input type="number" step="0.01" id="lenguas_cond_noesp" class="form-control form-control-sm" value="0.32">
+                                                    <input type="number" step="0.01" id="lenguas_cond_noesp" class="form-control form-control-sm" value="0">
                                                 </div>
                                             </div>
                                         </div>

@@ -55,6 +55,24 @@ body { padding-top: 85px; }
     margin: 0 auto;
     text-align: center;
 }
+
+        #contenedorTarjetasModal {
+            width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #c2185b #f1f1f1;
+        }
+        #contenedorTarjetasModal::-webkit-scrollbar { height: 4px; }
+        #contenedorTarjetasModal::-webkit-scrollbar-thumb { background: #c2185b; border-radius: 10px; }
+        .tema-card-mini {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-width: 65px; padding: 4px 6px; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s ease; background: #f8f9fa; border: 1px solid #e2e8f0; flex-shrink: 0;
+        }
+        .tema-card-mini:hover { background: #f3e8f1; border-color: #c2185b; transform: translateY(-2px); }
+        .tema-card-mini.active { background: #f3e8f1; border-color: #c2185b; box-shadow: 0 2px 8px rgba(194, 24, 91, 0.25); }
+        .tema-card-mini .tema-icon-wrapper { width: 28px !important; height: 28px !important; font-size: 0.75rem !important; margin-bottom: 2px; border-radius: 8px; }
+        .tema-nombre-mini { font-size: 0.58rem; font-weight: 700; color: #4a154b; text-align: center; line-height: 1.1; white-space: nowrap; }
+
 /* Medallón circular izquierdo (fondo morado institucional con borde fino) */
 .logo-ges-wrapper-izq {
     width: 58px;
@@ -1224,9 +1242,7 @@ h1, h2, h3, h4, h5, h6,
     line-height: 1;
 }
 
-/* ============================================================
-   16. BARRA DE TARJETAS MINI EN EL FOOTER DEL MODAL
-   ============================================================ */
+/* BARRA DE TARJETAS MINI EN EL FOOTER DEL MODAL*/
 .modal-footer {
     flex-wrap: nowrap !important;
     gap: 10px !important;
