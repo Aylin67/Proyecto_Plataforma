@@ -7,6 +7,7 @@
     const STORAGE_FOTO_KEY = 'gesmujer_admin_foto';
     const STORAGE_PASSWORD_KEY = 'gesmujer_admin_password';
 const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
+    const STORAGE_REMEMBER_USER_KEY = 'gesmujer_admin_user_recordado';
     const DEFAULT_ADMIN_PASSWORD = 'Gesmujer2026!';
     const ADMIN_PASSWORD = DEFAULT_ADMIN_PASSWORD;
     const DEFAULT_PIN = ADMIN_PASSWORD;
@@ -726,14 +727,15 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
 
             this.mostrarVistaLogin();
             const pinInput = document.getElementById('inputAdminPin');
+            const userInput = document.getElementById('inputAdminUsername');
             const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
+            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY);
 
+            if (userInput) {
+                userInput.value = userRecordado || '';
+            }
             if (pinInput) {
-                if (pinRecordado) {
-                    pinInput.value = pinRecordado;
-                } else {
-                    pinInput.value = '';
-                }
+                pinInput.value = pinRecordado || '';
                 const pinError = document.getElementById('adminPinError');
                 if (pinError) pinError.classList.add('d-none');
             }
@@ -794,35 +796,56 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             }
         },
 
-        verificarPin: function() {
+        verificarPin: function(event) {
             const pinInput = document.getElementById('inputAdminPin');
+            const userInput = document.getElementById('inputAdminUsername');
             const pinError = document.getElementById('adminPinError');
-            if (!pinInput) return;
+            if (!pinInput) return false;
 
             const pinIngresado = pinInput.value.trim();
+            const userIngresado = userInput ? userInput.value.trim() : '';
             const passActiva = this.obtenerPasswordActiva();
 
+            if (!userIngresado) {
+                if (event && event.preventDefault) event.preventDefault();
+                if (pinError) {
+                    pinError.className = 'text-danger small mt-2 fw-semibold';
+                    pinError.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Por favor ingresa tu correo electrónico.';
+                    pinError.classList.remove('d-none');
+                }
+                if (userInput) userInput.focus();
+                return false;
+            }
+
             if (pinIngresado === passActiva || pinIngresado === '@dminGeSol.' || pinIngresado === '@dminGeSol' || pinIngresado === 'gesmujer' || pinIngresado === 'Gesmujer2026!') {
-                // 1. Guardar de forma persistente en la laptop (autocompletado directo de la plataforma)
+                // 1. Guardar de forma persistente en la plataforma
+                localStorage.setItem(STORAGE_REMEMBER_USER_KEY, userIngresado);
                 localStorage.setItem(STORAGE_REMEMBER_PIN_KEY, pinIngresado);
 
-                // 2. Activar la ventana nativa de Google Chrome / Edge para guardar la contraseña en la laptop
+                // 2. Intentar API de credenciales nativas si está disponible
                 if (window.PasswordCredential && navigator.credentials && navigator.credentials.store) {
                     try {
-                        const cred = new window.PasswordCredential({
-                            id: 'soledad@studiomantis.com',
-                            password: pinIngresado,
-                            name: 'Soledad Venegas'
+                        const credManual = new window.PasswordCredential({
+                            id: userIngresado,
+                            password: pinIngresado
                         });
-                        navigator.credentials.store(cred).catch(() => {});
+                        navigator.credentials.store(credManual).catch(() => {});
                     } catch(e) {}
                 }
 
                 sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
                 sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
-                this.cerrarModalPin();
-                this.abrirModalAdmin();
+
+                // 3. Permitir que el formulario envíe su POST nativo al iframe oculto
+                // Esto es exactamente lo que hace que Edge y Google detecten el login y pregunten "¿Guardar contraseña?"
+                setTimeout(() => {
+                    this.cerrarModalPin();
+                    this.abrirModalAdmin();
+                }, 150);
+
+                return true;
             } else {
+                if (event && event.preventDefault) event.preventDefault();
                 if (pinError) {
                     pinError.className = 'text-danger small mt-2 fw-semibold';
                     pinError.innerHTML = '<i class="fa-solid fa-circle-exclamation me-1"></i> Contraseña incorrecta. Inténtalo nuevamente o restablécela con el enlace de abajo.';
@@ -830,6 +853,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 }
                 pinInput.select();
                 pinInput.focus();
+                return false;
             }
         },
 
@@ -916,12 +940,19 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             if (resetV) resetV.classList.add('d-none');
             if (loginV) loginV.classList.remove('d-none');
 
+            const userInput = document.getElementById('inputAdminUsername');
             const pinInput = document.getElementById('inputAdminPin');
+            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY);
             const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
 
+            if (userInput) userInput.value = userRecordado || '';
             if (pinInput) {
                 pinInput.value = pinRecordado || '';
-                pinInput.focus();
+                if (!userRecordado && userInput) {
+                    userInput.focus();
+                } else {
+                    pinInput.focus();
+                }
             }
         },
 
@@ -1539,7 +1570,11 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
         guardarLenguas: function() {
             const ids = [
                 'lenguas_monolingues_2010', 'lenguas_monolingues_2020',
-                'lenguas_cond_si', 'lenguas_cond_no', 'lenguas_cond_noesp'
+                'lenguas_cond_si', 'lenguas_cond_no', 'lenguas_cond_noesp',
+                'lenguas_auto_habla_si', 'lenguas_auto_habla_no', 'lenguas_auto_habla_noesp',
+                'lenguas_auto_nohabla_si', 'lenguas_auto_nohabla_no', 'lenguas_auto_nohabla_noesp',
+                'lenguas_auto_total_si', 'lenguas_auto_total_no', 'lenguas_auto_total_noesp',
+                'lenguas_comp_entiende', 'lenguas_comp_noentiende', 'lenguas_comp_noesp'
             ];
             const data = {};
             ids.forEach(id => {
@@ -1547,7 +1582,10 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 if (el) data[id] = parseFloat(el.value) || 0;
             });
             localStorage.setItem('gesmujer_lenguas_datos', JSON.stringify(data));
-            this.mostrarToast('Datos de Lenguas Indígenas (2 categorías) guardados con éxito.');
+            if (typeof window.renderizarLenguasINEGI === 'function') {
+                window.renderizarLenguasINEGI();
+            }
+            this.mostrarToast('Datos de Lenguas Indígenas (4 categorías) guardados con éxito.');
         },
 cargarFotoPerfil: function() {
             try {

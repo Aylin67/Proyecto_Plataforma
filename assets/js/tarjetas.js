@@ -331,6 +331,8 @@
     let chartIngresoDesocupacion = null;
     let chartLenguasMonolingues = null;
     let chartLenguasCondicion = null;
+    let chartLenguasAutoadscripcion = null;
+    let chartLenguasComprension = null;
 
     // 1. TOP 10 CAUSAS DE DEFUNCIÓN EN MUJERES EN OAXACA (DATOS REALES INEGI EDR 2025)
     const causasNombresCompletos = [
@@ -1713,21 +1715,32 @@ type: 'bar',
         }
     }
 
-    // RENDERIZADO DE LAS 2 GRÁFICAS DE LENGUAS INDÍGENAS (INEGI)
+    // RENDERIZADO DE LAS 4 GRÁFICAS DE LENGUAS INDÍGENAS (INEGI)
     function renderizarLenguasINEGI() {
         if (chartLenguasMonolingues) { chartLenguasMonolingues.destroy(); chartLenguasMonolingues = null; }
         if (chartLenguasCondicion) { chartLenguasCondicion.destroy(); chartLenguasCondicion = null; }
+        if (chartLenguasAutoadscripcion) { chartLenguasAutoadscripcion.destroy(); chartLenguasAutoadscripcion = null; }
+        if (chartLenguasComprension) { chartLenguasComprension.destroy(); chartLenguasComprension = null; }
+
+        let saved = {};
+        try {
+            const raw = localStorage.getItem('gesmujer_lenguas_datos');
+            if (raw) saved = JSON.parse(raw);
+        } catch(e) {}
 
         // 1. Población de 3 años y más hablante de lengua indígena que no habla español (Censos 2010 y 2020)
         const ctx0 = document.getElementById('canvasLenguasMonolingues');
         if (ctx0) {
+            const v2010 = saved['lenguas_monolingues_2010'] !== undefined ? Number(saved['lenguas_monolingues_2010']) : 128050;
+            const v2020 = saved['lenguas_monolingues_2020'] !== undefined ? Number(saved['lenguas_monolingues_2020']) : 87809;
+
             chartLenguasMonolingues = new Chart(ctx0.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: ['2010', '2020'],
                     datasets: [{
                         label: '',
-                        data: [128050, 87809],
+                        data: [v2010, v2020],
                         backgroundColor: ['#7b1fa2', '#ab47bc'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1789,13 +1802,17 @@ type: 'bar',
         // 2. Población de 3 años y más según condición de habla indígena (Intercensal 2025)
         const ctx1 = document.getElementById('canvasLenguasCondicion');
         if (ctx1) {
+            const condSi = saved['lenguas_cond_si'] !== undefined ? Number(saved['lenguas_cond_si']) : 29.39;
+            const condNo = saved['lenguas_cond_no'] !== undefined ? Number(saved['lenguas_cond_no']) : 70.29;
+            const condNoesp = saved['lenguas_cond_noesp'] !== undefined ? Number(saved['lenguas_cond_noesp']) : 0.32;
+
             chartLenguasCondicion = new Chart(ctx1.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: ['Habla lengua indígena', 'No habla lengua indígena', 'No especificado'],
                     datasets: [{
                         label: 'Valor porcentual (%)',
-                        data: [29.39, 70.29, 0.32],
+                        data: [condSi, condNo, condNoesp],
                         backgroundColor: ['#00897b', '#48b5c4', '#b0bec5'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1837,6 +1854,209 @@ type: 'bar',
                             title: {
                                 display: true,
                                 text: 'Valor porcentual (%)',
+                                color: '#666',
+                                font: { size: 10.5, weight: '500' }
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                callback: function(val) { return val + '%'; }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 10, weight: 'bold' },
+                                color: '#4a154b',
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Autoadscripción indígena en mujeres según condición de habla (Censo 2020 - Etnicidad 2)
+        const ctx2 = document.getElementById('canvasLenguasAutoadscripcion');
+        if (ctx2) {
+            const autoHablaSi = saved['lenguas_auto_habla_si'] !== undefined ? Number(saved['lenguas_auto_habla_si']) : 97.76;
+            const autoHablaNo = saved['lenguas_auto_habla_no'] !== undefined ? Number(saved['lenguas_auto_habla_no']) : 2.13;
+            const autoHablaNoesp = saved['lenguas_auto_habla_noesp'] !== undefined ? Number(saved['lenguas_auto_habla_noesp']) : 0.11;
+
+            const autoNoHablaSi = saved['lenguas_auto_nohabla_si'] !== undefined ? Number(saved['lenguas_auto_nohabla_si']) : 56.52;
+            const autoNoHablaNo = saved['lenguas_auto_nohabla_no'] !== undefined ? Number(saved['lenguas_auto_nohabla_no']) : 43.17;
+            const autoNoHablaNoesp = saved['lenguas_auto_nohabla_noesp'] !== undefined ? Number(saved['lenguas_auto_nohabla_noesp']) : 0.32;
+
+            const autoTotalSi = saved['lenguas_auto_total_si'] !== undefined ? Number(saved['lenguas_auto_total_si']) : 69.50;
+            const autoTotalNo = saved['lenguas_auto_total_no'] !== undefined ? Number(saved['lenguas_auto_total_no']) : 30.21;
+            const autoTotalNoesp = saved['lenguas_auto_total_noesp'] !== undefined ? Number(saved['lenguas_auto_total_noesp']) : 0.28;
+
+            const kpiAutoTotal = document.getElementById('kpiLenguasAutoTotal');
+            if (kpiAutoTotal) kpiAutoTotal.textContent = autoTotalSi.toFixed(2) + '%';
+
+            chartLenguasAutoadscripcion = new Chart(ctx2.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Habla lengua indígena', 'No habla lengua indígena', 'Total de mujeres estatal'],
+                    datasets: [
+                        {
+                            label: 'Se considera indígena',
+                            data: [autoHablaSi, autoNoHablaSi, autoTotalSi],
+                            backgroundColor: '#7b1fa2',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            barPercentage: 0.75,
+                            categoryPercentage: 0.8
+                        },
+                        {
+                            label: 'No se considera indígena',
+                            data: [autoHablaNo, autoNoHablaNo, autoTotalNo],
+                            backgroundColor: '#00897b',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            barPercentage: 0.75,
+                            categoryPercentage: 0.8
+                        },
+                        {
+                            label: 'No especificado',
+                            data: [autoHablaNoesp, autoNoHablaNoesp, autoTotalNoesp],
+                            backgroundColor: '#b0bec5',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            barPercentage: 0.75,
+                            categoryPercentage: 0.8
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 10.5, weight: 'bold' },
+                                boxWidth: 12,
+                                padding: 10
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(c) {
+                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(2) + '%';
+                                }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            offset: 2,
+                            color: '#333',
+                            font: { weight: 'bold', size: 9 },
+                            formatter: function(v) {
+                                return (v != null && Number(v) >= 1.0) ? Number(v).toFixed(2) + '%' : '';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 115,
+                            title: {
+                                display: true,
+                                text: 'Distribución porcentual (%)',
+                                color: '#666',
+                                font: { size: 10.5, weight: '500' }
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                callback: function(val) { return val + '%'; }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 10, weight: 'bold' },
+                                color: '#4a154b',
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. Condición de comprensión de lengua indígena en mujeres no hablantes (Censo 2020 - Etnicidad 4)
+        const ctx3 = document.getElementById('canvasLenguasComprension');
+        if (ctx3) {
+            const compEntiende = saved['lenguas_comp_entiende'] !== undefined ? Number(saved['lenguas_comp_entiende']) : 9.76;
+            const compNoentiende = saved['lenguas_comp_noentiende'] !== undefined ? Number(saved['lenguas_comp_noentiende']) : 89.79;
+            const compNoesp = saved['lenguas_comp_noesp'] !== undefined ? Number(saved['lenguas_comp_noesp']) : 0.45;
+
+            const kpiCompTotal = document.getElementById('kpiLenguasCompTotal');
+            if (kpiCompTotal) kpiCompTotal.textContent = compEntiende.toFixed(2) + '%';
+
+            chartLenguasComprension = new Chart(ctx3.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Entiende lengua indígena', 'No entiende lengua indígena', 'No especificado'],
+                    datasets: [{
+                        label: 'Distribución porcentual (%)',
+                        data: [compEntiende, compNoentiende, compNoesp],
+                        backgroundColor: ['#7b1fa2', '#48b5c4', '#b0bec5'],
+                        borderRadius: 6,
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(c) {
+                                    return ' ' + Number(c.raw).toFixed(2) + '%';
+                                }
+                            }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            offset: 2,
+                            color: '#333',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: function(v) {
+                                return v != null ? Number(v).toFixed(2) + '%' : '';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 105,
+                            title: {
+                                display: true,
+                                text: 'Distribución porcentual (%)',
                                 color: '#666',
                                 font: { size: 10.5, weight: '500' }
                             },
@@ -1977,4 +2197,5 @@ type: 'bar',
     window.datosTematicos = datosTematicos;
     window.abrirModalTematico = abrirModalTematico;
     window.mostrarTema = mostrarTema;
+    window.renderizarLenguasINEGI = renderizarLenguasINEGI;
 })(window);

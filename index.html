@@ -1553,6 +1553,110 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                             </div>
                         </div>
 
+                        <!-- 3. AUTOADSCRIPCIÓN INDÍGENA EN MUJERES SEGÚN CONDICIÓN DE HABLA (CENSO 2020) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-id-card-clip me-2" style="color: #7b1fa2;"></i>
+                                                Autoadscripción indígena en mujeres según condición de habla
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Censo 2020</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasLenguasAutoadscripcion"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-id-card-clip me-1"></i> SE CONSIDERA INDÍGENA (TOTAL ESTATAL)
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasAutoTotal">69.50%</div>
+                                                <div class="small opacity-90">De las mujeres de 3 años y más en Oaxaca</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                    En Oaxaca, el 69.50% de las mujeres de 3 años y más se autoadscribe como indígena (2,044,886 mujeres en total). Esta identidad es predominante entre quienes son hablantes de una lengua originaria (97.76%), pero también se manifiesta con contundencia entre las mujeres que no hablan lengua indígena, donde más de la mitad (56.52%) se reconoce y asume como perteneciente a un pueblo indígena. Ello demuestra que la identidad y pertenencia indígena en las mujeres oaxaqueñas trasciende el uso exclusivo de la lengua materna.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Censo de Población y Vivienda 2020. Tabulados del Cuestionario Ampliado (Etnicidad 2).</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. CONDICIÓN DE COMPRENSIÓN DE LENGUA INDÍGENA EN NO HABLANTES (CENSO 2020) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-ear-listen me-2" style="color: #00897b;"></i>
+                                                Comprensión de lengua indígena en mujeres no hablantes
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · Censo 2020</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasLenguasComprension"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-ear-listen me-1"></i> ENTIENDE LENGUA INDÍGENA (NO HABLANTES)
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasCompTotal">9.76%</div>
+                                                <div class="small opacity-90">De 1,399,325 mujeres de 3 años y más que no la hablan</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                    Entre las 1,399,325 mujeres de 3 años y más en Oaxaca que no hablan una lengua indígena, el 9.76% declara que sí la comprende, mientras que el 89.79% no la comprende y el 0.45% no lo especificó. Este segmento de mujeres no hablantes pero receptoras y comprensivas representa un puente lingüístico intergeneracional de enorme relevancia para los procesos comunitarios de revitalización y preservación de la riqueza cultural originaria en Oaxaca.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Censo de Población y Vivienda 2020. Tabulados del Cuestionario Ampliado (Etnicidad 4).</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
                         <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -1563,6 +1667,12 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                     </div>
                                     <div style="font-size: 0.8rem; line-height: 1.4;">
                                         2. INEGI. Encuesta Intercensal 2025.
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        3. INEGI. Censo de Población y Vivienda 2020. Tabulados del Cuestionario Ampliado (Etnicidad 2: Autoadscripción indígena).
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        4. INEGI. Censo de Población y Vivienda 2020. Tabulados del Cuestionario Ampliado (Etnicidad 4: Comprensión de lengua indígena).
                                     </div>
                                 </div>
                                 <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
@@ -1611,8 +1721,16 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         <p class="small text-muted mb-3">
                             Ingresa la contraseña 
                         </p>
-                        <form onsubmit="event.preventDefault(); AdminDatosUI.verificarPin();">
-                            <input type="text" name="username" id="inputAdminUsername" value="soledad@studiomantis.com" autocomplete="username" class="d-none" aria-hidden="true" tabindex="-1">
+                        <form id="formAdminLogin" action="auth-ok.html" method="post" target="iframeAuthOculto" autocomplete="on" onsubmit="return AdminDatosUI.verificarPin(event);">
+                            <div class="mb-2 text-start">
+                                <label for="inputAdminUsername" class="form-label small fw-bold text-muted mb-1">Correo electrónico:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white" style="border-right: none; color: #682260;">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </span>
+                                    <input type="email" name="username" id="inputAdminUsername" class="form-control" style="border-left: none;" placeholder="ejemplo@correo.com" autocomplete="username email" required autofocus>
+                                </div>
+                            </div>
                             <div class="mb-3 text-start">
                                 <label for="inputAdminPin" class="form-label small fw-bold text-muted mb-1">Contraseña:</label>
                                 <div class="input-group">
@@ -2740,9 +2858,9 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         </div>
 
                                         <!-- Cat 2: Condición de habla de lengua indígena y español -->
-                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
                                             <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-secondary me-2">2</span>  Hablantes de lenguas indígenas de 3 años y más
+                                                <span class="badge bg-secondary me-2">2</span> Hablantes de lenguas indígenas de 3 años y más
                                             </h6>
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-4">
@@ -2755,7 +2873,98 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label class="small text-muted">No especificado (%):</label>
-                                                    <input type="number" step="0.01" id="lenguas_cond_noesp" class="form-control form-control-sm" value="0">
+                                                    <input type="number" step="0.01" id="lenguas_cond_noesp" class="form-control form-control-sm" value="0.32">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 3: Condición de autoadscripción indígena según condición de habla (Censo 2020) -->
+                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Autoadscripción indígena en mujeres según condición de habla (Censo 2020)
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">Etnicidad 2</span>
+                                            </div>
+                                            
+                                            <!-- Subcategoría A: Habla lengua indígena -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-comments me-1" style="color: #7b1fa2;"></i> Habla lengua indígena:
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_habla_si" class="form-control form-control-sm" value="97.76">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_habla_no" class="form-control form-control-sm" value="2.13">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_habla_noesp" class="form-control form-control-sm" value="0.11">
+                                                </div>
+                                            </div>
+
+                                            <!-- Subcategoría B: No habla lengua indígena -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-comment-slash me-1" style="color: #00897b;"></i> No habla lengua indígena:
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_nohabla_si" class="form-control form-control-sm" value="56.52">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_nohabla_no" class="form-control form-control-sm" value="43.17">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_nohabla_noesp" class="form-control form-control-sm" value="0.32">
+                                                </div>
+                                            </div>
+
+                                            <!-- Subcategoría C: Total de mujeres estatal -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-users-line me-1" style="color: #4a154b;"></i> Total de mujeres estatal:
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_total_si" class="form-control form-control-sm" value="69.50">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No se considera indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_total_no" class="form-control form-control-sm" value="30.21">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_total_noesp" class="form-control form-control-sm" value="0.28">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 4: Condición de comprensión de lengua indígena en no hablantes (Censo 2020) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #00897b;">4</span> Gráfica 4: Comprensión de lengua indígena en mujeres no hablantes (Censo 2020)
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">Etnicidad 4</span>
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Entiende lengua indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_comp_entiende" class="form-control form-control-sm" value="9.76">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No entiende lengua indígena (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_comp_noentiende" class="form-control form-control-sm" value="89.79">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <input type="number" step="0.01" id="lenguas_comp_noesp" class="form-control form-control-sm" value="0.45">
                                                 </div>
                                             </div>
                                         </div>
@@ -3963,5 +4172,6 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         }
     });
 </script>
+<iframe name="iframeAuthOculto" id="iframeAuthOculto" style="display:none; width:0; height:0; border:0;"></iframe>
 </body>
 </html>
