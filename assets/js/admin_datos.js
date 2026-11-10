@@ -1636,7 +1636,24 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 violencia_informal_2006: 60.1,
                 violencia_informal_2011: 49.3,
                 violencia_informal_2016: 39.1,
-                violencia_informal_2021: 49.2
+                violencia_informal_2021: 49.2,
+                violencia_suicidio_2022: 32,
+                violencia_suicidio_2023: 42,
+                violencia_suicidio_2024: 33,
+                violencia_homicidio_2022: 123,
+                violencia_homicidio_2023: 95,
+                violencia_homicidio_2024: 93,
+                violencia_accidentes_2022: 414,
+                violencia_accidentes_2023: 461,
+                violencia_accidentes_2024: 443,
+                violencia_infancia_total_2016: 44.9,
+                violencia_infancia_total_2021: 46.1,
+                violencia_infancia_psico_2016: 24.2,
+                violencia_infancia_psico_2021: 24.4,
+                violencia_infancia_fisica_2016: 38.5,
+                violencia_infancia_fisica_2021: 38.9,
+                violencia_infancia_sexual_2016: 7.3,
+                violencia_infancia_sexual_2021: 9.8
             };
         },
 
@@ -1663,7 +1680,14 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'violencia_fisica_2006', 'violencia_fisica_2016', 'violencia_fisica_2021',
                 'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021',
                 'violencia_asalariada_2006', 'violencia_asalariada_2011', 'violencia_asalariada_2016', 'violencia_asalariada_2021',
-                'violencia_informal_2006', 'violencia_informal_2011', 'violencia_informal_2016', 'violencia_informal_2021'
+                'violencia_informal_2006', 'violencia_informal_2011', 'violencia_informal_2016', 'violencia_informal_2021',
+                'violencia_suicidio_2022', 'violencia_suicidio_2023', 'violencia_suicidio_2024',
+                'violencia_homicidio_2022', 'violencia_homicidio_2023', 'violencia_homicidio_2024',
+                'violencia_accidentes_2022', 'violencia_accidentes_2023', 'violencia_accidentes_2024',
+                'violencia_infancia_total_2016', 'violencia_infancia_total_2021',
+                'violencia_infancia_psico_2016', 'violencia_infancia_psico_2021',
+                'violencia_infancia_fisica_2016', 'violencia_infancia_fisica_2021',
+                'violencia_infancia_sexual_2016', 'violencia_infancia_sexual_2021'
             ];
             const data = {};
             ids.forEach(id => {

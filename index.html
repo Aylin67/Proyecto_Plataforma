@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js?v=20261109_v9"></script>
-    <script src="assets/js/admin_datos.js?v=20261109_v9"></script>
+    <script src="assets/js/tarjetas.js?v=20261110_v2"></script>
+    <script src="assets/js/admin_datos.js?v=20261110_v2"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
@@ -1856,6 +1856,111 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                             </div>
                         </div>
 
+                        <!-- 3. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (2022-2024) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-triangle-exclamation me-2" style="color: #c2185b;"></i>
+                                                Defunciones por Causas Externas en Mujeres (2022-2024)
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">SSA / INEGI · EDR</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasViolenciaDefunciones"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-shield-halved me-1"></i> DEFUNCIONES POR HOMICIDIO EN MUJERES (2024)
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiViolenciaHomicidios">93</div>
+                                                <div class="small opacity-90">Defunciones registradas en el último año reportado</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                    El registro de defunciones por causas externas permite dimensionar el impacto de la violencia extrema y los eventos fortuitos en la pérdida de vidas de mujeres en la entidad. El seguimiento de las defunciones por homicidio y suicidio evidencia la necesidad apremiante de consolidar políticas públicas de seguridad ciudadana, erradicación de las violencias basadas en género y atención integral a la salud mental con enfoque preventivo y comunitario. Al mismo tiempo, la persistencia de defunciones por causas accidentales subraya la importancia de fortalecer la seguridad vial y la protección en espacios colectivos y domésticos para resguardar la integridad y vida de las mujeres en todos los entornos.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: SSA/INEGI. Estadísticas de Defunciones Registradas (EDR), 1990-2024.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (2016 Y 2021) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-child-reaching me-2" style="color: #7b1fa2;"></i>
+                                                Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca (2016 y 2021)
+                                            </h6>
+                                            <small class="text-muted d-block" style="font-size: 0.76rem;">(Porcentaje de mujeres de 15 años y más)</small>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENDIREH</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasViolenciaInfancia"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-child-reaching me-1"></i> VIOLENCIA TOTAL EN LA INFANCIA (2021)
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiViolenciaInfancia">46.1%</div>
+                                                <div class="small opacity-90">Prevalencia en mujeres de 15 años y más que vivieron violencia en la niñez</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                    La experiencia de violencia durante las etapas tempranas del desarrollo constituye uno de los antecedentes más lesivos en la vida de las mujeres, marcando patrones de vulnerabilidad que trascienden hacia la adultez. Las manifestaciones de agresiones físicas y psicológicas en la niñez reflejan dinámicas familiares y entornos comunitarios donde los castigos corporales y el maltrato emocional han sido normalizados como métodos de disciplina y convivencia. Asimismo, la presencia de violencia sexual sufrida en la infancia evidencia la urgencia inaplazable de consolidar protocolos de detección temprana, garantías de salvaguarda integral de niñas y adolescentes, y programas de intervención psicosocial que restituyan plenamente sus derechos a una vida libre de violencia.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2016 y 2021.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
                         <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -1866,6 +1971,12 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                                     </div>
                                     <div style="font-size: 0.8rem; line-height: 1.4;">
                                         2. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2011, 2016 y 2021 (Posición en la ocupación de las mujeres trabajadoras en Oaxaca).
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        3. SSA/INEGI. Estadísticas de Defunciones Registradas (EDR), 1990-2024 (Defunciones por Suicidio, Homicidio y Causas Accidentales según sexo).
+                                    </div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        4. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2016 y 2021 (Prevalencia de violencia durante la infancia en mujeres de 15 años y más).
                                     </div>
                                 </div>
                                 <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
@@ -3382,6 +3493,143 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                                                 <div class="col-12 col-md-3">
                                                     <label class="small text-muted">Año 2021:</label>
                                                     <input type="number" step="0.1" id="violencia_informal_2021" class="form-control form-control-sm" value="49.2">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 3: Defunciones por Causas Externas (SSA/INEGI EDR 1990-2024) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #c2185b;">3</span> Gráfica 3: Defunciones por Causas Externas en Mujeres (2022-2024)
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">SSA / INEGI EDR</span>
+                                            </div>
+
+                                            <!-- Defunciones por Suicidio -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-heart-crack me-1" style="color: #7b1fa2;"></i> Defunciones por Suicidio:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2022:</label>
+                                                    <input type="number" step="1" id="violencia_suicidio_2022" class="form-control form-control-sm" value="32">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2023:</label>
+                                                    <input type="number" step="1" id="violencia_suicidio_2023" class="form-control form-control-sm" value="42">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2024:</label>
+                                                    <input type="number" step="1" id="violencia_suicidio_2024" class="form-control form-control-sm" value="33">
+                                                </div>
+                                            </div>
+
+                                            <!-- Defunciones por Homicidio -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-triangle-exclamation me-1" style="color: #c2185b;"></i> Defunciones por Homicidio:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2022:</label>
+                                                    <input type="number" step="1" id="violencia_homicidio_2022" class="form-control form-control-sm" value="123">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2023:</label>
+                                                    <input type="number" step="1" id="violencia_homicidio_2023" class="form-control form-control-sm" value="95">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2024:</label>
+                                                    <input type="number" step="1" id="violencia_homicidio_2024" class="form-control form-control-sm" value="93">
+                                                </div>
+                                            </div>
+
+                                            <!-- Defunciones por Causas Accidentales -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-car-burst me-1" style="color: #00897b;"></i> Defunciones por Causas Accidentales:
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2022:</label>
+                                                    <input type="number" step="1" id="violencia_accidentes_2022" class="form-control form-control-sm" value="414">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2023:</label>
+                                                    <input type="number" step="1" id="violencia_accidentes_2023" class="form-control form-control-sm" value="461">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2024:</label>
+                                                    <input type="number" step="1" id="violencia_accidentes_2024" class="form-control form-control-sm" value="443">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cat 4: Prevalencia de Violencia durante la Infancia (ENDIREH 2016 y 2021) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">4</span> Gráfica 4: Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca (2016 y 2021)
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">INEGI · ENDIREH</span>
+                                            </div>
+
+                                            <!-- Prevalencia Total en la Infancia -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-child-reaching me-1" style="color: #c2185b;"></i> Prevalencia de Violencia durante la Infancia (Total):
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2016 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_total_2016" class="form-control form-control-sm" value="44.9">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2021 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_total_2021" class="form-control form-control-sm" value="46.1">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Psicológica -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-brain me-1" style="color: #7b1fa2;"></i> Violencia Psicológica:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2016 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_psico_2016" class="form-control form-control-sm" value="24.2">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2021 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_psico_2021" class="form-control form-control-sm" value="24.4">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Física -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-hand-dots me-1" style="color: #e65100;"></i> Violencia Física:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2016 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_fisica_2016" class="form-control form-control-sm" value="38.5">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2021 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_fisica_2021" class="form-control form-control-sm" value="38.9">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Sexual -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-shield-virus me-1" style="color: #00897b;"></i> Violencia Sexual:
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2016 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_sexual_2016" class="form-control form-control-sm" value="7.3">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="small text-muted">Año 2021 (%):</label>
+                                                    <input type="number" step="0.1" id="violencia_infancia_sexual_2021" class="form-control form-control-sm" value="9.8">
                                                 </div>
                                             </div>
                                         </div>
