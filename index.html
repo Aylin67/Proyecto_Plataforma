@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js"></script>
-    <script src="assets/js/admin_datos.js"></script>
+    <script src="assets/js/tarjetas.js?v=20261109_v6"></script>
+    <script src="assets/js/admin_datos.js?v=20261109_v6"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
@@ -196,6 +196,15 @@
                 <i class="fa-solid fa-language"></i>
             </div>
             <span class="tema-nombre">Lenguas</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('violencia', this)">
+            <div class="tema-icon-wrapper tema-violencia">
+                <i class="fa-solid fa-shield-heart"></i>
+            </div>
+            <span class="tema-nombre">Violencia</span>
         </div>
     </div>
 
@@ -1581,11 +1590,11 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div class="card-metrica-total">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="small text-uppercase fw-bold opacity-75">
-                                                        <i class="fa-solid fa-id-card-clip me-1"></i> SE CONSIDERA INDÍGENA (TOTAL ESTATAL)
+                                                        <i class="fa-solid fa-id-card-clip me-1"></i> SE CONSIDERA INDÍGENA (HABLA LENGUA INDÍGENA)
                                                     </div>
                                                 </div>
-                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasAutoTotal">69.50%</div>
-                                                <div class="small opacity-90">De las mujeres de 3 años y más en Oaxaca</div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasAutoTotal">97.76</div>
+                                                <div class="small opacity-90">Estimador de autoadscripción en mujeres hablantes</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1595,7 +1604,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div style="flex:1;">
                                                 <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
                                                 <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
-                                                    En Oaxaca, el 69.50% de las mujeres de 3 años y más se autoadscribe como indígena (2,044,886 mujeres en total). Esta identidad es predominante entre quienes son hablantes de una lengua originaria (97.76%), pero también se manifiesta con contundencia entre las mujeres que no hablan lengua indígena, donde más de la mitad (56.52%) se reconoce y asume como perteneciente a un pueblo indígena. Ello demuestra que la identidad y pertenencia indígena en las mujeres oaxaqueñas trasciende el uso exclusivo de la lengua materna.
+                                                    La gran mayoría de las mujeres hablantes de una lengua originaria se asume y reconoce con autoadscripción indígena, donde el habla materna fortalece de forma directa la pertenencia comunitaria. A su vez, una proporción considerable de mujeres no hablantes también se reconoce con identidad originaria, evidenciando que el sentido de pertenencia trasciende el aspecto lingüístico y se sustenta en la memoria colectiva, los vínculos territoriales y la cosmovisión compartida.
                                                 </p>
                                             </div>
                                         </div>
@@ -1636,8 +1645,8 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                                         <i class="fa-solid fa-ear-listen me-1"></i> ENTIENDE LENGUA INDÍGENA (NO HABLANTES)
                                                     </div>
                                                 </div>
-                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasCompTotal">9.76%</div>
-                                                <div class="small opacity-90">De 1,399,325 mujeres de 3 años y más que no la hablan</div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiLenguasCompTotal">9.76</div>
+                                                <div class="small opacity-90">Estimador de mujeres no hablantes que comprenden lengua originaria</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1647,7 +1656,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             <div style="flex:1;">
                                                 <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
                                                 <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
-                                                    Entre las 1,399,325 mujeres de 3 años y más en Oaxaca que no hablan una lengua indígena, el 9.76% declara que sí la comprende, mientras que el 89.79% no la comprende y el 0.45% no lo especificó. Este segmento de mujeres no hablantes pero receptoras y comprensivas representa un puente lingüístico intergeneracional de enorme relevancia para los procesos comunitarios de revitalización y preservación de la riqueza cultural originaria en Oaxaca.
+                                                    Una parte de las mujeres que no hablan de manera activa una lengua originaria declara comprender lo que escucha en la lengua indígena de su comunidad familiar o entorno social. Este sector de mujeres oyentes y comprensivas constituye un puente indispensable para las iniciativas de revitalización lingüística, el arraigo cultural y la preservación de la memoria colectiva en los pueblos de la entidad.
                                                 </p>
                                             </div>
                                         </div>
@@ -1682,7 +1691,81 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                         </div>
 
                     </div>
-                </div>
+                    </div> <!-- Cierra layoutTematicoLenguas -->
+
+                    <!-- LAYOUT TEMÁTICO VIOLENCIA CONTRA LAS MUJERES (INEGI ENDIREH) -->
+                    <div id="layoutTematicoViolencia" class="d-none">
+
+                        <!-- 1. PREVALENCIA POR TIPO DE VIOLENCIA EN EL ÁMBITO FAMILIAR (2006, 2016, 2021) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-shield-heart me-2" style="color: #c2185b;"></i>
+                                                Tipo de Violencia en el Ámbito Familiar (2006, 2016 y 2021)
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENDIREH</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasViolenciaFamiliar"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-12">
+                                            <div class="card-metrica-total">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="small text-uppercase fw-bold opacity-75">
+                                                        <i class="fa-solid fa-triangle-exclamation me-1"></i> VIOLENCIA TOTAL EN LA FAMILIA (2021)
+                                                    </div>
+                                                </div>
+                                                <div class="fs-2 fw-bold my-1" id="kpiViolenciaTotal">12.0</div>
+                                                <div class="small opacity-90">Prevalencia a lo largo de la vida en mujeres de 15 años y más</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                    La violencia en el ámbito familiar representa una problemática estructural persistente que vulnera la seguridad e integridad de las mujeres en sus propios hogares. A lo largo de las distintas mediciones de la encuesta, la violencia psicológica se mantiene como la manifestación más recurrente y cotidiana, frecuentemente invisibilizada o normalizada frente a las agresiones físicas o patrimoniales. La presencia continua de estas conductas agresivas subraya la urgencia de fortalecer los mecanismos de prevención comunitaria, atención psicológica oportuna, redes de acompañamiento y acceso efectivo a la justicia para las mujeres y sus familias en la entidad.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares, 2006, 2016 y 2021.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuentes oficiales:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        1. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2016 y 2021 (Violencia contra las mujeres en el ámbito familiar).
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- Cierra layoutTematicoViolencia -->
+
+                </div> <!-- Cierra modal-body -->
 
                 <div class="modal-footer bg-white px-4 py-3 border-top d-flex justify-content-end align-items-center" id="modalTematicoFooter">
                     <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" data-bs-dismiss="modal">
@@ -1690,13 +1773,11 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     </button>
                 </div>
 
-            </div>
-        </div>
-    </div>
-</div>
-
+            </div> <!-- modal-content -->
+        </div> <!-- modal-dialog -->
+    </div> <!-- modalTematico -->
     
-    <!-- ======================================================== -->
+
     <!-- MODAL ACCESO ADMINISTRADORA (PIN / LOGIN CON CONTRASEÑA)  -->
     <!-- ======================================================== -->
     <div class="modal" id="modalAdminPin" tabindex="-1" aria-labelledby="modalAdminPinLabel" aria-hidden="true">
@@ -1943,6 +2024,15 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                         <div class="admin-btn-left">
                                             <i class="fa-solid fa-language menu-icon"></i>
                                             <span class="menu-label">Lenguas Indígenas</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="violencia" onclick="AdminMenuDashboard.seleccionar('violencia')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-shield-heart menu-icon"></i>
+                                            <span class="menu-label">Violencia Familiar</span>
                                         </div>
                                         <i class="fa-solid fa-chevron-right menu-chevron"></i>
                                     </button>
@@ -2878,74 +2968,74 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             </div>
                                         </div>
 
-                                        <!-- Cat 3: Condición de autoadscripción indígena según condición de habla (Censo 2020) -->
-                                        <div class="p-3 rounded-3 mb-3 bg-light border">
+                                        <!-- Cat 3: Condición de autoadscripción indígena según condición de habla (Censo 2020 - Etnicidad 2) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Autoadscripción indígena en mujeres según condición de habla (Censo 2020)
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Autoadscripción indígena según condición de habla (Censo 2020)
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">Etnicidad 2</span>
                                             </div>
-                                            
-                                            <!-- Subcategoría A: Habla lengua indígena -->
+
+                                            <!-- Subcategoría 1: Habla lengua indígena -->
                                             <div class="fw-bold small text-muted mb-1 mt-2">
                                                 <i class="fa-solid fa-comments me-1" style="color: #7b1fa2;"></i> Habla lengua indígena:
                                             </div>
-                                            <div class="row g-2 mb-2">
+                                            <div class="row g-2 mb-3">
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Se considera indígena (%):</label>
+                                                    <label class="small text-muted">Se considera indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_habla_si" class="form-control form-control-sm" value="97.76">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No se considera indígena (%):</label>
+                                                    <label class="small text-muted">No se considera indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_habla_no" class="form-control form-control-sm" value="2.13">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <label class="small text-muted">No especificado (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_habla_noesp" class="form-control form-control-sm" value="0.11">
                                                 </div>
                                             </div>
 
-                                            <!-- Subcategoría B: No habla lengua indígena -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                            <!-- Subcategoría 2: No habla lengua indígena -->
+                                            <div class="fw-bold small text-muted mb-1">
                                                 <i class="fa-solid fa-comment-slash me-1" style="color: #00897b;"></i> No habla lengua indígena:
                                             </div>
-                                            <div class="row g-2 mb-2">
+                                            <div class="row g-2 mb-3">
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Se considera indígena (%):</label>
+                                                    <label class="small text-muted">Se considera indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_nohabla_si" class="form-control form-control-sm" value="56.52">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No se considera indígena (%):</label>
+                                                    <label class="small text-muted">No se considera indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_nohabla_no" class="form-control form-control-sm" value="43.17">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <label class="small text-muted">No especificado (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_auto_nohabla_noesp" class="form-control form-control-sm" value="0.32">
                                                 </div>
                                             </div>
 
-                                            <!-- Subcategoría C: Total de mujeres estatal -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-users-line me-1" style="color: #4a154b;"></i> Total de mujeres estatal:
+                                            <!-- Subcategoría 3: No especificado -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-circle-question me-1" style="color: #546e7a;"></i> No especificado:
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Se considera indígena (%):</label>
-                                                    <input type="number" step="0.01" id="lenguas_auto_total_si" class="form-control form-control-sm" value="69.50">
+                                                    <label class="small text-muted">Se considera indígena (Valor):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_noesp_si" class="form-control form-control-sm" value="4.72">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No se considera indígena (%):</label>
-                                                    <input type="number" step="0.01" id="lenguas_auto_total_no" class="form-control form-control-sm" value="30.21">
+                                                    <label class="small text-muted">No se considera indígena (Valor):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_noesp_no" class="form-control form-control-sm" value="8.04">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No especificado (%):</label>
-                                                    <input type="number" step="0.01" id="lenguas_auto_total_noesp" class="form-control form-control-sm" value="0.28">
+                                                    <label class="small text-muted">No especificado (Valor):</label>
+                                                    <input type="number" step="0.01" id="lenguas_auto_noesp_noesp" class="form-control form-control-sm" value="87.24">
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Cat 4: Condición de comprensión de lengua indígena en no hablantes (Censo 2020) -->
+                                        <!-- Cat 4: Condición de comprensión de lengua indígena en no hablantes (Censo 2020 - Etnicidad 4) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
@@ -2955,15 +3045,15 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                             </div>
                                             <div class="row g-2">
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Entiende lengua indígena (%):</label>
+                                                    <label class="small text-muted">Entiende lengua indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_comp_entiende" class="form-control form-control-sm" value="9.76">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No entiende lengua indígena (%):</label>
+                                                    <label class="small text-muted">No entiende lengua indígena (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_comp_noentiende" class="form-control form-control-sm" value="89.79">
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">No especificado (%):</label>
+                                                    <label class="small text-muted">No especificado (Valor):</label>
                                                     <input type="number" step="0.01" id="lenguas_comp_noesp" class="form-control form-control-sm" value="0.45">
                                                 </div>
                                             </div>
@@ -2978,6 +3068,110 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                                 </div>
 
                                 <!-- 9. VISTA: FUENTES Y METADATOS OFICIALES -->
+                                <!-- 9. VISTA: VIOLENCIA CONTRA LAS MUJERES -->
+                                <div id="adminView_violencia" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-shield-heart me-2" style="color: #c2185b;"></i> Violencia en el Ámbito Familiar
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · ENDIREH 2006, 2016 y 2021</span>
+                                        </div>
+
+                                        <!-- Cat 1: Prevalencia por Tipo de Violencia (Ámbito Familiar) -->
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #c2185b;">1</span> Gráfica 1: Prevalencia por Tipo de Violencia en el Ámbito Familiar
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">ENDIREH</span>
+                                            </div>
+
+                                            <!-- Violencia Psicológica -->
+                                            <div class="fw-bold small text-muted mb-1 mt-2">
+                                                <i class="fa-solid fa-brain me-1" style="color: #7b1fa2;"></i> Violencia Psicológica:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2006:</label>
+                                                    <input type="number" step="0.1" id="violencia_psico_2006" class="form-control form-control-sm" value="15.8">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2016:</label>
+                                                    <input type="number" step="0.1" id="violencia_psico_2016" class="form-control form-control-sm" value="8.7">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2021:</label>
+                                                    <input type="number" step="0.1" id="violencia_psico_2021" class="form-control form-control-sm" value="9.8">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Económica/Patrimonial -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-coins me-1" style="color: #00897b;"></i> Violencia Económica / Patrimonial:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2006:</label>
+                                                    <input type="number" step="0.1" id="violencia_econ_2006" class="form-control form-control-sm" value="0.8">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2016:</label>
+                                                    <input type="number" step="0.1" id="violencia_econ_2016" class="form-control form-control-sm" value="4.1">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2021:</label>
+                                                    <input type="number" step="0.1" id="violencia_econ_2021" class="form-control form-control-sm" value="2.8">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Física -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-hand-dots me-1" style="color: #e65100;"></i> Violencia Física:
+                                            </div>
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2006:</label>
+                                                    <input type="number" step="0.1" id="violencia_fisica_2006" class="form-control form-control-sm" value="2.7">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2016:</label>
+                                                    <input type="number" step="0.1" id="violencia_fisica_2016" class="form-control form-control-sm" value="2.9">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2021:</label>
+                                                    <input type="number" step="0.1" id="violencia_fisica_2021" class="form-control form-control-sm" value="2.7">
+                                                </div>
+                                            </div>
+
+                                            <!-- Violencia Total en la Familia -->
+                                            <div class="fw-bold small text-muted mb-1">
+                                                <i class="fa-solid fa-triangle-exclamation me-1" style="color: #c2185b;"></i> Violencia Total en la Familia:
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2006:</label>
+                                                    <input type="number" step="0.1" id="violencia_total_2006" class="form-control form-control-sm" value="16.3">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2016:</label>
+                                                    <input type="number" step="0.1" id="violencia_total_2016" class="form-control form-control-sm" value="11.3">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label class="small text-muted">Año 2021:</label>
+                                                    <input type="number" step="0.1" id="violencia_total_2021" class="form-control form-control-sm" value="12.0">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarViolencia()">
+                                                <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div id="adminView_fuentes" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -3331,6 +3525,14 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     kpi2: { label: 'Mujeres Hablantes', sub: '52.5% del total' },
                     kpi3: { label: 'Hombres Hablantes', sub: '47.5% del total' }
                 },
+                violencia: {
+                    label: '<i class="fa-solid fa-shield-heart me-2"></i>VIOLENCIA FAMILIAR',
+                    clase: 'recuadro-violencia',
+                    titulo: 'Violencia contra las Mujeres en el Ámbito Familiar',
+                    kpi1: { label: 'Violencia Total (2021)', sub: 'Ámbito familiar' },
+                    kpi2: { label: 'Violencia Psicológica', sub: 'Mayor prevalencia' },
+                    kpi3: { label: 'Fuente Oficial', sub: 'ENDIREH INEGI' }
+                },
                 fuentes: {
                     label: '<i class="fa-solid fa-book-bookmark me-2"></i>FUENTES OFICIALES',
                     clase: 'recuadro-fuentes',
@@ -3353,7 +3555,7 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
                     btn.classList.toggle('active', btn.dataset.cat === cat);
                 });
 
-                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas', 'fuentes'];
+                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas', 'violencia', 'fuentes'];
                 vistas.forEach(v => {
                     const el = document.getElementById('adminView_' + v);
                     if (el) el.classList.toggle('d-none', v !== cat);
@@ -4115,7 +4317,8 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         { id: 'educacion',    nombre: 'Educación',    icono: 'fa-book-open',          color: 'tema-educacion' },
         { id: 'vivienda',     nombre: 'Vivienda',     icono: 'fa-house-chimney',      color: 'tema-vivienda' },
         { id: 'ingreso',      nombre: 'Ingreso',      icono: 'fa-sack-dollar',        color: 'tema-ingreso' },
-        { id: 'lenguas',      nombre: 'Lenguas',      icono: 'fa-language',           color: 'tema-lenguas' }
+        { id: 'lenguas',      nombre: 'Lenguas',      icono: 'fa-language',           color: 'tema-lenguas' },
+        { id: 'violencia',    nombre: 'Violencia',    icono: 'fa-shield-heart',       color: 'tema-violencia' }
     ];
 
     let timerTarjetaMiniActiva = null;
@@ -4168,6 +4371,13 @@ La alfabetización en la infancia y la adolescencia constituye un indicador fund
         if (modalTematicoEl) {
             modalTematicoEl.addEventListener('shown.bs.modal', function() {
                 renderizarTarjetasFooter();
+                if (typeof window.temaActual !== 'undefined') {
+                    if (window.temaActual === 'violencia' && typeof window.renderizarViolenciaINEGI === 'function') {
+                        window.renderizarViolenciaINEGI();
+                    } else if (window.temaActual === 'lenguas' && typeof window.renderizarLenguasINEGI === 'function') {
+                        window.renderizarLenguasINEGI();
+                    }
+                }
             });
         }
     });

@@ -1553,17 +1553,43 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             this.mostrarToast('Datos de Ingreso y Desocupación (Ventana de 4 años) guardados con éxito.');
         },
 
-        // Carga y guardado de Lenguas Indígenas (2 categorías)
+        // Valores por defecto de Lenguas Indígenas oficiales (Censos e Intercensal INEGI)
+        obtenerLenguasDefault: function() {
+            return {
+                lenguas_monolingues_2010: 128050,
+                lenguas_monolingues_2020: 87809,
+                lenguas_cond_si: 29.39,
+                lenguas_cond_no: 70.29,
+                lenguas_cond_noesp: 0.32,
+                lenguas_auto_habla_si: 97.76,
+                lenguas_auto_habla_no: 2.13,
+                lenguas_auto_habla_noesp: 0.11,
+                lenguas_auto_nohabla_si: 56.52,
+                lenguas_auto_nohabla_no: 43.17,
+                lenguas_auto_nohabla_noesp: 0.32,
+                lenguas_auto_noesp_si: 4.72,
+                lenguas_auto_noesp_no: 8.04,
+                lenguas_auto_noesp_noesp: 87.24,
+                lenguas_comp_entiende: 9.76,
+                lenguas_comp_noentiende: 89.79,
+                lenguas_comp_noesp: 0.45
+            };
+        },
+
+        // Carga y guardado de Lenguas Indígenas
         cargarLenguasEnFormulario: function() {
             try {
+                const defaults = this.obtenerLenguasDefault();
+                let d = defaults;
                 const raw = localStorage.getItem('gesmujer_lenguas_datos');
                 if (raw) {
-                    const d = JSON.parse(raw);
-                    Object.keys(d).forEach(k => {
-                        const el = document.getElementById(k);
-                        if (el) el.value = d[k];
-                    });
+                    const parsed = JSON.parse(raw);
+                    d = Object.assign({}, defaults, parsed);
                 }
+                Object.keys(d).forEach(k => {
+                    const el = document.getElementById(k);
+                    if (el) el.value = d[k];
+                });
             } catch(e) {}
         },
 
@@ -1573,7 +1599,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'lenguas_cond_si', 'lenguas_cond_no', 'lenguas_cond_noesp',
                 'lenguas_auto_habla_si', 'lenguas_auto_habla_no', 'lenguas_auto_habla_noesp',
                 'lenguas_auto_nohabla_si', 'lenguas_auto_nohabla_no', 'lenguas_auto_nohabla_noesp',
-                'lenguas_auto_total_si', 'lenguas_auto_total_no', 'lenguas_auto_total_noesp',
+                'lenguas_auto_noesp_si', 'lenguas_auto_noesp_no', 'lenguas_auto_noesp_noesp',
                 'lenguas_comp_entiende', 'lenguas_comp_noentiende', 'lenguas_comp_noesp'
             ];
             const data = {};
@@ -1585,9 +1611,63 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             if (typeof window.renderizarLenguasINEGI === 'function') {
                 window.renderizarLenguasINEGI();
             }
-            this.mostrarToast('Datos de Lenguas Indígenas (4 categorías) guardados con éxito.');
+            this.mostrarToast('Datos de Lenguas Indígenas guardados con éxito.');
         },
-cargarFotoPerfil: function() {
+
+        // Valores por defecto de Violencia (ENDIREH INEGI)
+        obtenerViolenciaDefault: function() {
+            return {
+                violencia_psico_2006: 15.8,
+                violencia_psico_2016: 8.7,
+                violencia_psico_2021: 9.8,
+                violencia_econ_2006: 0.8,
+                violencia_econ_2016: 4.1,
+                violencia_econ_2021: 2.8,
+                violencia_fisica_2006: 2.7,
+                violencia_fisica_2016: 2.9,
+                violencia_fisica_2021: 2.7,
+                violencia_total_2006: 16.3,
+                violencia_total_2016: 11.3,
+                violencia_total_2021: 12.0
+            };
+        },
+
+        cargarViolenciaEnFormulario: function() {
+            try {
+                const defaults = this.obtenerViolenciaDefault();
+                let d = defaults;
+                const raw = localStorage.getItem('gesmujer_violencia_datos');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    d = Object.assign({}, defaults, parsed);
+                }
+                Object.keys(d).forEach(k => {
+                    const el = document.getElementById(k);
+                    if (el) el.value = d[k];
+                });
+            } catch(e) {}
+        },
+
+        guardarViolencia: function() {
+            const ids = [
+                'violencia_psico_2006', 'violencia_psico_2016', 'violencia_psico_2021',
+                'violencia_econ_2006', 'violencia_econ_2016', 'violencia_econ_2021',
+                'violencia_fisica_2006', 'violencia_fisica_2016', 'violencia_fisica_2021',
+                'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021'
+            ];
+            const data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+            localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(data));
+            if (typeof window.renderizarViolenciaINEGI === 'function') {
+                window.renderizarViolenciaINEGI();
+            }
+            this.mostrarToast('Datos de Violencia guardados con éxito.');
+        },
+
+        cargarFotoPerfil: function() {
             try {
                 const foto = localStorage.getItem(STORAGE_FOTO_KEY);
                 const img = document.getElementById('adminAvatarImg');
@@ -1635,6 +1715,8 @@ cargarFotoPerfil: function() {
                 this.cargarIngresoEnFormulario();
             } else if (cat === 'lenguas') {
                 this.cargarLenguasEnFormulario();
+            } else if (cat === 'violencia') {
+                this.cargarViolenciaEnFormulario();
             } else if (cat === 'fuentes') {
                 this.cargarFuentesEnFormulario();
             }

@@ -158,6 +158,17 @@
             fuenteCorta: "INEGI / Censos / Intercensal",
             pieFuente: "INEGI · Censos 2010, 2020 y Encuesta Intercensal 2025",
             kpiTotal: { label: "Habla lengua indígena (2025)", valor: "29.39%" }
+        },
+        // VIOLENCIA CONTRA LAS MUJERES (ENDIREH)
+        violencia: {
+            titulo: "DIMENSIÓN DE VIOLENCIA CONTRA LAS MUJERES",
+            subtitulo: "Prevalencia de violencia contra las mujeres en el ámbito familiar (ENDIREH)",
+            icono: "fa-shield-heart",
+            iconoColor: "#c2185b",
+            badge: "INEGI · ENDIREH 2006, 2016 y 2021",
+            fuenteCorta: "INEGI / ENDIREH",
+            pieFuente: "INEGI · Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares, 2006, 2016 y 2021",
+            kpiTotal: { label: "Violencia Total en la Familia (2021)", valor: "12.0" }
         }
     };
 
@@ -333,6 +344,7 @@
     let chartLenguasCondicion = null;
     let chartLenguasAutoadscripcion = null;
     let chartLenguasComprension = null;
+    let chartViolenciaFamiliar = null;
 
     // 1. TOP 10 CAUSAS DE DEFUNCIÓN EN MUJERES EN OAXACA (DATOS REALES INEGI EDR 2025)
     const causasNombresCompletos = [
@@ -966,7 +978,7 @@
                             max: 100,
                             ticks: {
                                 font: { size: 10 },
-                                callback: function(val) { return val + '%'; }
+                                callback: function(val) { return val; }
                             },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
@@ -1035,7 +1047,7 @@
                             max: 100,
                             ticks: {
                                 font: { size: 10 },
-                                callback: function(val) { return val + '%'; }
+                                callback: function(val) { return val; }
                             },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
@@ -1889,47 +1901,50 @@ type: 'bar',
             const autoNoHablaNo = saved['lenguas_auto_nohabla_no'] !== undefined ? Number(saved['lenguas_auto_nohabla_no']) : 43.17;
             const autoNoHablaNoesp = saved['lenguas_auto_nohabla_noesp'] !== undefined ? Number(saved['lenguas_auto_nohabla_noesp']) : 0.32;
 
-            const autoTotalSi = saved['lenguas_auto_total_si'] !== undefined ? Number(saved['lenguas_auto_total_si']) : 69.50;
-            const autoTotalNo = saved['lenguas_auto_total_no'] !== undefined ? Number(saved['lenguas_auto_total_no']) : 30.21;
-            const autoTotalNoesp = saved['lenguas_auto_total_noesp'] !== undefined ? Number(saved['lenguas_auto_total_noesp']) : 0.28;
+            const autoNoespSi = saved['lenguas_auto_noesp_si'] !== undefined ? Number(saved['lenguas_auto_noesp_si']) : 4.72;
+            const autoNoespNo = saved['lenguas_auto_noesp_no'] !== undefined ? Number(saved['lenguas_auto_noesp_no']) : 8.04;
+            const autoNoespNoesp = saved['lenguas_auto_noesp_noesp'] !== undefined ? Number(saved['lenguas_auto_noesp_noesp']) : 87.24;
 
             const kpiAutoTotal = document.getElementById('kpiLenguasAutoTotal');
-            if (kpiAutoTotal) kpiAutoTotal.textContent = autoTotalSi.toFixed(2) + '%';
+            if (kpiAutoTotal) kpiAutoTotal.textContent = autoHablaSi.toFixed(2);
 
             chartLenguasAutoadscripcion = new Chart(ctx2.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    labels: ['Habla lengua indígena', 'No habla lengua indígena', 'Total de mujeres estatal'],
+                    labels: ['Habla lengua indígena', 'No habla lengua indígena', 'No especificado'],
                     datasets: [
                         {
                             label: 'Se considera indígena',
-                            data: [autoHablaSi, autoNoHablaSi, autoTotalSi],
+                            data: [autoHablaSi, autoNoHablaSi, autoNoespSi],
                             backgroundColor: '#7b1fa2',
                             borderRadius: 5,
                             borderWidth: 1,
                             borderColor: '#ffffff',
-                            barPercentage: 0.75,
-                            categoryPercentage: 0.8
+                            minBarLength: 14,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
                         },
                         {
                             label: 'No se considera indígena',
-                            data: [autoHablaNo, autoNoHablaNo, autoTotalNo],
+                            data: [autoHablaNo, autoNoHablaNo, autoNoespNo],
                             backgroundColor: '#00897b',
                             borderRadius: 5,
                             borderWidth: 1,
                             borderColor: '#ffffff',
-                            barPercentage: 0.75,
-                            categoryPercentage: 0.8
+                            minBarLength: 14,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
                         },
                         {
                             label: 'No especificado',
-                            data: [autoHablaNoesp, autoNoHablaNoesp, autoTotalNoesp],
-                            backgroundColor: '#b0bec5',
+                            data: [autoHablaNoesp, autoNoHablaNoesp, autoNoespNoesp],
+                            backgroundColor: '#546e7a',
                             borderRadius: 5,
                             borderWidth: 1,
                             borderColor: '#ffffff',
-                            barPercentage: 0.75,
-                            categoryPercentage: 0.8
+                            minBarLength: 14,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
                         }
                     ]
                 },
@@ -1938,55 +1953,56 @@ type: 'bar',
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: {
                             display: true,
                             position: 'top',
                             labels: {
-                                font: { size: 10.5, weight: 'bold' },
+                                font: { size: 11, weight: 'bold' },
                                 boxWidth: 12,
-                                padding: 10
+                                padding: 12
                             }
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(c) {
-                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(2) + '%';
+                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(2);
                                 }
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
-                            font: { weight: 'bold', size: 9 },
+                            align: 'top',
+                            offset: 3,
+                            color: '#263238',
+                            font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
-                                return (v != null && Number(v) >= 1.0) ? Number(v).toFixed(2) + '%' : '';
+                                return v != null ? Number(v).toFixed(2) : '';
                             }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: 115,
+                            max: 112,
                             title: {
                                 display: true,
-                                text: 'Distribución porcentual (%)',
+                                text: 'Valor',
                                 color: '#666',
                                 font: { size: 10.5, weight: '500' }
                             },
                             ticks: {
                                 font: { size: 10 },
-                                callback: function(val) { return val + '%'; }
+                                callback: function(val) { return val; }
                             },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
                         x: {
                             ticks: {
-                                font: { size: 10, weight: 'bold' },
+                                font: { size: 11, weight: 'bold' },
                                 color: '#4a154b',
                                 autoSkip: false,
                                 maxRotation: 0,
@@ -2007,19 +2023,20 @@ type: 'bar',
             const compNoesp = saved['lenguas_comp_noesp'] !== undefined ? Number(saved['lenguas_comp_noesp']) : 0.45;
 
             const kpiCompTotal = document.getElementById('kpiLenguasCompTotal');
-            if (kpiCompTotal) kpiCompTotal.textContent = compEntiende.toFixed(2) + '%';
+            if (kpiCompTotal) kpiCompTotal.textContent = compEntiende.toFixed(2);
 
             chartLenguasComprension = new Chart(ctx3.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: ['Entiende lengua indígena', 'No entiende lengua indígena', 'No especificado'],
                     datasets: [{
-                        label: 'Distribución porcentual (%)',
+                        label: 'Valor',
                         data: [compEntiende, compNoentiende, compNoesp],
-                        backgroundColor: ['#7b1fa2', '#48b5c4', '#b0bec5'],
+                        backgroundColor: ['#00897b', '#7b1fa2', '#546e7a'],
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
+                        minBarLength: 14,
                         barPercentage: 0.55
                     }]
                 },
@@ -2028,25 +2045,26 @@ type: 'bar',
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
                                 label: function(c) {
-                                    return ' ' + Number(c.raw).toFixed(2) + '%';
+                                    return ' ' + Number(c.raw).toFixed(2);
                                 }
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            offset: 3,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
-                                return v != null ? Number(v).toFixed(2) + '%' : '';
+                                return v != null ? Number(v).toFixed(2) : '';
                             }
                         }
                     },
@@ -2056,19 +2074,160 @@ type: 'bar',
                             max: 105,
                             title: {
                                 display: true,
-                                text: 'Distribución porcentual (%)',
+                                text: 'Valor',
                                 color: '#666',
                                 font: { size: 10.5, weight: '500' }
                             },
                             ticks: {
                                 font: { size: 10 },
-                                callback: function(val) { return val + '%'; }
+                                callback: function(val) { return val; }
                             },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
                         x: {
                             ticks: {
-                                font: { size: 10, weight: 'bold' },
+                                font: { size: 10.5, weight: 'bold' },
+                                color: '#4a154b',
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }    }
+
+
+    // ABRIR MODAL TEMÁTICO
+    
+    // RENDERIZADO DE LAS GRÁFICAS DE VIOLENCIA (INEGI ENDIREH)
+    function renderizarViolenciaINEGI() {
+        if (chartViolenciaFamiliar) { chartViolenciaFamiliar.destroy(); chartViolenciaFamiliar = null; }
+
+        let saved = {};
+        try {
+            const raw = localStorage.getItem('gesmujer_violencia_datos');
+            if (raw) saved = JSON.parse(raw);
+        } catch(e) {}
+
+        const ctx0 = document.getElementById('canvasViolenciaFamiliar');
+        if (ctx0) {
+            const p2006 = saved['violencia_psico_2006'] !== undefined ? Number(saved['violencia_psico_2006']) : 15.8;
+            const p2016 = saved['violencia_psico_2016'] !== undefined ? Number(saved['violencia_psico_2016']) : 8.7;
+            const p2021 = saved['violencia_psico_2021'] !== undefined ? Number(saved['violencia_psico_2021']) : 9.8;
+
+            const e2006 = saved['violencia_econ_2006'] !== undefined ? Number(saved['violencia_econ_2006']) : 0.8;
+            const e2016 = saved['violencia_econ_2016'] !== undefined ? Number(saved['violencia_econ_2016']) : 4.1;
+            const e2021 = saved['violencia_econ_2021'] !== undefined ? Number(saved['violencia_econ_2021']) : 2.8;
+
+            const f2006 = saved['violencia_fisica_2006'] !== undefined ? Number(saved['violencia_fisica_2006']) : 2.7;
+            const f2016 = saved['violencia_fisica_2016'] !== undefined ? Number(saved['violencia_fisica_2016']) : 2.9;
+            const f2021 = saved['violencia_fisica_2021'] !== undefined ? Number(saved['violencia_fisica_2021']) : 2.7;
+
+            const t2006 = saved['violencia_total_2006'] !== undefined ? Number(saved['violencia_total_2006']) : 16.3;
+            const t2016 = saved['violencia_total_2016'] !== undefined ? Number(saved['violencia_total_2016']) : 11.3;
+            const t2021 = saved['violencia_total_2021'] !== undefined ? Number(saved['violencia_total_2021']) : 12.0;
+
+            const kpiTot = document.getElementById('kpiViolenciaTotal');
+            if (kpiTot) kpiTot.textContent = t2021.toFixed(1);
+
+            chartViolenciaFamiliar = new Chart(ctx0.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Violencia Psicológica', 'Violencia Económica / Patrimonial', 'Violencia Física', 'Violencia Total en la Familia'],
+                    datasets: [
+                        {
+                            label: 'Año 2006',
+                            data: [p2006, e2006, f2006, t2006],
+                            backgroundColor: '#c2185b',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
+                        },
+                        {
+                            label: 'Año 2016',
+                            data: [p2016, e2016, f2016, t2016],
+                            backgroundColor: '#7b1fa2',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
+                        },
+                        {
+                            label: 'Año 2021',
+                            data: [p2021, e2021, f2021, t2021],
+                            backgroundColor: '#00897b',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.72,
+                            categoryPercentage: 0.82
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 11, weight: 'bold' },
+                                boxWidth: 12,
+                                padding: 12
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(c) {
+                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1);
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 3,
+                            color: '#263238',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: function(v) {
+                                return v != null ? Number(v).toFixed(1) : '';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 20,
+                            title: {
+                                display: true,
+                                text: 'Prevalencia',
+                                color: '#666',
+                                font: { size: 10.5, weight: '500' }
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                callback: function(val) { return val; }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 10.5, weight: 'bold' },
                                 color: '#4a154b',
                                 autoSkip: false,
                                 maxRotation: 0,
@@ -2082,7 +2241,6 @@ type: 'bar',
         }
     }
 
-    // ABRIR MODAL TEMÁTICO
     function abrirModalTematico(nombreTema) {
         const data = datosTematicos[nombreTema];
         if (!data) { console.warn("No hay configuración: " + nombreTema); return; }
@@ -2110,6 +2268,7 @@ type: 'bar',
         const layoutVivienda = document.getElementById("layoutTematicoVivienda");
         const layoutIngreso = document.getElementById("layoutTematicoIngreso");
         const layoutLenguas = document.getElementById("layoutTematicoLenguas");
+        const layoutViolencia = document.getElementById("layoutTematicoViolencia");
         const layoutStd = document.getElementById("layoutTematicoEstandar");
 
         if (layoutSalud) layoutSalud.classList.add("d-none");
@@ -2117,6 +2276,7 @@ type: 'bar',
         if (layoutVivienda) layoutVivienda.classList.add("d-none");
         if (layoutIngreso) layoutIngreso.classList.add("d-none");
         if (layoutLenguas) layoutLenguas.classList.add("d-none");
+        if (layoutViolencia) layoutViolencia.classList.add("d-none");
         if (layoutStd) layoutStd.classList.add("d-none");
 
         const esDimensionCISGES = ['atendidas', 'psicologia', 'juicios', 'feminicidios', 'talleres', 'proyectos'].indexOf(nombreTema) !== -1;
@@ -2145,6 +2305,11 @@ type: 'bar',
             if (layoutLenguas) {
                 layoutLenguas.classList.remove("d-none");
                 renderizarLenguasINEGI();
+            }
+        } else if (nombreTema === 'violencia') {
+            if (layoutViolencia) {
+                layoutViolencia.classList.remove("d-none");
+                renderizarViolenciaINEGI();
             }
         } else if (esDimensionCISGES) {
             if (layoutStd) {
@@ -2198,4 +2363,5 @@ type: 'bar',
     window.abrirModalTematico = abrirModalTematico;
     window.mostrarTema = mostrarTema;
     window.renderizarLenguasINEGI = renderizarLenguasINEGI;
+    window.renderizarViolenciaINEGI = renderizarViolenciaINEGI;
 })(window);
