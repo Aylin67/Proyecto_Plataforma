@@ -345,6 +345,7 @@
     let chartLenguasAutoadscripcion = null;
     let chartLenguasComprension = null;
     let chartViolenciaFamiliar = null;
+    let chartViolenciaOcupacion = null;
 
     // 1. TOP 10 CAUSAS DE DEFUNCIÓN EN MUJERES EN OAXACA (DATOS REALES INEGI EDR 2025)
     const causasNombresCompletos = [
@@ -2228,6 +2229,119 @@ type: 'bar',
                         x: {
                             ticks: {
                                 font: { size: 10.5, weight: 'bold' },
+                                color: '#4a154b',
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        // 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (2006-2021)
+        if (chartViolenciaOcupacion) { chartViolenciaOcupacion.destroy(); chartViolenciaOcupacion = null; }
+
+        const ctx1 = document.getElementById('canvasViolenciaOcupacion');
+        if (ctx1) {
+            const as2006 = saved['violencia_asalariada_2006'] !== undefined ? Number(saved['violencia_asalariada_2006']) : 39.9;
+            const as2011 = saved['violencia_asalariada_2011'] !== undefined ? Number(saved['violencia_asalariada_2011']) : 50.5;
+            const as2016 = saved['violencia_asalariada_2016'] !== undefined ? Number(saved['violencia_asalariada_2016']) : 60.9;
+            const as2021 = saved['violencia_asalariada_2021'] !== undefined ? Number(saved['violencia_asalariada_2021']) : 50.8;
+
+            const inf2006 = saved['violencia_informal_2006'] !== undefined ? Number(saved['violencia_informal_2006']) : 60.1;
+            const inf2011 = saved['violencia_informal_2011'] !== undefined ? Number(saved['violencia_informal_2011']) : 49.3;
+            const inf2016 = saved['violencia_informal_2016'] !== undefined ? Number(saved['violencia_informal_2016']) : 39.1;
+            const inf2021 = saved['violencia_informal_2021'] !== undefined ? Number(saved['violencia_informal_2021']) : 49.2;
+
+            const kpiOcup = document.getElementById('kpiViolenciaOcupacion');
+            if (kpiOcup) kpiOcup.textContent = as2021.toFixed(1);
+
+            chartViolenciaOcupacion = new Chart(ctx1.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['2006', '2011', '2016', '2021'],
+                    datasets: [
+                        {
+                            label: 'Empleada, obrera o jornalera (Asalariada)',
+                            data: [as2006, as2011, as2016, as2021],
+                            backgroundColor: '#7b1fa2',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.65,
+                            categoryPercentage: 0.75
+                        },
+                        {
+                            label: 'Por cuenta propia, patrona o trabajó sin pago (Informal)',
+                            data: [inf2006, inf2011, inf2016, inf2021],
+                            backgroundColor: '#00897b',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.65,
+                            categoryPercentage: 0.75
+                        }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 11, weight: 'bold' },
+                                boxWidth: 12,
+                                padding: 12
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(c) {
+                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1);
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 3,
+                            color: '#263238',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: function(v) {
+                                return v != null ? Number(v).toFixed(1) : '';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 75,
+                            title: {
+                                display: true,
+                                text: 'Porcentaje',
+                                color: '#666',
+                                font: { size: 10.5, weight: '500' }
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                callback: function(val) { return val; }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 11, weight: 'bold' },
                                 color: '#4a154b',
                                 autoSkip: false,
                                 maxRotation: 0,

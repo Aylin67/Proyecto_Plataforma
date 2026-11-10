@@ -1628,7 +1628,15 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 violencia_fisica_2021: 2.7,
                 violencia_total_2006: 16.3,
                 violencia_total_2016: 11.3,
-                violencia_total_2021: 12.0
+                violencia_total_2021: 12.0,
+                violencia_asalariada_2006: 39.9,
+                violencia_asalariada_2011: 50.5,
+                violencia_asalariada_2016: 60.9,
+                violencia_asalariada_2021: 50.8,
+                violencia_informal_2006: 60.1,
+                violencia_informal_2011: 49.3,
+                violencia_informal_2016: 39.1,
+                violencia_informal_2021: 49.2
             };
         },
 
@@ -1653,7 +1661,9 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'violencia_psico_2006', 'violencia_psico_2016', 'violencia_psico_2021',
                 'violencia_econ_2006', 'violencia_econ_2016', 'violencia_econ_2021',
                 'violencia_fisica_2006', 'violencia_fisica_2016', 'violencia_fisica_2021',
-                'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021'
+                'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021',
+                'violencia_asalariada_2006', 'violencia_asalariada_2011', 'violencia_asalariada_2016', 'violencia_asalariada_2021',
+                'violencia_informal_2006', 'violencia_informal_2011', 'violencia_informal_2016', 'violencia_informal_2021'
             ];
             const data = {};
             ids.forEach(id => {
