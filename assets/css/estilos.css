@@ -501,6 +501,15 @@ body { padding-top: 85px; }
     padding: 14px 18px;
     box-shadow: 0 4px 12px rgba(74, 21, 75, 0.2);
 }
+#modalTematico .card-metrica-total {
+    display: none !important;
+}
+#modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+}
 .card-metrica-mujeres {
     background: #fdf4f8;
     border: 1px solid #f3c7e0;

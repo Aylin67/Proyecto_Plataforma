@@ -1657,7 +1657,11 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 violencia_infancia_fisica_2016: 38.5,
                 violencia_infancia_fisica_2021: 38.9,
                 violencia_infancia_sexual_2016: 7.3,
-                violencia_infancia_sexual_2021: 9.8
+                violencia_infancia_sexual_2021: 9.8,
+                violencia_vida_2006: 61.2,
+                violencia_vida_2011: 55.7,
+                violencia_vida_2016: 63.7,
+                violencia_vida_2021: 67.1
             };
         },
 
@@ -1689,7 +1693,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'violencia_infancia_total_2016', 'violencia_infancia_total_2021',
                 'violencia_infancia_psico_2016', 'violencia_infancia_psico_2021',
                 'violencia_infancia_fisica_2016', 'violencia_infancia_fisica_2021',
-                'violencia_infancia_sexual_2016', 'violencia_infancia_sexual_2021'
+                'violencia_infancia_sexual_2016', 'violencia_infancia_sexual_2021',
+                'violencia_vida_2006', 'violencia_vida_2011', 'violencia_vida_2016', 'violencia_vida_2021'
             ];
             let prevData = {};
             try {

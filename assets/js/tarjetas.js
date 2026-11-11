@@ -349,6 +349,7 @@
     let chartViolenciaOcupacion = null;
     let chartViolenciaDefunciones = null;
     let chartViolenciaInfancia = null;
+    let chartViolenciaVida = null;
 
     // 1. TOP 10 CAUSAS DE DEFUNCIÓN EN MUJERES EN OAXACA (DATOS REALES INEGI EDR 2025)
     const causasNombresCompletos = [
@@ -2633,6 +2634,99 @@ type: 'bar',
                 });
             } catch (err) {
                 console.error('Error al renderizar canvasViolenciaInfancia:', err);
+            }
+        }
+
+        // 5. PREVALENCIA TOTAL DE VIOLENCIA A LO LARGO DE LA VIDA (ENDIREH 2006-2021)
+        if (chartViolenciaVida) { chartViolenciaVida.destroy(); chartViolenciaVida = null; }
+
+        const ctxVida = document.getElementById('canvasViolenciaVida');
+        if (ctxVida) {
+            try {
+                if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+                    const exVida = Chart.getChart(ctxVida);
+                    if (exVida) exVida.destroy();
+                }
+
+                const v2006 = saved['violencia_vida_2006'] !== undefined ? Number(saved['violencia_vida_2006']) : 61.2;
+                const v2011 = saved['violencia_vida_2011'] !== undefined ? Number(saved['violencia_vida_2011']) : 55.7;
+                const v2016 = saved['violencia_vida_2016'] !== undefined ? Number(saved['violencia_vida_2016']) : 63.7;
+                const v2021 = saved['violencia_vida_2021'] !== undefined ? Number(saved['violencia_vida_2021']) : 67.1;
+
+                chartViolenciaVida = new Chart(ctxVida.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Año 2006', 'Año 2011', 'Año 2016', 'Año 2021'],
+                        datasets: [
+                            {
+                                label: 'Prevalencia Total en Oaxaca (%)',
+                                data: [v2006, v2011, v2016, v2021],
+                                backgroundColor: ['#8e24aa', '#ba68c8', '#7b1fa2', '#4a154b'],
+                                borderRadius: 6,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                barPercentage: 0.55
+                            }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return ' Prevalencia total en Oaxaca: ' + Number(c.raw).toFixed(1) + '%';
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 3,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 11 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 80,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 11, weight: 'bold' },
+                                    color: '#4a154b'
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error('Error al renderizar canvasViolenciaVida:', err);
             }
         }
     }
