@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js?v=20261110_v2"></script>
-    <script src="assets/js/admin_datos.js?v=20261110_v2"></script>
+    <script src="assets/js/tarjetas.js?v=20261111_v1"></script>
+    <script src="assets/js/admin_datos.js?v=20261111_v1"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
@@ -1803,60 +1803,7 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                             </div>
                         </div>
 
-                        
-                        <!-- 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (2006-2021) -->
-                        <div class="row g-4 align-items-stretch mb-4">
-                            <!-- DIVISIÓN 1: GRÁFICA -->
-                            <div class="col-12 col-xl-7 col-lg-6">
-                                <div class="card modal-nacional-card h-100">
-                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
-                                        <div>
-                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
-                                                <i class="fa-solid fa-briefcase me-2" style="color: #7b1fa2;"></i>
-                                                Posición en la ocupación de las mujeres trabajadoras en Oaxaca (2006-2021)
-                                            </h6>
-                                        </div>
-                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENDIREH</span>
-                                    </div>
-                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
-                                        <canvas id="canvasViolenciaOcupacion"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
-                            <div class="col-12 col-xl-5 col-lg-6">
-                                <div class="card modal-nacional-card h-100">
-                                    <div class="row g-2 mb-3">
-                                        <div class="col-12">
-                                            <div class="card-metrica-total">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="small text-uppercase fw-bold opacity-75">
-                                                        <i class="fa-solid fa-user-tie me-1"></i> EMPLEADA, OBRERA O JORNALERA (ASALARIADA - 2021)
-                                                    </div>
-                                                </div>
-                                                <div class="fs-2 fw-bold my-1" id="kpiViolenciaOcupacion">50.8</div>
-                                                <div class="small opacity-90">Condición de ocupación en mujeres trabajadoras</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2">
-                                        <div class="d-flex align-items-start gap-2 mb-2">
-                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
-                                            <div style="flex:1;">
-                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
-                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
-                                                    La posición que ocupan las mujeres dentro de la fuerza de trabajo en la entidad refleja las transformaciones en la estructura laboral y los niveles de autonomía económica alcanzados en las últimas décadas. A lo largo del periodo analizado, se observa una transición donde la inserción en empleos de carácter asalariado o subordinado ha ganado terreno frente a las labores por cuenta propia y el trabajo no remunerado, aunque la informalidad continúa representando un sostén preponderante para una amplia proporción de las trabajadoras oaxaqueñas. Garantizar condiciones laborales estables, seguridad social y remuneraciones equitativas resulta indispensable para fortalecer la independencia económica de las mujeres y reducir su vulnerabilidad frente a situaciones de violencia.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2011, 2016 y 2021.</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 3. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (2022-2024) -->
+                        <!-- 2. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (2022-2024) -->
                         <div class="row g-4 align-items-stretch mb-4">
                             <!-- DIVISIÓN 1: GRÁFICA -->
                             <div class="col-12 col-xl-7 col-lg-6">
@@ -1908,7 +1855,7 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                             </div>
                         </div>
 
-                        <!-- 4. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (2016 Y 2021) -->
+                        <!-- 3. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (2016 Y 2021) -->
                         <div class="row g-4 align-items-stretch mb-4">
                             <!-- DIVISIÓN 1: GRÁFICA -->
                             <div class="col-12 col-xl-7 col-lg-6">
@@ -1970,13 +1917,10 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                                         1. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2016 y 2021 (Violencia contra las mujeres en el ámbito familiar).
                                     </div>
                                     <div style="font-size: 0.8rem; line-height: 1.4;">
-                                        2. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2011, 2016 y 2021 (Posición en la ocupación de las mujeres trabajadoras en Oaxaca).
+                                        2. SSA/INEGI. Estadísticas de Defunciones Registradas (EDR), 1990-2024 (Defunciones por Suicidio, Homicidio y Causas Accidentales según sexo).
                                     </div>
                                     <div style="font-size: 0.8rem; line-height: 1.4;">
-                                        3. SSA/INEGI. Estadísticas de Defunciones Registradas (EDR), 1990-2024 (Defunciones por Suicidio, Homicidio y Causas Accidentales según sexo).
-                                    </div>
-                                    <div style="font-size: 0.8rem; line-height: 1.4;">
-                                        4. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2016 y 2021 (Prevalencia de violencia durante la infancia en mujeres de 15 años y más).
+                                        3. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2016 y 2021 (Prevalencia de violencia durante la infancia en mujeres de 15 años y más).
                                     </div>
                                 </div>
                                 <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
@@ -3440,68 +3384,11 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                                             </div>
                                         </div>
 
-                                        
-                                        <!-- Cat 2: Posición en la Ocupación (ENDIREH 2006-2021) -->
+                                        <!-- Cat 2: Defunciones por Causas Externas (SSA/INEGI EDR 1990-2024) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Posición en la Ocupación de las Mujeres Trabajadoras en Oaxaca (2006-2021)
-                                                </h6>
-                                                <span class="badge bg-white text-secondary border px-2 py-1 small">ENDIREH</span>
-                                            </div>
-
-                                            <!-- Empleada, obrera o jornalera (Asalariada) -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-briefcase me-1" style="color: #7b1fa2;"></i> Empleada, obrera o jornalera (Asalariada):
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_asalariada_2006" class="form-control form-control-sm" value="39.9">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2011:</label>
-                                                    <input type="number" step="0.1" id="violencia_asalariada_2011" class="form-control form-control-sm" value="50.5">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_asalariada_2016" class="form-control form-control-sm" value="60.9">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_asalariada_2021" class="form-control form-control-sm" value="50.8">
-                                                </div>
-                                            </div>
-
-                                            <!-- Por cuenta propia, patrona o trabajó sin pago (Informal) -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-store me-1" style="color: #00897b;"></i> Por cuenta propia, patrona o trabajó sin pago (Informal):
-                                            </div>
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_informal_2006" class="form-control form-control-sm" value="60.1">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2011:</label>
-                                                    <input type="number" step="0.1" id="violencia_informal_2011" class="form-control form-control-sm" value="49.3">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_informal_2016" class="form-control form-control-sm" value="39.1">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_informal_2021" class="form-control form-control-sm" value="49.2">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Cat 3: Defunciones por Causas Externas (SSA/INEGI EDR 1990-2024) -->
-                                        <div class="p-3 rounded-3 mb-4 bg-light border">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #c2185b;">3</span> Gráfica 3: Defunciones por Causas Externas en Mujeres (2022-2024)
+                                                    <span class="badge me-2" style="background-color: #c2185b;">2</span> Gráfica 2: Defunciones por Causas Externas en Mujeres (2022-2024)
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">SSA / INEGI EDR</span>
                                             </div>
@@ -3564,11 +3451,11 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                                             </div>
                                         </div>
 
-                                        <!-- Cat 4: Prevalencia de Violencia durante la Infancia (ENDIREH 2016 y 2021) -->
+                                        <!-- Cat 3: Prevalencia de Violencia durante la Infancia (ENDIREH 2016 y 2021) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #7b1fa2;">4</span> Gráfica 4: Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca (2016 y 2021)
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca (2016 y 2021)
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">INEGI · ENDIREH</span>
                                             </div>
@@ -4846,6 +4733,8 @@ La evolución en la inserción laboral de las mujeres en Oaxaca muestra cambios 
                         window.renderizarViolenciaINEGI();
                     } else if (window.temaActual === 'lenguas' && typeof window.renderizarLenguasINEGI === 'function') {
                         window.renderizarLenguasINEGI();
+                    } else if (window.temaActual === 'ingreso' && typeof window.renderizarIngresoINEGI === 'function') {
+                        window.renderizarIngresoINEGI();
                     }
                 }
             });

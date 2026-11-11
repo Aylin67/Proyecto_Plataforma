@@ -340,6 +340,7 @@
     let chartVivPisos = null;
     let chartIngresoRubros = null;
     let chartIngresoDesocupacion = null;
+    let chartIngresoOcupacion = null;
     let chartLenguasMonolingues = null;
     let chartLenguasCondicion = null;
     let chartLenguasAutoadscripcion = null;
@@ -1728,6 +1729,138 @@ type: 'bar',
                 }
             });
         }
+
+        // 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (2006-2021)
+        if (chartIngresoOcupacion) {
+            chartIngresoOcupacion.destroy();
+            chartIngresoOcupacion = null;
+        }
+
+        const ctxIngOcup = document.getElementById('canvasIngresoOcupacion');
+        if (ctxIngOcup) {
+            try {
+                if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+                    const existing = Chart.getChart(ctxIngOcup);
+                    if (existing) existing.destroy();
+                }
+
+                let savedVio = {};
+                try {
+                    const rawVio = localStorage.getItem('gesmujer_violencia_datos');
+                    if (rawVio) savedVio = JSON.parse(rawVio);
+                } catch(e) {}
+
+                const as2006 = savedVio['violencia_asalariada_2006'] !== undefined ? Number(savedVio['violencia_asalariada_2006']) : 39.9;
+                const as2011 = savedVio['violencia_asalariada_2011'] !== undefined ? Number(savedVio['violencia_asalariada_2011']) : 50.5;
+                const as2016 = savedVio['violencia_asalariada_2016'] !== undefined ? Number(savedVio['violencia_asalariada_2016']) : 60.9;
+                const as2021 = savedVio['violencia_asalariada_2021'] !== undefined ? Number(savedVio['violencia_asalariada_2021']) : 50.8;
+
+                const inf2006 = savedVio['violencia_informal_2006'] !== undefined ? Number(savedVio['violencia_informal_2006']) : 60.1;
+                const inf2011 = savedVio['violencia_informal_2011'] !== undefined ? Number(savedVio['violencia_informal_2011']) : 49.3;
+                const inf2016 = savedVio['violencia_informal_2016'] !== undefined ? Number(savedVio['violencia_informal_2016']) : 39.1;
+                const inf2021 = savedVio['violencia_informal_2021'] !== undefined ? Number(savedVio['violencia_informal_2021']) : 49.2;
+
+                const kpiIngOcup = document.getElementById('kpiIngresoOcupacion');
+                if (kpiIngOcup) kpiIngOcup.textContent = as2021.toFixed(1) + '%';
+
+                chartIngresoOcupacion = new Chart(ctxIngOcup.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['2006', '2011', '2016', '2021'],
+                        datasets: [
+                            {
+                                label: 'Empleada, obrera o jornalera (Asalariada)',
+                                data: [as2006, as2011, as2016, as2021],
+                                backgroundColor: '#2e7d32',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.65,
+                                categoryPercentage: 0.75
+                            },
+                            {
+                                label: 'Por cuenta propia, patrona o trabajó sin pago (Informal)',
+                                data: [inf2006, inf2011, inf2016, inf2021],
+                                backgroundColor: '#00897b',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.65,
+                                categoryPercentage: 0.75
+                            }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 28, bottom: 5, left: 5, right: 10 }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { size: 11, weight: 'bold' },
+                                    boxWidth: 12,
+                                    padding: 12
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1) + '%';
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 3,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 10 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 75,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 11, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error('Error al inicializar gráfica de Ocupación en Ingreso:', err);
+            }
+        }
     }
 
     // RENDERIZADO DE LAS 4 GRÁFICAS DE LENGUAS INDÍGENAS (INEGI)
@@ -2242,245 +2375,140 @@ type: 'bar',
                 }
             });
         }
-        // 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (2006-2021)
-        if (chartViolenciaOcupacion) { chartViolenciaOcupacion.destroy(); chartViolenciaOcupacion = null; }
-
-        const ctx1 = document.getElementById('canvasViolenciaOcupacion');
-        if (ctx1) {
-            const as2006 = saved['violencia_asalariada_2006'] !== undefined ? Number(saved['violencia_asalariada_2006']) : 39.9;
-            const as2011 = saved['violencia_asalariada_2011'] !== undefined ? Number(saved['violencia_asalariada_2011']) : 50.5;
-            const as2016 = saved['violencia_asalariada_2016'] !== undefined ? Number(saved['violencia_asalariada_2016']) : 60.9;
-            const as2021 = saved['violencia_asalariada_2021'] !== undefined ? Number(saved['violencia_asalariada_2021']) : 50.8;
-
-            const inf2006 = saved['violencia_informal_2006'] !== undefined ? Number(saved['violencia_informal_2006']) : 60.1;
-            const inf2011 = saved['violencia_informal_2011'] !== undefined ? Number(saved['violencia_informal_2011']) : 49.3;
-            const inf2016 = saved['violencia_informal_2016'] !== undefined ? Number(saved['violencia_informal_2016']) : 39.1;
-            const inf2021 = saved['violencia_informal_2021'] !== undefined ? Number(saved['violencia_informal_2021']) : 49.2;
-
-            const kpiOcup = document.getElementById('kpiViolenciaOcupacion');
-            if (kpiOcup) kpiOcup.textContent = as2021.toFixed(1);
-
-            chartViolenciaOcupacion = new Chart(ctx1.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['2006', '2011', '2016', '2021'],
-                    datasets: [
-                        {
-                            label: 'Empleada, obrera o jornalera (Asalariada)',
-                            data: [as2006, as2011, as2016, as2021],
-                            backgroundColor: '#7b1fa2',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.65,
-                            categoryPercentage: 0.75
-                        },
-                        {
-                            label: 'Por cuenta propia, patrona o trabajó sin pago (Informal)',
-                            data: [inf2006, inf2011, inf2016, inf2021],
-                            backgroundColor: '#00897b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.65,
-                            categoryPercentage: 0.75
-                        }
-                    ]
-                },
-                options: {
-                    animation: false,
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: { size: 11, weight: 'bold' },
-                                boxWidth: 12,
-                                padding: 12
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(c) {
-                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1);
-                                }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 3,
-                            color: '#263238',
-                            font: { weight: 'bold', size: 10 },
-                            formatter: function(v) {
-                                return v != null ? Number(v).toFixed(1) : '';
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 75,
-                            title: {
-                                display: true,
-                                text: 'Porcentaje',
-                                color: '#666',
-                                font: { size: 10.5, weight: '500' }
-                            },
-                            ticks: {
-                                font: { size: 10 },
-                                callback: function(val) { return val; }
-                            },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
-                        },
-                        x: {
-                            ticks: {
-                                font: { size: 11, weight: 'bold' },
-                                color: '#4a154b',
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            },
-                            grid: { display: false }
-                        }
-                    }
-                }
-            });
-        }
-
-        // 3. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (SSA/INEGI EDR 1990-2024)
+        // 2. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (SSA/INEGI EDR 1990-2024)
         if (chartViolenciaDefunciones) { chartViolenciaDefunciones.destroy(); chartViolenciaDefunciones = null; }
 
         const ctxDef = document.getElementById('canvasViolenciaDefunciones');
         if (ctxDef) {
-            const s2022 = saved['violencia_suicidio_2022'] !== undefined ? Number(saved['violencia_suicidio_2022']) : 32;
-            const s2023 = saved['violencia_suicidio_2023'] !== undefined ? Number(saved['violencia_suicidio_2023']) : 42;
-            const s2024 = saved['violencia_suicidio_2024'] !== undefined ? Number(saved['violencia_suicidio_2024']) : 33;
+            try {
+                if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+                    const exDef = Chart.getChart(ctxDef);
+                    if (exDef) exDef.destroy();
+                }
 
-            const h2022 = saved['violencia_homicidio_2022'] !== undefined ? Number(saved['violencia_homicidio_2022']) : 123;
-            const h2023 = saved['violencia_homicidio_2023'] !== undefined ? Number(saved['violencia_homicidio_2023']) : 95;
-            const h2024 = saved['violencia_homicidio_2024'] !== undefined ? Number(saved['violencia_homicidio_2024']) : 93;
+                const s2022 = saved['violencia_suicidio_2022'] !== undefined ? Number(saved['violencia_suicidio_2022']) : 32;
+                const s2023 = saved['violencia_suicidio_2023'] !== undefined ? Number(saved['violencia_suicidio_2023']) : 42;
+                const s2024 = saved['violencia_suicidio_2024'] !== undefined ? Number(saved['violencia_suicidio_2024']) : 33;
 
-            const a2022 = saved['violencia_accidentes_2022'] !== undefined ? Number(saved['violencia_accidentes_2022']) : 414;
-            const a2023 = saved['violencia_accidentes_2023'] !== undefined ? Number(saved['violencia_accidentes_2023']) : 461;
-            const a2024 = saved['violencia_accidentes_2024'] !== undefined ? Number(saved['violencia_accidentes_2024']) : 443;
+                const h2022 = saved['violencia_homicidio_2022'] !== undefined ? Number(saved['violencia_homicidio_2022']) : 123;
+                const h2023 = saved['violencia_homicidio_2023'] !== undefined ? Number(saved['violencia_homicidio_2023']) : 95;
+                const h2024 = saved['violencia_homicidio_2024'] !== undefined ? Number(saved['violencia_homicidio_2024']) : 93;
 
-            const kpiDef = document.getElementById('kpiViolenciaHomicidios');
-            if (kpiDef) kpiDef.textContent = h2024.toLocaleString('es-MX');
+                const a2022 = saved['violencia_accidentes_2022'] !== undefined ? Number(saved['violencia_accidentes_2022']) : 414;
+                const a2023 = saved['violencia_accidentes_2023'] !== undefined ? Number(saved['violencia_accidentes_2023']) : 461;
+                const a2024 = saved['violencia_accidentes_2024'] !== undefined ? Number(saved['violencia_accidentes_2024']) : 443;
 
-            chartViolenciaDefunciones = new Chart(ctxDef.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['Defunciones por Suicidio', 'Defunciones por Homicidio', 'Defunciones por Causas Accidentales'],
-                    datasets: [
-                        {
-                            label: 'Año 2022',
-                            data: [s2022, h2022, a2022],
-                            backgroundColor: '#c2185b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        },
-                        {
-                            label: 'Año 2023',
-                            data: [s2023, h2023, a2023],
-                            backgroundColor: '#7b1fa2',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        },
-                        {
-                            label: 'Año 2024',
-                            data: [s2024, h2024, a2024],
-                            backgroundColor: '#00897b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        }
-                    ]
-                },
-                options: {
-                    animation: false,
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: { size: 11, weight: 'bold' },
-                                boxWidth: 12,
-                                padding: 12
+                const kpiDef = document.getElementById('kpiViolenciaHomicidios');
+                if (kpiDef) kpiDef.textContent = h2024.toLocaleString('es-MX');
+
+                chartViolenciaDefunciones = new Chart(ctxDef.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Defunciones por Suicidio', 'Defunciones por Homicidio', 'Defunciones por Causas Accidentales'],
+                        datasets: [
+                            {
+                                label: 'Año 2022',
+                                data: [s2022, h2022, a2022],
+                                backgroundColor: '#c2185b',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.72,
+                                categoryPercentage: 0.82
+                            },
+                            {
+                                label: 'Año 2023',
+                                data: [s2023, h2023, a2023],
+                                backgroundColor: '#7b1fa2',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.72,
+                                categoryPercentage: 0.82
+                            },
+                            {
+                                label: 'Año 2024',
+                                data: [s2024, h2024, a2024],
+                                backgroundColor: '#00897b',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.72,
+                                categoryPercentage: 0.82
                             }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 28, bottom: 5, left: 5, right: 10 }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(c) {
-                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toLocaleString('es-MX');
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { size: 11, weight: 'bold' },
+                                    boxWidth: 12,
+                                    padding: 12
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return ' ' + c.dataset.label + ': ' + Number(c.raw).toLocaleString('es-MX');
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 3,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 10 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toLocaleString('es-MX') : '';
                                 }
                             }
                         },
-                        datalabels: {
-                            display: true,
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 3,
-                            color: '#263238',
-                            font: { weight: 'bold', size: 10 },
-                            formatter: function(v) {
-                                return v != null ? Number(v).toLocaleString('es-MX') : '';
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 520,
+                                title: {
+                                    display: true,
+                                    text: 'Número de defunciones',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return Number(val).toLocaleString('es-MX'); }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 10.5, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                grid: { display: false }
                             }
                         }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 520,
-                            title: {
-                                display: true,
-                                text: 'Número de defunciones',
-                                color: '#666',
-                                font: { size: 10.5, weight: '500' }
-                            },
-                            ticks: {
-                                font: { size: 10 },
-                                callback: function(val) { return Number(val).toLocaleString('es-MX'); }
-                            },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
-                        },
-                        x: {
-                            ticks: {
-                                font: { size: 10.5, weight: 'bold' },
-                                color: '#4a154b',
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            },
-                            grid: { display: false }
-                        }
                     }
-                }
-            });
+                });
+            } catch (err) {
+                console.error('Error al renderizar canvasViolenciaDefunciones:', err);
+            }
         }
 
         // 4. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (ENDIREH 2016 Y 2021)
@@ -2488,115 +2516,124 @@ type: 'bar',
 
         const ctxInf = document.getElementById('canvasViolenciaInfancia');
         if (ctxInf) {
-            const tot2016 = saved['violencia_infancia_total_2016'] !== undefined ? Number(saved['violencia_infancia_total_2016']) : 44.9;
-            const tot2021 = saved['violencia_infancia_total_2021'] !== undefined ? Number(saved['violencia_infancia_total_2021']) : 46.1;
+            try {
+                if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+                    const exInf = Chart.getChart(ctxInf);
+                    if (exInf) exInf.destroy();
+                }
 
-            const psi2016 = saved['violencia_infancia_psico_2016'] !== undefined ? Number(saved['violencia_infancia_psico_2016']) : 24.2;
-            const psi2021 = saved['violencia_infancia_psico_2021'] !== undefined ? Number(saved['violencia_infancia_psico_2021']) : 24.4;
+                const tot2016 = saved['violencia_infancia_total_2016'] !== undefined ? Number(saved['violencia_infancia_total_2016']) : 44.9;
+                const tot2021 = saved['violencia_infancia_total_2021'] !== undefined ? Number(saved['violencia_infancia_total_2021']) : 46.1;
 
-            const fis2016 = saved['violencia_infancia_fisica_2016'] !== undefined ? Number(saved['violencia_infancia_fisica_2016']) : 38.5;
-            const fis2021 = saved['violencia_infancia_fisica_2021'] !== undefined ? Number(saved['violencia_infancia_fisica_2021']) : 38.9;
+                const psi2016 = saved['violencia_infancia_psico_2016'] !== undefined ? Number(saved['violencia_infancia_psico_2016']) : 24.2;
+                const psi2021 = saved['violencia_infancia_psico_2021'] !== undefined ? Number(saved['violencia_infancia_psico_2021']) : 24.4;
 
-            const sex2016 = saved['violencia_infancia_sexual_2016'] !== undefined ? Number(saved['violencia_infancia_sexual_2016']) : 7.3;
-            const sex2021 = saved['violencia_infancia_sexual_2021'] !== undefined ? Number(saved['violencia_infancia_sexual_2021']) : 9.8;
+                const fis2016 = saved['violencia_infancia_fisica_2016'] !== undefined ? Number(saved['violencia_infancia_fisica_2016']) : 38.5;
+                const fis2021 = saved['violencia_infancia_fisica_2021'] !== undefined ? Number(saved['violencia_infancia_fisica_2021']) : 38.9;
 
-            const kpiInf = document.getElementById('kpiViolenciaInfancia');
-            if (kpiInf) kpiInf.textContent = tot2021.toFixed(1) + '%';
+                const sex2016 = saved['violencia_infancia_sexual_2016'] !== undefined ? Number(saved['violencia_infancia_sexual_2016']) : 7.3;
+                const sex2021 = saved['violencia_infancia_sexual_2021'] !== undefined ? Number(saved['violencia_infancia_sexual_2021']) : 9.8;
 
-            chartViolenciaInfancia = new Chart(ctxInf.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: ['Violencia Psicológica', 'Violencia Física', 'Violencia Sexual', 'Prevalencia Total en la Infancia'],
-                    datasets: [
-                        {
-                            label: 'Año 2016',
-                            data: [psi2016, fis2016, sex2016, tot2016],
-                            backgroundColor: '#7b1fa2',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        },
-                        {
-                            label: 'Año 2021',
-                            data: [psi2021, fis2021, sex2021, tot2021],
-                            backgroundColor: '#00897b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        }
-                    ]
-                },
-                options: {
-                    animation: false,
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: { size: 11, weight: 'bold' },
-                                boxWidth: 12,
-                                padding: 12
+                const kpiInf = document.getElementById('kpiViolenciaInfancia');
+                if (kpiInf) kpiInf.textContent = tot2021.toFixed(1) + '%';
+
+                chartViolenciaInfancia = new Chart(ctxInf.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Violencia Psicológica', 'Violencia Física', 'Violencia Sexual', 'Prevalencia Total en la Infancia'],
+                        datasets: [
+                            {
+                                label: 'Año 2016',
+                                data: [psi2016, fis2016, sex2016, tot2016],
+                                backgroundColor: '#7b1fa2',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.72,
+                                categoryPercentage: 0.82
+                            },
+                            {
+                                label: 'Año 2021',
+                                data: [psi2021, fis2021, sex2021, tot2021],
+                                backgroundColor: '#00897b',
+                                borderRadius: 5,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 12,
+                                barPercentage: 0.72,
+                                categoryPercentage: 0.82
                             }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 28, bottom: 5, left: 5, right: 10 }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(c) {
-                                    return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1) + '%';
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    font: { size: 11, weight: 'bold' },
+                                    boxWidth: 12,
+                                    padding: 12
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return ' ' + c.dataset.label + ': ' + Number(c.raw).toFixed(1) + '%';
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 3,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 10 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
                                 }
                             }
                         },
-                        datalabels: {
-                            display: true,
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 3,
-                            color: '#263238',
-                            font: { weight: 'bold', size: 10 },
-                            formatter: function(v) {
-                                return v != null ? Number(v).toFixed(1) + '%' : '';
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 60,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 10.5, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                grid: { display: false }
                             }
                         }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 60,
-                            title: {
-                                display: true,
-                                text: 'Porcentaje (%)',
-                                color: '#666',
-                                font: { size: 10.5, weight: '500' }
-                            },
-                            ticks: {
-                                font: { size: 10 },
-                                callback: function(val) { return val + '%'; }
-                            },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
-                        },
-                        x: {
-                            ticks: {
-                                font: { size: 10.5, weight: 'bold' },
-                                color: '#4a154b',
-                                autoSkip: false,
-                                maxRotation: 0,
-                                minRotation: 0
-                            },
-                            grid: { display: false }
-                        }
                     }
-                }
-            });
+                });
+            } catch (err) {
+                console.error('Error al renderizar canvasViolenciaInfancia:', err);
+            }
         }
     }
 
@@ -2690,12 +2727,23 @@ type: 'bar',
         if (!modalTematicoBootstrap && typeof bootstrap !== 'undefined') {
             modalTematicoBootstrap = new bootstrap.Modal(modalEl);
         }
-        if (modalTematicoBootstrap) modalTematicoBootstrap.show();
+        if (modalTematicoBootstrap) {
+            modalTematicoBootstrap.show();
+            setTimeout(function() {
+                if (nombreTema === 'violencia' && typeof renderizarViolenciaINEGI === 'function') {
+                    renderizarViolenciaINEGI();
+                } else if (nombreTema === 'lenguas' && typeof renderizarLenguasINEGI === 'function') {
+                    renderizarLenguasINEGI();
+                } else if (nombreTema === 'ingreso' && typeof renderizarIngresoINEGI === 'function') {
+                    renderizarIngresoINEGI();
+                }
+            }, 120);
+        }
     }
 
     // MOSTRAR TEMA
     function mostrarTema(nombreTema, elemento) {
-        if (typeof window.temaActual !== 'undefined') window.temaActual = nombreTema;
+        window.temaActual = nombreTema;
         try {
             sessionStorage.setItem('plataforma_vista_activa', JSON.stringify({ tipo: 'tema', id: nombreTema }));
             history.replaceState(null, document.title, '#tema-' + nombreTema);
@@ -2721,6 +2769,7 @@ type: 'bar',
     window.datosTematicos = datosTematicos;
     window.abrirModalTematico = abrirModalTematico;
     window.mostrarTema = mostrarTema;
+    window.renderizarIngresoINEGI = renderizarIngresoINEGI;
     window.renderizarLenguasINEGI = renderizarLenguasINEGI;
     window.renderizarViolenciaINEGI = renderizarViolenciaINEGI;
 })(window);

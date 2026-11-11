@@ -1550,6 +1550,10 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             // Re-renderizar la vista de desocupación inmediatamente para reflejar el primer año rotado (ej. 2024 al frente)
             this.renderizarDesocupacionAnios(aniosActivos, data);
 
+            if (typeof window.renderizarIngresoINEGI === 'function') {
+                window.renderizarIngresoINEGI();
+            }
+
             this.mostrarToast('Datos de Ingreso y Desocupación (Ventana de 4 años) guardados con éxito.');
         },
 
@@ -1679,8 +1683,6 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'violencia_econ_2006', 'violencia_econ_2016', 'violencia_econ_2021',
                 'violencia_fisica_2006', 'violencia_fisica_2016', 'violencia_fisica_2021',
                 'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021',
-                'violencia_asalariada_2006', 'violencia_asalariada_2011', 'violencia_asalariada_2016', 'violencia_asalariada_2021',
-                'violencia_informal_2006', 'violencia_informal_2011', 'violencia_informal_2016', 'violencia_informal_2021',
                 'violencia_suicidio_2022', 'violencia_suicidio_2023', 'violencia_suicidio_2024',
                 'violencia_homicidio_2022', 'violencia_homicidio_2023', 'violencia_homicidio_2024',
                 'violencia_accidentes_2022', 'violencia_accidentes_2023', 'violencia_accidentes_2024',
@@ -1689,7 +1691,12 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 'violencia_infancia_fisica_2016', 'violencia_infancia_fisica_2021',
                 'violencia_infancia_sexual_2016', 'violencia_infancia_sexual_2021'
             ];
-            const data = {};
+            let prevData = {};
+            try {
+                const rawPrev = localStorage.getItem('gesmujer_violencia_datos');
+                if (rawPrev) prevData = JSON.parse(rawPrev);
+            } catch(e) {}
+            const data = Object.assign({}, prevData);
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) data[id] = parseFloat(el.value) || 0;
@@ -1697,6 +1704,9 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(data));
             if (typeof window.renderizarViolenciaINEGI === 'function') {
                 window.renderizarViolenciaINEGI();
+            }
+            if (typeof window.renderizarIngresoINEGI === 'function') {
+                window.renderizarIngresoINEGI();
             }
             this.mostrarToast('Datos de Violencia guardados con éxito.');
         },
