@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js?v=20261111_v3"></script>
-    <script src="assets/js/admin_datos.js?v=20261111_v3"></script>
+    <script src="assets/js/tarjetas.js?v=20261112_v1"></script>
+    <script src="assets/js/admin_datos.js?v=20261112_v1"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
@@ -2753,9 +2753,7 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                                 <h6 class="fw-bold mb-0 text-dark">
                                                     <span class="badge bg-success me-2">2</span> Tasa de Desocupación Trimestral 
                                                 </h6>
-                                                <span class="badge bg-warning text-dark small" style="font-size: 0.72rem;">
-                                                    <i class="fa-solid fa-clock-rotate-left me-1"></i>Solo se conserva la información del año más reciente
-                                                </span>
+                                                
                                             </div>
                                             <div id="contenedorDesocupacionAnios">
 <div class="row g-2 mb-2">
@@ -2812,67 +2810,41 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                                         <input type="number" step="0.01" id="desoc_nuevo_q4" class="form-control form-control-sm" placeholder="Trim IV">
                                                     </div>
                                                 </div>
-                                                <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">
-                                                    Al completar los datos de 2027, la gráfica eliminará automáticamente el bloque de 2023 manteniendo los 4 años más recientes.
-                                                </small>
+                                                
                                             </div>
                                         </div>
 
-                                                                                <!-- Cat 3: Posición en la Ocupación de las Mujeres Trabajadoras (2006-2021) -->
+                                                                                <!-- Cat 3: Posición en la Ocupación de las Mujeres Trabajadoras (Ventana de 4 años) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge bg-success me-2">3</span> Posición en la Ocupación de las Mujeres Trabajadoras (2006-2021)
+                                                    <span class="badge bg-success me-2">3</span> Posición en la Ocupación de las Mujeres Trabajadoras
                                                 </h6>
                                                 <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · ENDIREH</span>
                                             </div>
-                                            <div class="row g-2 mb-2">
-                                                <div class="col-12 fw-bold small text-muted" style="color: #2b7a78;">Año 2006:</div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Asalariada (empleada, obrera o jornalera):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_asalariada_2006" class="form-control form-control-sm" value="39.9">
+                                            <div id="contenedorIngresoOcupacionAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
                                                 </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Informal (cuenta propia, patrona o sin pago):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_informal_2006" class="form-control form-control-sm" value="60.1">
-                                                </div>
-                                            </div>
-                                            <div class="row g-2 mb-2">
-                                                <div class="col-12 fw-bold small text-muted" style="color: #0077b6;">Año 2011:</div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Asalariada (empleada, obrera o jornalera):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_asalariada_2011" class="form-control form-control-sm" value="50.5">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Informal (cuenta propia, patrona o sin pago):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_informal_2011" class="form-control form-control-sm" value="49.3">
-                                                </div>
-                                            </div>
-                                            <div class="row g-2 mb-2">
-                                                <div class="col-12 fw-bold small text-muted" style="color: #7b1fa2;">Año 2016:</div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Asalariada (empleada, obrera o jornalera):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_asalariada_2016" class="form-control form-control-sm" value="60.9">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Informal (cuenta propia, patrona o sin pago):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_informal_2016" class="form-control form-control-sm" value="39.1">
-                                                </div>
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 fw-bold small text-muted" style="color: #e65100;">Año 2021:</div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Asalariada (empleada, obrera o jornalera):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_asalariada_2021" class="form-control form-control-sm" value="50.8">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Informal (cuenta propia, patrona o sin pago):</label>
-                                                    <input type="number" step="0.1" id="ing_ocu_informal_2021" class="form-control form-control-sm" value="49.2">
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-3">
+                                                        <input type="number" step="1" id="ing_ocu_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2026)">
+                                                    </div>
+                                                    <div class="col-6 col-md-4">
+                                                        <input type="number" step="0.1" id="ing_ocu_nuevo_asalariada" class="form-control form-control-sm" placeholder="Asalariada (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-4">
+                                                        <input type="number" step="0.1" id="ing_ocu_nuevo_informal" class="form-control form-control-sm" placeholder="Informal (%)">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioIngresoOcupacion()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-<div class="d-flex justify-content-end">
+                                        <div class="d-flex justify-content-end">
                                             <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #00897b, #00695c); border-radius: 8px;" onclick="AdminDatosUI.guardarIngreso()">
                                                 <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
                                             </button>
@@ -2890,19 +2862,29 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI · Censo 2010 - 2025</span>
                                         </div>
 
-                                        <!-- Cat 1: Población Monolingüe -->
+                                        <!-- Cat 1: Población Monolingüe (Ventana de hasta 4 años) -->
                                         <div class="p-3 rounded-3 mb-3 bg-light border">
-                                            <h6 class="fw-bold mb-2 text-dark">
-                                                <span class="badge bg-primary me-2">1</span> Población de 3 años y más que no habla español
-                                            </h6>
-                                <div class="row g-2">
-                               <div class="col-12 col-md-6">
-                            <label class="small text-muted">Año 2010 (Habla lengua indígena que no habla español):</label>
-                             <input type="number" step="1" id="lenguas_monolingues_2010" class="form-control form-control-sm" value="128050">
-                            </div>
-                            <div class="col-12 col-md-6">
-                            <label class="small text-muted">Año 2020 (Habla lengua indígena que no habla español):</label>
-                                                    <input type="number" step="1" id="lenguas_monolingues_2020" class="form-control form-control-sm" value="87809">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge bg-primary me-2">1</span> Población de 3 años y más que no habla español
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">INEGI</span>
+                                            </div>
+                                            <div id="contenedorLenguasMonoAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
+                                                </div>
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-4">
+                                                        <input type="number" step="1" id="lenguas_mono_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2025)">
+                                                    </div>
+                                                    <div class="col-12 col-md-7">
+                                                        <input type="number" step="1" id="lenguas_mono_nuevo_val" class="form-control form-control-sm" placeholder="Población sin español">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioLenguasMono()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -3038,7 +3020,7 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                             <span class="badge bg-light text-secondary border px-3 py-1">INEGI · ENDIREH 2006, 2016 y 2021</span>
                                         </div>
 
-                                        <!-- Cat 1: Prevalencia por Tipo de Violencia (Ámbito Familiar) -->
+                                        <!-- Cat 1: Prevalencia por Tipo de Violencia en el Ámbito Familiar (Ventana de 4 años) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
@@ -3046,249 +3028,126 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">ENDIREH</span>
                                             </div>
-
-                                            <!-- Violencia Psicológica -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-brain me-1" style="color: #7b1fa2;"></i> Violencia Psicológica:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_psico_2006" class="form-control form-control-sm" value="15.8">
+                                            <div id="contenedorViolenciaFamAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
                                                 </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_psico_2016" class="form-control form-control-sm" value="8.7">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_psico_2021" class="form-control form-control-sm" value="9.8">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Económica/Patrimonial -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-coins me-1" style="color: #00897b;"></i> Violencia Económica / Patrimonial:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_econ_2006" class="form-control form-control-sm" value="0.8">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_econ_2016" class="form-control form-control-sm" value="4.1">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_econ_2021" class="form-control form-control-sm" value="2.8">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Física -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-hand-dots me-1" style="color: #e65100;"></i> Violencia Física:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_fisica_2006" class="form-control form-control-sm" value="2.7">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_fisica_2016" class="form-control form-control-sm" value="2.9">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_fisica_2021" class="form-control form-control-sm" value="2.7">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Total en la Familia -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-triangle-exclamation me-1" style="color: #c2185b;"></i> Violencia Total en la Familia:
-                                            </div>
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2006:</label>
-                                                    <input type="number" step="0.1" id="violencia_total_2006" class="form-control form-control-sm" value="16.3">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2016:</label>
-                                                    <input type="number" step="0.1" id="violencia_total_2016" class="form-control form-control-sm" value="11.3">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2021:</label>
-                                                    <input type="number" step="0.1" id="violencia_total_2021" class="form-control form-control-sm" value="12.0">
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-2">
+                                                        <input type="number" step="1" id="violencia_fam_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2026)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_fam_nuevo_psico" class="form-control form-control-sm" placeholder="Psicológica (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_fam_nuevo_econ" class="form-control form-control-sm" placeholder="Económica (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_fam_nuevo_fisica" class="form-control form-control-sm" placeholder="Física (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-3">
+                                                        <input type="number" step="0.1" id="violencia_fam_nuevo_total" class="form-control form-control-sm" placeholder="Total Familiar (%)">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioViolenciaFam()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Cat 2: Defunciones por Causas Externas (SSA/INEGI EDR 1990-2024) -->
+                                        <!-- Cat 2: Defunciones por Causas Externas (Ventana de 4 años) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #c2185b;">2</span> Gráfica 2: Defunciones por Causas Externas en Mujeres (2022-2024)
+                                                    <span class="badge me-2" style="background-color: #c2185b;">2</span> Gráfica 2: Defunciones por Causas Externas en Mujeres
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">SSA / INEGI EDR</span>
                                             </div>
-
-                                            <!-- Defunciones por Suicidio -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-heart-crack me-1" style="color: #7b1fa2;"></i> Defunciones por Suicidio:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2022:</label>
-                                                    <input type="number" step="1" id="violencia_suicidio_2022" class="form-control form-control-sm" value="32">
+                                            <div id="contenedorViolenciaDefAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
                                                 </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2023:</label>
-                                                    <input type="number" step="1" id="violencia_suicidio_2023" class="form-control form-control-sm" value="42">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2024:</label>
-                                                    <input type="number" step="1" id="violencia_suicidio_2024" class="form-control form-control-sm" value="33">
-                                                </div>
-                                            </div>
-
-                                            <!-- Defunciones por Homicidio -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-triangle-exclamation me-1" style="color: #c2185b;"></i> Defunciones por Homicidio:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2022:</label>
-                                                    <input type="number" step="1" id="violencia_homicidio_2022" class="form-control form-control-sm" value="123">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2023:</label>
-                                                    <input type="number" step="1" id="violencia_homicidio_2023" class="form-control form-control-sm" value="95">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2024:</label>
-                                                    <input type="number" step="1" id="violencia_homicidio_2024" class="form-control form-control-sm" value="93">
-                                                </div>
-                                            </div>
-
-                                            <!-- Defunciones por Causas Accidentales -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-car-burst me-1" style="color: #00897b;"></i> Defunciones por Causas Accidentales:
-                                            </div>
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2022:</label>
-                                                    <input type="number" step="1" id="violencia_accidentes_2022" class="form-control form-control-sm" value="414">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2023:</label>
-                                                    <input type="number" step="1" id="violencia_accidentes_2023" class="form-control form-control-sm" value="461">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label class="small text-muted">Año 2024:</label>
-                                                    <input type="number" step="1" id="violencia_accidentes_2024" class="form-control form-control-sm" value="443">
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-3">
+                                                        <input type="number" step="1" id="violencia_def_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2025)">
+                                                    </div>
+                                                    <div class="col-4 col-md-2">
+                                                        <input type="number" step="1" id="violencia_def_nuevo_suicidio" class="form-control form-control-sm" placeholder="Suicidios">
+                                                    </div>
+                                                    <div class="col-4 col-md-3">
+                                                        <input type="number" step="1" id="violencia_def_nuevo_homicidio" class="form-control form-control-sm" placeholder="Homicidios">
+                                                    </div>
+                                                    <div class="col-4 col-md-3">
+                                                        <input type="number" step="1" id="violencia_def_nuevo_accidentes" class="form-control form-control-sm" placeholder="Accidentales">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioViolenciaDef()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Cat 3: Prevalencia de Violencia durante la Infancia (ENDIREH 2016 y 2021) -->
+                                        <!-- Cat 3: Prevalencia de Violencia durante la Infancia (Ventana de 4 años) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca (2016 y 2021)
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">3</span> Gráfica 3: Prevalencia de Violencia durante la Infancia en Mujeres de Oaxaca
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">INEGI · ENDIREH</span>
                                             </div>
-
-                                            <!-- Prevalencia Total en la Infancia -->
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-child-reaching me-1" style="color: #c2185b;"></i> Prevalencia de Violencia durante la Infancia (Total):
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2016 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_total_2016" class="form-control form-control-sm" value="44.9">
+                                            <div id="contenedorViolenciaInfAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
                                                 </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2021 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_total_2021" class="form-control form-control-sm" value="46.1">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Psicológica -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-brain me-1" style="color: #7b1fa2;"></i> Violencia Psicológica:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2016 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_psico_2016" class="form-control form-control-sm" value="24.2">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2021 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_psico_2021" class="form-control form-control-sm" value="24.4">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Física -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-hand-dots me-1" style="color: #e65100;"></i> Violencia Física:
-                                            </div>
-                                            <div class="row g-2 mb-3">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2016 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_fisica_2016" class="form-control form-control-sm" value="38.5">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2021 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_fisica_2021" class="form-control form-control-sm" value="38.9">
-                                                </div>
-                                            </div>
-
-                                            <!-- Violencia Sexual -->
-                                            <div class="fw-bold small text-muted mb-1">
-                                                <i class="fa-solid fa-shield-virus me-1" style="color: #00897b;"></i> Violencia Sexual:
-                                            </div>
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2016 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_sexual_2016" class="form-control form-control-sm" value="7.3">
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label class="small text-muted">Año 2021 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_infancia_sexual_2021" class="form-control form-control-sm" value="9.8">
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-2">
+                                                        <input type="number" step="1" id="violencia_inf_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2026)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_inf_nuevo_total" class="form-control form-control-sm" placeholder="Total Infancia (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_inf_nuevo_psico" class="form-control form-control-sm" placeholder="Psicológica (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-2">
+                                                        <input type="number" step="0.1" id="violencia_inf_nuevo_fisica" class="form-control form-control-sm" placeholder="Física (%)">
+                                                    </div>
+                                                    <div class="col-6 col-md-3">
+                                                        <input type="number" step="0.1" id="violencia_inf_nuevo_sexual" class="form-control form-control-sm" placeholder="Sexual (%)">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioViolenciaInf()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Cat 4: Prevalencia Total de Violencia a lo Largo de la Vida (ENDIREH 2006-2021) -->
+                                        <!-- Cat 4: Prevalencia Total de Violencia a lo Largo de la Vida (Ventana de 4 años) -->
                                         <div class="p-3 rounded-3 mb-4 bg-light border">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="fw-bold mb-0 text-dark">
-                                                    <span class="badge me-2" style="background-color: #7b1fa2;">4</span> Gráfica 4: Prevalencia Total de Violencia contra las Mujeres a lo Largo de la Vida en Oaxaca (2006-2021)
+                                                    <span class="badge me-2" style="background-color: #7b1fa2;">4</span> Gráfica 4: Prevalencia Total de Violencia contra las Mujeres a lo Largo de la Vida en Oaxaca
                                                 </h6>
                                                 <span class="badge bg-white text-secondary border px-2 py-1 small">INEGI · ENDIREH</span>
                                             </div>
-
-                                            <div class="fw-bold small text-muted mb-1 mt-2">
-                                                <i class="fa-solid fa-person-dress me-1" style="color: #7b1fa2;"></i> Prevalencia Total a lo largo de la vida (% en Oaxaca):
-                                            </div>
-                                            <div class="row g-2">
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2006 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_vida_2006" class="form-control form-control-sm" value="61.2">
+                                            <div id="contenedorViolenciaVidaAnios"></div>
+                                            <div class="p-2 rounded-2 border mt-2" style="background: #ffffff;">
+                                                <div class="fw-bold small mb-2" style="color: #00897b;">
+                                                    <i class="fa-solid fa-plus-circle me-1"></i> Registrar Próximo Año:
                                                 </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2011 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_vida_2011" class="form-control form-control-sm" value="55.7">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2016 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_vida_2016" class="form-control form-control-sm" value="63.7">
-                                                </div>
-                                                <div class="col-12 col-md-3">
-                                                    <label class="small text-muted">Año 2021 (%):</label>
-                                                    <input type="number" step="0.1" id="violencia_vida_2021" class="form-control form-control-sm" value="67.1">
+                                                <div class="row g-2 align-items-center">
+                                                    <div class="col-12 col-md-4">
+                                                        <input type="number" step="1" id="violencia_vida_nuevo_anio" class="form-control form-control-sm" placeholder="Año (ej. 2026)">
+                                                    </div>
+                                                    <div class="col-12 col-md-7">
+                                                        <input type="number" step="0.1" id="violencia_vida_nuevo_val" class="form-control form-control-sm" placeholder="Prevalencia Total (%)">
+                                                    </div>
+                                                    <div class="col-12 col-md-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-success w-100 fw-bold" onclick="AdminDatosUI.agregarAnioViolenciaVida()" title="Agregar Año">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

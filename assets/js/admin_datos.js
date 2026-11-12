@@ -1457,7 +1457,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             }
             const smallDepuracion = inputNuevoAnio?.closest('.p-2')?.querySelector('small');
             if (smallDepuracion) {
-                smallDepuracion.textContent = `Al completar los datos de ${siguienteAnio}, la gráfica eliminará automáticamente el bloque de ${anios[0]} manteniendo los 4 años más recientes.`;
+                smallDepuracion.remove();
             }
         },
 
@@ -1473,15 +1473,102 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     });
                 }
 
-                // Ventana de los 4 años activos
+                // Ventana de los 4 años activos en Desocupación
                 const anios = (d && Array.isArray(d.desoc_anios) && d.desoc_anios.length >= 4)
                     ? d.desoc_anios.slice(-4)
                     : [2023, 2024, 2025, 2026];
 
                 this.renderizarDesocupacionAnios(anios, d);
+
+                // Ventana de 4 años en Ocupación (Ingreso Gráfica 3: 8 barras)
+                const aniosOcup = (d && Array.isArray(d.ocup_anios) && d.ocup_anios.length > 0)
+                    ? d.ocup_anios.slice(-4)
+                    : [2006, 2011, 2016, 2021];
+                this.renderizarIngresoOcupacionAnios(aniosOcup, d);
             } catch(e) {
                 console.error('Error al cargar ingreso:', e);
             }
+        },
+
+        renderizarIngresoOcupacionAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorIngresoOcupacionAnios');
+            if (!cont) return;
+
+            const defaultsAsal = { 2006: 39.9, 2011: 50.5, 2016: 60.9, 2021: 50.8 };
+            const defaultsInf = { 2006: 60.1, 2011: 49.3, 2016: 39.1, 2021: 49.2 };
+
+            let html = '';
+            anios.forEach((yr) => {
+                let vAsal = (d && d[`ing_ocu_asalariada_${yr}`] !== undefined)
+                    ? d[`ing_ocu_asalariada_${yr}`]
+                    : ((d && d[`violencia_asalariada_${yr}`] !== undefined) ? d[`violencia_asalariada_${yr}`] : (defaultsAsal[yr] ?? ''));
+                let vInf = (d && d[`ing_ocu_informal_${yr}`] !== undefined)
+                    ? d[`ing_ocu_informal_${yr}`]
+                    : ((d && d[`violencia_informal_${yr}`] !== undefined) ? d[`violencia_informal_${yr}`] : (defaultsInf[yr] ?? ''));
+
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="fw-bold small text-muted mb-1" style="color: #2e7d32;">Año ${yr}:</div>
+                    <div class="row g-2">
+                        <div class="col-12 col-md-6">
+                            <label class="small text-muted d-block">Empleada / Asalariada (%):</label>
+                            <input type="number" step="0.1" id="ing_ocu_asalariada_${yr}" class="form-control form-control-sm" value="${vAsal}">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="small text-muted d-block">Cuenta propia / Informal (%):</label>
+                            <input type="number" step="0.1" id="ing_ocu_informal_${yr}" class="form-control form-control-sm" value="${vInf}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('ing_ocu_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioIngresoOcupacion: function() {
+            const anioInp = document.getElementById('ing_ocu_nuevo_anio');
+            const asalInp = document.getElementById('ing_ocu_nuevo_asalariada');
+            const infInp = document.getElementById('ing_ocu_nuevo_informal');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_ingreso_datos');
+                if (raw) d = JSON.parse(raw);
+            } catch(e) {}
+
+            let anios = (Array.isArray(d.ocup_anios) && d.ocup_anios.length > 0) ? [...d.ocup_anios] : [2006, 2011, 2016, 2021];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+
+            d.ocup_anios = anios;
+            if (asalInp && asalInp.value !== '') d[`ing_ocu_asalariada_${anio}`] = parseFloat(asalInp.value) || 0;
+            if (infInp && infInp.value !== '') d[`ing_ocu_informal_${anio}`] = parseFloat(infInp.value) || 0;
+
+            localStorage.setItem('gesmujer_ingreso_datos', JSON.stringify(d));
+
+            if (anioInp) anioInp.value = '';
+            if (asalInp) asalInp.value = '';
+            if (infInp) infInp.value = '';
+
+            this.renderizarIngresoOcupacionAnios(anios, d);
+            if (typeof window.renderizarIngresoINEGI === 'function') {
+                window.renderizarIngresoINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Ocupación.`);
         },
 
         guardarIngreso: function() {
@@ -1501,12 +1588,11 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 }
             });
 
-            // Obtener los años activos actuales
+            // Desocupación
             let aniosActivos = (Array.isArray(prevData.desoc_anios) && prevData.desoc_anios.length >= 4)
                 ? [...prevData.desoc_anios.slice(-4)]
                 : [2023, 2024, 2025, 2026];
 
-            // Guardar los valores de los trimestres actuales en pantalla
             aniosActivos.forEach(yr => {
                 for (let q = 1; q <= 4; q++) {
                     const id = 'desoc_' + yr + '_' + q;
@@ -1518,7 +1604,6 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 }
             });
 
-            // Verificar si se está registrando un nuevo año (Ej. 2027, 2028, etc.)
             const nuevoAnio = parseInt(document.getElementById('desoc_nuevo_anio')?.value, 10);
             const q1Val = document.getElementById('desoc_nuevo_q1')?.value;
             const q2Val = document.getElementById('desoc_nuevo_q2')?.value;
@@ -1526,17 +1611,14 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             const q4Val = document.getElementById('desoc_nuevo_q4')?.value;
 
             if (nuevoAnio && nuevoAnio > aniosActivos[aniosActivos.length - 1] && (q1Val !== '' || q2Val !== '' || q3Val !== '' || q4Val !== '')) {
-                // Al registrar el nuevo año, este se incorpora y se descarta el más antiguo (desplazando la ventana de 4 años)
                 if (q1Val !== '') data['desoc_' + nuevoAnio + '_1'] = parseFloat(q1Val) || 0;
                 if (q2Val !== '') data['desoc_' + nuevoAnio + '_2'] = parseFloat(q2Val) || 0;
                 if (q3Val !== '') data['desoc_' + nuevoAnio + '_3'] = parseFloat(q3Val) || 0;
                 if (q4Val !== '') data['desoc_' + nuevoAnio + '_4'] = parseFloat(q4Val) || 0;
 
-                // Nueva ventana de 4 años con el año más nuevo al final y desplazando el primero
                 aniosActivos = [...aniosActivos, nuevoAnio].slice(-4);
                 data.desoc_anios = aniosActivos;
 
-                // Limpiar campos del nuevo año
                 ['desoc_nuevo_q1', 'desoc_nuevo_q2', 'desoc_nuevo_q3', 'desoc_nuevo_q4'].forEach(qid => {
                     const elQ = document.getElementById(qid);
                     if (elQ) elQ.value = '';
@@ -1545,21 +1627,47 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 data.desoc_anios = aniosActivos;
             }
 
+            // Ocupación (Ventana de 4 años)
+            let aniosOcup = (Array.isArray(prevData.ocup_anios) && prevData.ocup_anios.length > 0)
+                ? [...prevData.ocup_anios.slice(-4)]
+                : [2006, 2011, 2016, 2021];
+
+            aniosOcup.forEach(yr => {
+                const elAsal = document.getElementById('ing_ocu_asalariada_' + yr);
+                if (elAsal && elAsal.value !== '') data['ing_ocu_asalariada_' + yr] = parseFloat(elAsal.value) || 0;
+                const elInf = document.getElementById('ing_ocu_informal_' + yr);
+                if (elInf && elInf.value !== '') data['ing_ocu_informal_' + yr] = parseFloat(elInf.value) || 0;
+            });
+
+            const nuevoAnioOcup = parseInt(document.getElementById('ing_ocu_nuevo_anio')?.value, 10);
+            const valAsalOcup = document.getElementById('ing_ocu_nuevo_asalariada')?.value;
+            const valInfOcup = document.getElementById('ing_ocu_nuevo_informal')?.value;
+            if (nuevoAnioOcup && (valAsalOcup !== '' || valInfOcup !== '')) {
+                if (valAsalOcup !== '') data['ing_ocu_asalariada_' + nuevoAnioOcup] = parseFloat(valAsalOcup) || 0;
+                if (valInfOcup !== '') data['ing_ocu_informal_' + nuevoAnioOcup] = parseFloat(valInfOcup) || 0;
+                if (!aniosOcup.includes(nuevoAnioOcup)) aniosOcup.push(nuevoAnioOcup);
+                aniosOcup.sort((a, b) => a - b);
+                aniosOcup = aniosOcup.slice(-4);
+            }
+            data.ocup_anios = aniosOcup;
+
             localStorage.setItem('gesmujer_ingreso_datos', JSON.stringify(data));
 
-            // Re-renderizar la vista de desocupación inmediatamente para reflejar el primer año rotado (ej. 2024 al frente)
             this.renderizarDesocupacionAnios(aniosActivos, data);
+            this.renderizarIngresoOcupacionAnios(aniosOcup, data);
 
             if (typeof window.renderizarIngresoINEGI === 'function') {
                 window.renderizarIngresoINEGI();
             }
 
-            this.mostrarToast('Datos de Ingreso y Desocupación (Ventana de 4 años) guardados con éxito.');
+            this.mostrarToast('Datos de Ingreso guardados con éxito.');
         },
 
         // Valores por defecto de Lenguas Indígenas oficiales (Censos e Intercensal INEGI)
         obtenerLenguasDefault: function() {
             return {
+                lenguas_mono_2010: 128050,
+                lenguas_mono_2020: 87809,
                 lenguas_monolingues_2010: 128050,
                 lenguas_monolingues_2020: 87809,
                 lenguas_cond_si: 29.39,
@@ -1594,31 +1702,128 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     const el = document.getElementById(k);
                     if (el) el.value = d[k];
                 });
+
+                const monoAnios = (Array.isArray(d.mono_anios) && d.mono_anios.length > 0)
+                    ? d.mono_anios.slice(-4)
+                    : [2010, 2020];
+                this.renderizarLenguasMonoAnios(monoAnios, d);
             } catch(e) {}
+        },
+
+        renderizarLenguasMonoAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorLenguasMonoAnios');
+            if (!cont) return;
+
+            const defaultsMono = { 2010: 128050, 2020: 87809 };
+            let html = '';
+            anios.forEach(yr => {
+                let v = (d && d[`lenguas_mono_${yr}`] !== undefined)
+                    ? d[`lenguas_mono_${yr}`]
+                    : ((d && d[`lenguas_monolingues_${yr}`] !== undefined) ? d[`lenguas_monolingues_${yr}`] : (defaultsMono[yr] ?? ''));
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-12 col-md-4 fw-bold small text-muted" style="color: #7b1fa2;">Año ${yr}:</div>
+                        <div class="col-12 col-md-8">
+                            <label class="small text-muted d-block">Población (personas):</label>
+                            <input type="number" step="1" id="lenguas_mono_${yr}" class="form-control form-control-sm" value="${v}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('lenguas_mono_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioLenguasMono: function() {
+            const anioInp = document.getElementById('lenguas_mono_nuevo_anio');
+            const valInp = document.getElementById('lenguas_mono_nuevo_val');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_lenguas_datos');
+                if (raw) d = JSON.parse(raw);
+            } catch(e) {}
+
+            let anios = (Array.isArray(d.mono_anios) && d.mono_anios.length > 0) ? [...d.mono_anios] : [2010, 2020];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+            d.mono_anios = anios;
+            if (valInp && valInp.value !== '') d[`lenguas_mono_${anio}`] = parseFloat(valInp.value) || 0;
+
+            localStorage.setItem('gesmujer_lenguas_datos', JSON.stringify(d));
+
+            if (anioInp) anioInp.value = '';
+            if (valInp) valInp.value = '';
+
+            this.renderizarLenguasMonoAnios(anios, d);
+            if (typeof window.renderizarLenguasINEGI === 'function') {
+                window.renderizarLenguasINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Lenguas Indígenas.`);
         },
 
         guardarLenguas: function() {
             const ids = [
-                'lenguas_monolingues_2010', 'lenguas_monolingues_2020',
                 'lenguas_cond_si', 'lenguas_cond_no', 'lenguas_cond_noesp',
                 'lenguas_auto_habla_si', 'lenguas_auto_habla_no', 'lenguas_auto_habla_noesp',
                 'lenguas_auto_nohabla_si', 'lenguas_auto_nohabla_no', 'lenguas_auto_nohabla_noesp',
                 'lenguas_auto_noesp_si', 'lenguas_auto_noesp_no', 'lenguas_auto_noesp_noesp',
                 'lenguas_comp_entiende', 'lenguas_comp_noentiende', 'lenguas_comp_noesp'
             ];
-            const data = {};
+            let prevData = {};
+            try {
+                const rawPrev = localStorage.getItem('gesmujer_lenguas_datos');
+                if (rawPrev) prevData = JSON.parse(rawPrev);
+            } catch(e) {}
+            const data = Object.assign({}, prevData);
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) data[id] = parseFloat(el.value) || 0;
             });
+
+            let monoAnios = (Array.isArray(prevData.mono_anios) && prevData.mono_anios.length > 0)
+                ? [...prevData.mono_anios.slice(-4)]
+                : [2010, 2020];
+
+            monoAnios.forEach(yr => {
+                const el = document.getElementById('lenguas_mono_' + yr);
+                if (el && el.value !== '') data['lenguas_mono_' + yr] = parseFloat(el.value) || 0;
+            });
+
+            const nuevoMonoAnio = parseInt(document.getElementById('lenguas_mono_nuevo_anio')?.value, 10);
+            const nuevoMonoVal = document.getElementById('lenguas_mono_nuevo_val')?.value;
+            if (nuevoMonoAnio && nuevoMonoVal !== '') {
+                data['lenguas_mono_' + nuevoMonoAnio] = parseFloat(nuevoMonoVal) || 0;
+                if (!monoAnios.includes(nuevoMonoAnio)) monoAnios.push(nuevoMonoAnio);
+                monoAnios.sort((a, b) => a - b);
+                monoAnios = monoAnios.slice(-4);
+            }
+            data.mono_anios = monoAnios;
+
             localStorage.setItem('gesmujer_lenguas_datos', JSON.stringify(data));
+            this.renderizarLenguasMonoAnios(monoAnios, data);
             if (typeof window.renderizarLenguasINEGI === 'function') {
                 window.renderizarLenguasINEGI();
             }
             this.mostrarToast('Datos de Lenguas Indígenas guardados con éxito.');
         },
 
-        // Valores por defecto de Violencia (ENDIREH INEGI)
+        // Valores por defecto de Violencia (ENDIREH e INEGI)
         obtenerViolenciaDefault: function() {
             return {
                 violencia_psico_2006: 15.8,
@@ -1633,14 +1838,6 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 violencia_total_2006: 16.3,
                 violencia_total_2016: 11.3,
                 violencia_total_2021: 12.0,
-                violencia_asalariada_2006: 39.9,
-                violencia_asalariada_2011: 50.5,
-                violencia_asalariada_2016: 60.9,
-                violencia_asalariada_2021: 50.8,
-                violencia_informal_2006: 60.1,
-                violencia_informal_2011: 49.3,
-                violencia_informal_2016: 39.1,
-                violencia_informal_2021: 49.2,
                 violencia_suicidio_2022: 32,
                 violencia_suicidio_2023: 42,
                 violencia_suicidio_2024: 33,
@@ -1674,44 +1871,456 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     const parsed = JSON.parse(raw);
                     d = Object.assign({}, defaults, parsed);
                 }
-                Object.keys(d).forEach(k => {
-                    const el = document.getElementById(k);
-                    if (el) el.value = d[k];
-                });
+                const famAnios = (Array.isArray(d.fam_anios) && d.fam_anios.length > 0) ? d.fam_anios.slice(-4) : [2006, 2016, 2021];
+                const defAnios = (Array.isArray(d.def_anios) && d.def_anios.length > 0) ? d.def_anios.slice(-4) : [2022, 2023, 2024];
+                const infAnios = (Array.isArray(d.inf_anios) && d.inf_anios.length > 0) ? d.inf_anios.slice(-4) : [2016, 2021];
+                const vidaAnios = (Array.isArray(d.vida_anios) && d.vida_anios.length > 0) ? d.vida_anios.slice(-4) : [2006, 2011, 2016, 2021];
+
+                this.renderizarViolenciaFamAnios(famAnios, d);
+                this.renderizarViolenciaDefAnios(defAnios, d);
+                this.renderizarViolenciaInfAnios(infAnios, d);
+                this.renderizarViolenciaVidaAnios(vidaAnios, d);
+            } catch(e) {
+                console.error('Error al cargar violencia:', e);
+            }
+        },
+
+        renderizarViolenciaFamAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorViolenciaFamAnios');
+            if (!cont) return;
+
+            const defaults = {
+                2006: { psico: 15.8, econ: 0.8, fisica: 2.7, total: 16.3 },
+                2016: { psico: 8.7, econ: 4.1, fisica: 2.9, total: 11.3 },
+                2021: { psico: 9.8, econ: 2.8, fisica: 2.7, total: 12.0 }
+            };
+
+            let html = '';
+            anios.forEach(yr => {
+                const p = (d && d[`violencia_psico_${yr}`] !== undefined) ? d[`violencia_psico_${yr}`] : (defaults[yr]?.psico ?? '');
+                const e = (d && d[`violencia_econ_${yr}`] !== undefined) ? d[`violencia_econ_${yr}`] : (defaults[yr]?.econ ?? '');
+                const f = (d && d[`violencia_fisica_${yr}`] !== undefined) ? d[`violencia_fisica_${yr}`] : (defaults[yr]?.fisica ?? '');
+                const t = (d && d[`violencia_total_${yr}`] !== undefined) ? d[`violencia_total_${yr}`] : (defaults[yr]?.total ?? '');
+
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="fw-bold small text-muted mb-1" style="color: #c2185b;">Año ${yr}:</div>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Psicológica:</label>
+                            <input type="number" step="0.1" id="violencia_psico_${yr}" class="form-control form-control-sm" value="${p}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Econ./Patrim.:</label>
+                            <input type="number" step="0.1" id="violencia_econ_${yr}" class="form-control form-control-sm" value="${e}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Física:</label>
+                            <input type="number" step="0.1" id="violencia_fisica_${yr}" class="form-control form-control-sm" value="${f}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Total en Familia:</label>
+                            <input type="number" step="0.1" id="violencia_total_${yr}" class="form-control form-control-sm" value="${t}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('viol_fam_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioViolenciaFam: function() {
+            const anioInp = document.getElementById('viol_fam_nuevo_anio');
+            const pInp = document.getElementById('viol_fam_nuevo_psico');
+            const eInp = document.getElementById('viol_fam_nuevo_econ');
+            const fInp = document.getElementById('viol_fam_nuevo_fisica');
+            const tInp = document.getElementById('viol_fam_nuevo_total');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_violencia_datos');
+                if (raw) d = JSON.parse(raw);
             } catch(e) {}
+
+            let anios = (Array.isArray(d.fam_anios) && d.fam_anios.length > 0) ? [...d.fam_anios] : [2006, 2016, 2021];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+            d.fam_anios = anios;
+            if (pInp && pInp.value !== '') d[`violencia_psico_${anio}`] = parseFloat(pInp.value) || 0;
+            if (eInp && eInp.value !== '') d[`violencia_econ_${anio}`] = parseFloat(eInp.value) || 0;
+            if (fInp && fInp.value !== '') d[`violencia_fisica_${anio}`] = parseFloat(fInp.value) || 0;
+            if (tInp && tInp.value !== '') d[`violencia_total_${anio}`] = parseFloat(tInp.value) || 0;
+
+            localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(d));
+
+            [anioInp, pInp, eInp, fInp, tInp].forEach(el => { if (el) el.value = ''; });
+
+            this.renderizarViolenciaFamAnios(anios, d);
+            if (typeof window.renderizarViolenciaINEGI === 'function') {
+                window.renderizarViolenciaINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Violencia Familiar.`);
+        },
+
+        renderizarViolenciaDefAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorViolenciaDefAnios');
+            if (!cont) return;
+
+            const defaults = {
+                2022: { suicidio: 32, homicidio: 123, accidentes: 414 },
+                2023: { suicidio: 42, homicidio: 95, accidentes: 461 },
+                2024: { suicidio: 33, homicidio: 93, accidentes: 443 }
+            };
+
+            let html = '';
+            anios.forEach(yr => {
+                const s = (d && d[`violencia_suicidio_${yr}`] !== undefined) ? d[`violencia_suicidio_${yr}`] : (defaults[yr]?.suicidio ?? '');
+                const h = (d && d[`violencia_homicidio_${yr}`] !== undefined) ? d[`violencia_homicidio_${yr}`] : (defaults[yr]?.homicidio ?? '');
+                const a = (d && d[`violencia_accidentes_${yr}`] !== undefined) ? d[`violencia_accidentes_${yr}`] : (defaults[yr]?.accidentes ?? '');
+
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="fw-bold small text-muted mb-1" style="color: #00897b;">Año ${yr}:</div>
+                    <div class="row g-2">
+                        <div class="col-12 col-md-4">
+                            <label class="small text-muted d-block">Suicidio:</label>
+                            <input type="number" step="1" id="violencia_suicidio_${yr}" class="form-control form-control-sm" value="${s}">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="small text-muted d-block">Homicidio:</label>
+                            <input type="number" step="1" id="violencia_homicidio_${yr}" class="form-control form-control-sm" value="${h}">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="small text-muted d-block">Accidentes:</label>
+                            <input type="number" step="1" id="violencia_accidentes_${yr}" class="form-control form-control-sm" value="${a}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('viol_def_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioViolenciaDef: function() {
+            const anioInp = document.getElementById('viol_def_nuevo_anio');
+            const sInp = document.getElementById('viol_def_nuevo_suicidio');
+            const hInp = document.getElementById('viol_def_nuevo_homicidio');
+            const aInp = document.getElementById('viol_def_nuevo_accidentes');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_violencia_datos');
+                if (raw) d = JSON.parse(raw);
+            } catch(e) {}
+
+            let anios = (Array.isArray(d.def_anios) && d.def_anios.length > 0) ? [...d.def_anios] : [2022, 2023, 2024];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+            d.def_anios = anios;
+            if (sInp && sInp.value !== '') d[`violencia_suicidio_${anio}`] = parseFloat(sInp.value) || 0;
+            if (hInp && hInp.value !== '') d[`violencia_homicidio_${anio}`] = parseFloat(hInp.value) || 0;
+            if (aInp && aInp.value !== '') d[`violencia_accidentes_${anio}`] = parseFloat(aInp.value) || 0;
+
+            localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(d));
+
+            [anioInp, sInp, hInp, aInp].forEach(el => { if (el) el.value = ''; });
+
+            this.renderizarViolenciaDefAnios(anios, d);
+            if (typeof window.renderizarViolenciaINEGI === 'function') {
+                window.renderizarViolenciaINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Defunciones.`);
+        },
+
+        renderizarViolenciaInfAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorViolenciaInfAnios');
+            if (!cont) return;
+
+            const defaults = {
+                2016: { total: 44.9, psico: 24.2, fisica: 38.5, sexual: 7.3 },
+                2021: { total: 46.1, psico: 24.4, fisica: 38.9, sexual: 9.8 }
+            };
+
+            let html = '';
+            anios.forEach(yr => {
+                const tot = (d && d[`violencia_infancia_total_${yr}`] !== undefined) ? d[`violencia_infancia_total_${yr}`] : (defaults[yr]?.total ?? '');
+                const psi = (d && d[`violencia_infancia_psico_${yr}`] !== undefined) ? d[`violencia_infancia_psico_${yr}`] : (defaults[yr]?.psico ?? '');
+                const fis = (d && d[`violencia_infancia_fisica_${yr}`] !== undefined) ? d[`violencia_infancia_fisica_${yr}`] : (defaults[yr]?.fisica ?? '');
+                const sex = (d && d[`violencia_infancia_sexual_${yr}`] !== undefined) ? d[`violencia_infancia_sexual_${yr}`] : (defaults[yr]?.sexual ?? '');
+
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="fw-bold small text-muted mb-1" style="color: #7b1fa2;">Año ${yr}:</div>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Total Infancia (%):</label>
+                            <input type="number" step="0.1" id="violencia_infancia_total_${yr}" class="form-control form-control-sm" value="${tot}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Psicológica (%):</label>
+                            <input type="number" step="0.1" id="violencia_infancia_psico_${yr}" class="form-control form-control-sm" value="${psi}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Física (%):</label>
+                            <input type="number" step="0.1" id="violencia_infancia_fisica_${yr}" class="form-control form-control-sm" value="${fis}">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="small text-muted d-block">Sexual (%):</label>
+                            <input type="number" step="0.1" id="violencia_infancia_sexual_${yr}" class="form-control form-control-sm" value="${sex}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('viol_inf_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioViolenciaInf: function() {
+            const anioInp = document.getElementById('viol_inf_nuevo_anio');
+            const totInp = document.getElementById('viol_inf_nuevo_total');
+            const psiInp = document.getElementById('viol_inf_nuevo_psico');
+            const fisInp = document.getElementById('viol_inf_nuevo_fisica');
+            const sexInp = document.getElementById('viol_inf_nuevo_sexual');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_violencia_datos');
+                if (raw) d = JSON.parse(raw);
+            } catch(e) {}
+
+            let anios = (Array.isArray(d.inf_anios) && d.inf_anios.length > 0) ? [...d.inf_anios] : [2016, 2021];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+            d.inf_anios = anios;
+            if (totInp && totInp.value !== '') d[`violencia_infancia_total_${anio}`] = parseFloat(totInp.value) || 0;
+            if (psiInp && psiInp.value !== '') d[`violencia_infancia_psico_${anio}`] = parseFloat(psiInp.value) || 0;
+            if (fisInp && fisInp.value !== '') d[`violencia_infancia_fisica_${anio}`] = parseFloat(fisInp.value) || 0;
+            if (sexInp && sexInp.value !== '') d[`violencia_infancia_sexual_${anio}`] = parseFloat(sexInp.value) || 0;
+
+            localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(d));
+
+            [anioInp, totInp, psiInp, fisInp, sexInp].forEach(el => { if (el) el.value = ''; });
+
+            this.renderizarViolenciaInfAnios(anios, d);
+            if (typeof window.renderizarViolenciaINEGI === 'function') {
+                window.renderizarViolenciaINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Violencia en la Infancia.`);
+        },
+
+        renderizarViolenciaVidaAnios: function(anios, d) {
+            const cont = document.getElementById('contenedorViolenciaVidaAnios');
+            if (!cont) return;
+
+            const defaults = { 2006: 61.2, 2011: 55.7, 2016: 63.7, 2021: 67.1 };
+            const colores = ['#7b1fa2', '#00897b', '#c2185b', '#e65100'];
+
+            let html = '';
+            anios.forEach((yr, idx) => {
+                const color = colores[idx % colores.length];
+                const v = (d && d[`violencia_vida_${yr}`] !== undefined) ? d[`violencia_vida_${yr}`] : (defaults[yr] ?? '');
+
+                html += `<div class="p-2 border rounded-2 mb-2 bg-white">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-12 col-md-4 fw-bold small text-muted" style="color: ${color};">Año ${yr}:</div>
+                        <div class="col-12 col-md-8">
+                            <label class="small text-muted d-block">Prevalencia Total (%):</label>
+                            <input type="number" step="0.1" id="violencia_vida_${yr}" class="form-control form-control-sm" value="${v}">
+                        </div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+
+            const inputNuevoAnio = document.getElementById('viol_vida_nuevo_anio');
+            if (inputNuevoAnio && anios.length > 0) {
+                const prox = anios[anios.length - 1] + 1;
+                inputNuevoAnio.placeholder = `Año (ej. ${prox})`;
+            }
+        },
+
+        agregarAnioViolenciaVida: function() {
+            const anioInp = document.getElementById('viol_vida_nuevo_anio');
+            const valInp = document.getElementById('viol_vida_nuevo_val');
+            const anio = parseInt(anioInp?.value, 10);
+            if (!anio || isNaN(anio)) {
+                this.mostrarToast('Ingresa un año válido.');
+                return;
+            }
+
+            let d = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_violencia_datos');
+                if (raw) d = JSON.parse(raw);
+            } catch(e) {}
+
+            let anios = (Array.isArray(d.vida_anios) && d.vida_anios.length > 0) ? [...d.vida_anios] : [2006, 2011, 2016, 2021];
+            if (!anios.includes(anio)) {
+                anios.push(anio);
+                anios.sort((a, b) => a - b);
+            }
+            if (anios.length > 4) {
+                anios = anios.slice(-4);
+            }
+            d.vida_anios = anios;
+            if (valInp && valInp.value !== '') d[`violencia_vida_${anio}`] = parseFloat(valInp.value) || 0;
+
+            localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(d));
+
+            if (anioInp) anioInp.value = '';
+            if (valInp) valInp.value = '';
+
+            this.renderizarViolenciaVidaAnios(anios, d);
+            if (typeof window.renderizarViolenciaINEGI === 'function') {
+                window.renderizarViolenciaINEGI();
+            }
+            this.mostrarToast(`Año ${anio} agregado correctamente a Prevalencia de Vida.`);
         },
 
         guardarViolencia: function() {
-            const ids = [
-                'violencia_psico_2006', 'violencia_psico_2016', 'violencia_psico_2021',
-                'violencia_econ_2006', 'violencia_econ_2016', 'violencia_econ_2021',
-                'violencia_fisica_2006', 'violencia_fisica_2016', 'violencia_fisica_2021',
-                'violencia_total_2006', 'violencia_total_2016', 'violencia_total_2021',
-                'violencia_suicidio_2022', 'violencia_suicidio_2023', 'violencia_suicidio_2024',
-                'violencia_homicidio_2022', 'violencia_homicidio_2023', 'violencia_homicidio_2024',
-                'violencia_accidentes_2022', 'violencia_accidentes_2023', 'violencia_accidentes_2024',
-                'violencia_infancia_total_2016', 'violencia_infancia_total_2021',
-                'violencia_infancia_psico_2016', 'violencia_infancia_psico_2021',
-                'violencia_infancia_fisica_2016', 'violencia_infancia_fisica_2021',
-                'violencia_infancia_sexual_2016', 'violencia_infancia_sexual_2021',
-                'violencia_vida_2006', 'violencia_vida_2011', 'violencia_vida_2016', 'violencia_vida_2021'
-            ];
             let prevData = {};
             try {
                 const rawPrev = localStorage.getItem('gesmujer_violencia_datos');
                 if (rawPrev) prevData = JSON.parse(rawPrev);
             } catch(e) {}
             const data = Object.assign({}, prevData);
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) data[id] = parseFloat(el.value) || 0;
+
+            // Fam
+            let famAnios = (Array.isArray(prevData.fam_anios) && prevData.fam_anios.length > 0) ? [...prevData.fam_anios.slice(-4)] : [2006, 2016, 2021];
+            famAnios.forEach(yr => {
+                ['violencia_psico_', 'violencia_econ_', 'violencia_fisica_', 'violencia_total_'].forEach(pref => {
+                    const el = document.getElementById(pref + yr);
+                    if (el && el.value !== '') data[pref + yr] = parseFloat(el.value) || 0;
+                });
             });
+            const nuevoFamAnio = parseInt(document.getElementById('viol_fam_nuevo_anio')?.value, 10);
+            if (nuevoFamAnio) {
+                ['viol_fam_nuevo_psico', 'viol_fam_nuevo_econ', 'viol_fam_nuevo_fisica', 'viol_fam_nuevo_total'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value !== '') {
+                        const targetKey = id.replace('viol_fam_nuevo_', 'violencia_') + '_' + nuevoFamAnio;
+                        data[targetKey] = parseFloat(el.value) || 0;
+                    }
+                });
+                if (!famAnios.includes(nuevoFamAnio)) famAnios.push(nuevoFamAnio);
+                famAnios.sort((a, b) => a - b);
+                famAnios = famAnios.slice(-4);
+            }
+            data.fam_anios = famAnios;
+
+            // Def
+            let defAnios = (Array.isArray(prevData.def_anios) && prevData.def_anios.length > 0) ? [...prevData.def_anios.slice(-4)] : [2022, 2023, 2024];
+            defAnios.forEach(yr => {
+                ['violencia_suicidio_', 'violencia_homicidio_', 'violencia_accidentes_'].forEach(pref => {
+                    const el = document.getElementById(pref + yr);
+                    if (el && el.value !== '') data[pref + yr] = parseFloat(el.value) || 0;
+                });
+            });
+            const nuevoDefAnio = parseInt(document.getElementById('viol_def_nuevo_anio')?.value, 10);
+            if (nuevoDefAnio) {
+                ['viol_def_nuevo_suicidio', 'viol_def_nuevo_homicidio', 'viol_def_nuevo_accidentes'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value !== '') {
+                        const targetKey = id.replace('viol_def_nuevo_', 'violencia_') + '_' + nuevoDefAnio;
+                        data[targetKey] = parseFloat(el.value) || 0;
+                    }
+                });
+                if (!defAnios.includes(nuevoDefAnio)) defAnios.push(nuevoDefAnio);
+                defAnios.sort((a, b) => a - b);
+                defAnios = defAnios.slice(-4);
+            }
+            data.def_anios = defAnios;
+
+            // Inf
+            let infAnios = (Array.isArray(prevData.inf_anios) && prevData.inf_anios.length > 0) ? [...prevData.inf_anios.slice(-4)] : [2016, 2021];
+            infAnios.forEach(yr => {
+                ['violencia_infancia_total_', 'violencia_infancia_psico_', 'violencia_infancia_fisica_', 'violencia_infancia_sexual_'].forEach(pref => {
+                    const el = document.getElementById(pref + yr);
+                    if (el && el.value !== '') data[pref + yr] = parseFloat(el.value) || 0;
+                });
+            });
+            const nuevoInfAnio = parseInt(document.getElementById('viol_inf_nuevo_anio')?.value, 10);
+            if (nuevoInfAnio) {
+                ['viol_inf_nuevo_total', 'viol_inf_nuevo_psico', 'viol_inf_nuevo_fisica', 'viol_inf_nuevo_sexual'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value !== '') {
+                        const targetKey = id.replace('viol_inf_nuevo_', 'violencia_infancia_') + '_' + nuevoInfAnio;
+                        data[targetKey] = parseFloat(el.value) || 0;
+                    }
+                });
+                if (!infAnios.includes(nuevoInfAnio)) infAnios.push(nuevoInfAnio);
+                infAnios.sort((a, b) => a - b);
+                infAnios = infAnios.slice(-4);
+            }
+            data.inf_anios = infAnios;
+
+            // Vida
+            let vidaAnios = (Array.isArray(prevData.vida_anios) && prevData.vida_anios.length > 0) ? [...prevData.vida_anios.slice(-4)] : [2006, 2011, 2016, 2021];
+            vidaAnios.forEach(yr => {
+                const el = document.getElementById('violencia_vida_' + yr);
+                if (el && el.value !== '') data['violencia_vida_' + yr] = parseFloat(el.value) || 0;
+            });
+            const nuevoVidaAnio = parseInt(document.getElementById('viol_vida_nuevo_anio')?.value, 10);
+            const nuevoVidaVal = document.getElementById('viol_vida_nuevo_val')?.value;
+            if (nuevoVidaAnio && nuevoVidaVal !== '') {
+                data['violencia_vida_' + nuevoVidaAnio] = parseFloat(nuevoVidaVal) || 0;
+                if (!vidaAnios.includes(nuevoVidaAnio)) vidaAnios.push(nuevoVidaAnio);
+                vidaAnios.sort((a, b) => a - b);
+                vidaAnios = vidaAnios.slice(-4);
+            }
+            data.vida_anios = vidaAnios;
+
             localStorage.setItem('gesmujer_violencia_datos', JSON.stringify(data));
+
+            this.renderizarViolenciaFamAnios(famAnios, data);
+            this.renderizarViolenciaDefAnios(defAnios, data);
+            this.renderizarViolenciaInfAnios(infAnios, data);
+            this.renderizarViolenciaVidaAnios(vidaAnios, data);
+
             if (typeof window.renderizarViolenciaINEGI === 'function') {
                 window.renderizarViolenciaINEGI();
-            }
-            if (typeof window.renderizarIngresoINEGI === 'function') {
-                window.renderizarIngresoINEGI();
             }
             this.mostrarToast('Datos de Violencia guardados con éxito.');
         },

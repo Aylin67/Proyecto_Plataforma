@@ -1731,7 +1731,7 @@ type: 'bar',
             });
         }
 
-        // 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (2006-2021)
+        // 3. POSICIÓN EN LA OCUPACIÓN DE LAS MUJERES TRABAJADORAS EN OAXACA (Ventana de 4 años, 8 barras)
         if (chartIngresoOcupacion) {
             chartIngresoOcupacion.destroy();
             chartIngresoOcupacion = null;
@@ -1745,33 +1745,49 @@ type: 'bar',
                     if (existing) existing.destroy();
                 }
 
+                let savedIng = {};
+                try {
+                    const rawIng = localStorage.getItem('gesmujer_ingreso_datos');
+                    if (rawIng) savedIng = JSON.parse(rawIng);
+                } catch(e) {}
                 let savedVio = {};
                 try {
                     const rawVio = localStorage.getItem('gesmujer_violencia_datos');
                     if (rawVio) savedVio = JSON.parse(rawVio);
                 } catch(e) {}
 
-                const as2006 = savedVio['violencia_asalariada_2006'] !== undefined ? Number(savedVio['violencia_asalariada_2006']) : 39.9;
-                const as2011 = savedVio['violencia_asalariada_2011'] !== undefined ? Number(savedVio['violencia_asalariada_2011']) : 50.5;
-                const as2016 = savedVio['violencia_asalariada_2016'] !== undefined ? Number(savedVio['violencia_asalariada_2016']) : 60.9;
-                const as2021 = savedVio['violencia_asalariada_2021'] !== undefined ? Number(savedVio['violencia_asalariada_2021']) : 50.8;
+                const anios = (Array.isArray(savedIng.ocup_anios) && savedIng.ocup_anios.length > 0)
+                    ? savedIng.ocup_anios.slice(-4)
+                    : [2006, 2011, 2016, 2021];
 
-                const inf2006 = savedVio['violencia_informal_2006'] !== undefined ? Number(savedVio['violencia_informal_2006']) : 60.1;
-                const inf2011 = savedVio['violencia_informal_2011'] !== undefined ? Number(savedVio['violencia_informal_2011']) : 49.3;
-                const inf2016 = savedVio['violencia_informal_2016'] !== undefined ? Number(savedVio['violencia_informal_2016']) : 39.1;
-                const inf2021 = savedVio['violencia_informal_2021'] !== undefined ? Number(savedVio['violencia_informal_2021']) : 49.2;
+                const defaultsAsal = { 2006: 39.9, 2011: 50.5, 2016: 60.9, 2021: 50.8 };
+                const defaultsInf = { 2006: 60.1, 2011: 49.3, 2016: 39.1, 2021: 49.2 };
+
+                const dataAsal = anios.map(yr => {
+                    if (savedIng['ing_ocu_asalariada_' + yr] !== undefined) return Number(savedIng['ing_ocu_asalariada_' + yr]);
+                    if (savedVio['violencia_asalariada_' + yr] !== undefined) return Number(savedVio['violencia_asalariada_' + yr]);
+                    return defaultsAsal[yr] ?? 0;
+                });
+
+                const dataInf = anios.map(yr => {
+                    if (savedIng['ing_ocu_informal_' + yr] !== undefined) return Number(savedIng['ing_ocu_informal_' + yr]);
+                    if (savedVio['violencia_informal_' + yr] !== undefined) return Number(savedVio['violencia_informal_' + yr]);
+                    return defaultsInf[yr] ?? 0;
+                });
 
                 const kpiIngOcup = document.getElementById('kpiIngresoOcupacion');
-                if (kpiIngOcup) kpiIngOcup.textContent = as2021.toFixed(1) + '%';
+                if (kpiIngOcup && dataAsal.length > 0) {
+                    kpiIngOcup.textContent = dataAsal[dataAsal.length - 1].toFixed(1) + '%';
+                }
 
                 chartIngresoOcupacion = new Chart(ctxIngOcup.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['2006', '2011', '2016', '2021'],
+                        labels: anios.map(String),
                         datasets: [
                             {
                                 label: 'Empleada, obrera o jornalera (Asalariada)',
-                                data: [as2006, as2011, as2016, as2021],
+                                data: dataAsal,
                                 backgroundColor: '#2e7d32',
                                 borderRadius: 5,
                                 borderWidth: 1,
@@ -1782,7 +1798,7 @@ type: 'bar',
                             },
                             {
                                 label: 'Por cuenta propia, patrona o trabajó sin pago (Informal)',
-                                data: [inf2006, inf2011, inf2016, inf2021],
+                                data: dataInf,
                                 backgroundColor: '#00897b',
                                 borderRadius: 5,
                                 borderWidth: 1,
@@ -1877,20 +1893,31 @@ type: 'bar',
             if (raw) saved = JSON.parse(raw);
         } catch(e) {}
 
-        // 1. Población de 3 años y más hablante de lengua indígena que no habla español (Censos 2010 y 2020)
+        // 1. Población de 3 años y más hablante de lengua indígena que no habla español (Ventana de hasta 4 años)
         const ctx0 = document.getElementById('canvasLenguasMonolingues');
         if (ctx0) {
-            const v2010 = saved['lenguas_monolingues_2010'] !== undefined ? Number(saved['lenguas_monolingues_2010']) : 128050;
-            const v2020 = saved['lenguas_monolingues_2020'] !== undefined ? Number(saved['lenguas_monolingues_2020']) : 87809;
+            const anios = (Array.isArray(saved.mono_anios) && saved.mono_anios.length > 0)
+                ? saved.mono_anios.slice(-4)
+                : [2010, 2020];
+
+            const defaultVals = { 2010: 128050, 2020: 87809 };
+            const dataVals = anios.map(yr => {
+                if (saved['lenguas_mono_' + yr] !== undefined) return Number(saved['lenguas_mono_' + yr]);
+                if (saved['lenguas_monolingues_' + yr] !== undefined) return Number(saved['lenguas_monolingues_' + yr]);
+                return defaultVals[yr] ?? 0;
+            });
+
+            const palette = ['#7b1fa2', '#ab47bc', '#00897b', '#26a69a'];
+            const bgColors = anios.map((_, i) => palette[i % palette.length]);
 
             chartLenguasMonolingues = new Chart(ctx0.getContext('2d'), {
                 type: 'bar',
                 data: {
-                    labels: ['2010', '2020'],
+                    labels: anios.map(String),
                     datasets: [{
-                        label: '',
-                        data: [v2010, v2020],
-                        backgroundColor: ['#7b1fa2', '#ab47bc'],
+                        label: 'Población que no habla español',
+                        data: dataVals,
+                        backgroundColor: bgColors,
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
@@ -2249,66 +2276,51 @@ type: 'bar',
             if (raw) saved = JSON.parse(raw);
         } catch(e) {}
 
+        const paletteAnios = ['#c2185b', '#7b1fa2', '#00897b', '#e65100'];
+
+        // 1. PREVALENCIA POR TIPO DE VIOLENCIA EN EL ÁMBITO FAMILIAR (Ventana de 4 años)
         const ctx0 = document.getElementById('canvasViolenciaFamiliar');
         if (ctx0) {
-            const p2006 = saved['violencia_psico_2006'] !== undefined ? Number(saved['violencia_psico_2006']) : 15.8;
-            const p2016 = saved['violencia_psico_2016'] !== undefined ? Number(saved['violencia_psico_2016']) : 8.7;
-            const p2021 = saved['violencia_psico_2021'] !== undefined ? Number(saved['violencia_psico_2021']) : 9.8;
+            const famAnios = (Array.isArray(saved.fam_anios) && saved.fam_anios.length > 0)
+                ? saved.fam_anios.slice(-4)
+                : [2006, 2016, 2021];
 
-            const e2006 = saved['violencia_econ_2006'] !== undefined ? Number(saved['violencia_econ_2006']) : 0.8;
-            const e2016 = saved['violencia_econ_2016'] !== undefined ? Number(saved['violencia_econ_2016']) : 4.1;
-            const e2021 = saved['violencia_econ_2021'] !== undefined ? Number(saved['violencia_econ_2021']) : 2.8;
+            const famDefaults = {
+                2006: { psico: 15.8, econ: 0.8, fisica: 2.7, total: 16.3 },
+                2016: { psico: 8.7, econ: 4.1, fisica: 2.9, total: 11.3 },
+                2021: { psico: 9.8, econ: 2.8, fisica: 2.7, total: 12.0 }
+            };
 
-            const f2006 = saved['violencia_fisica_2006'] !== undefined ? Number(saved['violencia_fisica_2006']) : 2.7;
-            const f2016 = saved['violencia_fisica_2016'] !== undefined ? Number(saved['violencia_fisica_2016']) : 2.9;
-            const f2021 = saved['violencia_fisica_2021'] !== undefined ? Number(saved['violencia_fisica_2021']) : 2.7;
-
-            const t2006 = saved['violencia_total_2006'] !== undefined ? Number(saved['violencia_total_2006']) : 16.3;
-            const t2016 = saved['violencia_total_2016'] !== undefined ? Number(saved['violencia_total_2016']) : 11.3;
-            const t2021 = saved['violencia_total_2021'] !== undefined ? Number(saved['violencia_total_2021']) : 12.0;
+            const datasetsFam = famAnios.map((yr, idx) => {
+                const p = saved['violencia_psico_' + yr] !== undefined ? Number(saved['violencia_psico_' + yr]) : (famDefaults[yr]?.psico ?? 0);
+                const e = saved['violencia_econ_' + yr] !== undefined ? Number(saved['violencia_econ_' + yr]) : (famDefaults[yr]?.econ ?? 0);
+                const f = saved['violencia_fisica_' + yr] !== undefined ? Number(saved['violencia_fisica_' + yr]) : (famDefaults[yr]?.fisica ?? 0);
+                const t = saved['violencia_total_' + yr] !== undefined ? Number(saved['violencia_total_' + yr]) : (famDefaults[yr]?.total ?? 0);
+                return {
+                    label: 'Año ' + yr,
+                    data: [p, e, f, t],
+                    backgroundColor: paletteAnios[idx % paletteAnios.length],
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: '#ffffff',
+                    minBarLength: 12,
+                    barPercentage: 0.72,
+                    categoryPercentage: 0.82
+                };
+            });
 
             const kpiTot = document.getElementById('kpiViolenciaTotal');
-            if (kpiTot) kpiTot.textContent = t2021.toFixed(1);
+            if (kpiTot && famAnios.length > 0) {
+                const ultFamYr = famAnios[famAnios.length - 1];
+                const valTot = saved['violencia_total_' + ultFamYr] !== undefined ? Number(saved['violencia_total_' + ultFamYr]) : (famDefaults[ultFamYr]?.total ?? 12.0);
+                kpiTot.textContent = valTot.toFixed(1);
+            }
 
             chartViolenciaFamiliar = new Chart(ctx0.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: ['Violencia Psicológica', 'Violencia Económica / Patrimonial', 'Violencia Física', 'Violencia Total en la Familia'],
-                    datasets: [
-                        {
-                            label: 'Año 2006',
-                            data: [p2006, e2006, f2006, t2006],
-                            backgroundColor: '#c2185b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        },
-                        {
-                            label: 'Año 2016',
-                            data: [p2016, e2016, f2016, t2016],
-                            backgroundColor: '#7b1fa2',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        },
-                        {
-                            label: 'Año 2021',
-                            data: [p2021, e2021, f2021, t2021],
-                            backgroundColor: '#00897b',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            borderColor: '#ffffff',
-                            minBarLength: 12,
-                            barPercentage: 0.72,
-                            categoryPercentage: 0.82
-                        }
-                    ]
+                    datasets: datasetsFam
                 },
                 options: {
                     animation: false,
@@ -2376,7 +2388,8 @@ type: 'bar',
                 }
             });
         }
-        // 2. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (SSA/INEGI EDR 1990-2024)
+
+        // 2. DEFUNCIONES POR CAUSAS EXTERNAS EN MUJERES (Ventana de 4 años)
         if (chartViolenciaDefunciones) { chartViolenciaDefunciones.destroy(); chartViolenciaDefunciones = null; }
 
         const ctxDef = document.getElementById('canvasViolenciaDefunciones');
@@ -2387,60 +2400,45 @@ type: 'bar',
                     if (exDef) exDef.destroy();
                 }
 
-                const s2022 = saved['violencia_suicidio_2022'] !== undefined ? Number(saved['violencia_suicidio_2022']) : 32;
-                const s2023 = saved['violencia_suicidio_2023'] !== undefined ? Number(saved['violencia_suicidio_2023']) : 42;
-                const s2024 = saved['violencia_suicidio_2024'] !== undefined ? Number(saved['violencia_suicidio_2024']) : 33;
+                const defAnios = (Array.isArray(saved.def_anios) && saved.def_anios.length > 0)
+                    ? saved.def_anios.slice(-4)
+                    : [2022, 2023, 2024];
 
-                const h2022 = saved['violencia_homicidio_2022'] !== undefined ? Number(saved['violencia_homicidio_2022']) : 123;
-                const h2023 = saved['violencia_homicidio_2023'] !== undefined ? Number(saved['violencia_homicidio_2023']) : 95;
-                const h2024 = saved['violencia_homicidio_2024'] !== undefined ? Number(saved['violencia_homicidio_2024']) : 93;
+                const defDefaults = {
+                    2022: { suicidio: 32, homicidio: 123, accidentes: 414 },
+                    2023: { suicidio: 42, homicidio: 95, accidentes: 461 },
+                    2024: { suicidio: 33, homicidio: 93, accidentes: 443 }
+                };
 
-                const a2022 = saved['violencia_accidentes_2022'] !== undefined ? Number(saved['violencia_accidentes_2022']) : 414;
-                const a2023 = saved['violencia_accidentes_2023'] !== undefined ? Number(saved['violencia_accidentes_2023']) : 461;
-                const a2024 = saved['violencia_accidentes_2024'] !== undefined ? Number(saved['violencia_accidentes_2024']) : 443;
+                const datasetsDef = defAnios.map((yr, idx) => {
+                    const s = saved['violencia_suicidio_' + yr] !== undefined ? Number(saved['violencia_suicidio_' + yr]) : (defDefaults[yr]?.suicidio ?? 0);
+                    const h = saved['violencia_homicidio_' + yr] !== undefined ? Number(saved['violencia_homicidio_' + yr]) : (defDefaults[yr]?.homicidio ?? 0);
+                    const a = saved['violencia_accidentes_' + yr] !== undefined ? Number(saved['violencia_accidentes_' + yr]) : (defDefaults[yr]?.accidentes ?? 0);
+                    return {
+                        label: 'Año ' + yr,
+                        data: [s, h, a],
+                        backgroundColor: paletteAnios[idx % paletteAnios.length],
+                        borderRadius: 5,
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        minBarLength: 12,
+                        barPercentage: 0.72,
+                        categoryPercentage: 0.82
+                    };
+                });
 
                 const kpiDef = document.getElementById('kpiViolenciaHomicidios');
-                if (kpiDef) kpiDef.textContent = h2024.toLocaleString('es-MX');
+                if (kpiDef && defAnios.length > 0) {
+                    const ultDefYr = defAnios[defAnios.length - 1];
+                    const valHomi = saved['violencia_homicidio_' + ultDefYr] !== undefined ? Number(saved['violencia_homicidio_' + ultDefYr]) : (defDefaults[ultDefYr]?.homicidio ?? 93);
+                    kpiDef.textContent = valHomi.toLocaleString('es-MX');
+                }
 
                 chartViolenciaDefunciones = new Chart(ctxDef.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: ['Defunciones por Suicidio', 'Defunciones por Homicidio', 'Defunciones por Causas Accidentales'],
-                        datasets: [
-                            {
-                                label: 'Año 2022',
-                                data: [s2022, h2022, a2022],
-                                backgroundColor: '#c2185b',
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                borderColor: '#ffffff',
-                                minBarLength: 12,
-                                barPercentage: 0.72,
-                                categoryPercentage: 0.82
-                            },
-                            {
-                                label: 'Año 2023',
-                                data: [s2023, h2023, a2023],
-                                backgroundColor: '#7b1fa2',
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                borderColor: '#ffffff',
-                                minBarLength: 12,
-                                barPercentage: 0.72,
-                                categoryPercentage: 0.82
-                            },
-                            {
-                                label: 'Año 2024',
-                                data: [s2024, h2024, a2024],
-                                backgroundColor: '#00897b',
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                borderColor: '#ffffff',
-                                minBarLength: 12,
-                                barPercentage: 0.72,
-                                categoryPercentage: 0.82
-                            }
-                        ]
+                        datasets: datasetsDef
                     },
                     options: {
                         animation: false,
@@ -2512,7 +2510,7 @@ type: 'bar',
             }
         }
 
-        // 4. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (ENDIREH 2016 Y 2021)
+        // 3. PREVALENCIA DE VIOLENCIA DURANTE LA INFANCIA (Ventana de 4 años)
         if (chartViolenciaInfancia) { chartViolenciaInfancia.destroy(); chartViolenciaInfancia = null; }
 
         const ctxInf = document.getElementById('canvasViolenciaInfancia');
@@ -2523,49 +2521,45 @@ type: 'bar',
                     if (exInf) exInf.destroy();
                 }
 
-                const tot2016 = saved['violencia_infancia_total_2016'] !== undefined ? Number(saved['violencia_infancia_total_2016']) : 44.9;
-                const tot2021 = saved['violencia_infancia_total_2021'] !== undefined ? Number(saved['violencia_infancia_total_2021']) : 46.1;
+                const infAnios = (Array.isArray(saved.inf_anios) && saved.inf_anios.length > 0)
+                    ? saved.inf_anios.slice(-4)
+                    : [2016, 2021];
 
-                const psi2016 = saved['violencia_infancia_psico_2016'] !== undefined ? Number(saved['violencia_infancia_psico_2016']) : 24.2;
-                const psi2021 = saved['violencia_infancia_psico_2021'] !== undefined ? Number(saved['violencia_infancia_psico_2021']) : 24.4;
+                const infDefaults = {
+                    2016: { total: 44.9, psico: 24.2, fisica: 38.5, sexual: 7.3 },
+                    2021: { total: 46.1, psico: 24.4, fisica: 38.9, sexual: 9.8 }
+                };
 
-                const fis2016 = saved['violencia_infancia_fisica_2016'] !== undefined ? Number(saved['violencia_infancia_fisica_2016']) : 38.5;
-                const fis2021 = saved['violencia_infancia_fisica_2021'] !== undefined ? Number(saved['violencia_infancia_fisica_2021']) : 38.9;
-
-                const sex2016 = saved['violencia_infancia_sexual_2016'] !== undefined ? Number(saved['violencia_infancia_sexual_2016']) : 7.3;
-                const sex2021 = saved['violencia_infancia_sexual_2021'] !== undefined ? Number(saved['violencia_infancia_sexual_2021']) : 9.8;
+                const datasetsInf = infAnios.map((yr, idx) => {
+                    const tot = saved['violencia_infancia_total_' + yr] !== undefined ? Number(saved['violencia_infancia_total_' + yr]) : (infDefaults[yr]?.total ?? 0);
+                    const psi = saved['violencia_infancia_psico_' + yr] !== undefined ? Number(saved['violencia_infancia_psico_' + yr]) : (infDefaults[yr]?.psico ?? 0);
+                    const fis = saved['violencia_infancia_fisica_' + yr] !== undefined ? Number(saved['violencia_infancia_fisica_' + yr]) : (infDefaults[yr]?.fisica ?? 0);
+                    const sex = saved['violencia_infancia_sexual_' + yr] !== undefined ? Number(saved['violencia_infancia_sexual_' + yr]) : (infDefaults[yr]?.sexual ?? 0);
+                    return {
+                        label: 'Año ' + yr,
+                        data: [psi, fis, sex, tot],
+                        backgroundColor: paletteAnios[idx % paletteAnios.length],
+                        borderRadius: 5,
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        minBarLength: 12,
+                        barPercentage: 0.72,
+                        categoryPercentage: 0.82
+                    };
+                });
 
                 const kpiInf = document.getElementById('kpiViolenciaInfancia');
-                if (kpiInf) kpiInf.textContent = tot2021.toFixed(1) + '%';
+                if (kpiInf && infAnios.length > 0) {
+                    const ultInfYr = infAnios[infAnios.length - 1];
+                    const valInfTot = saved['violencia_infancia_total_' + ultInfYr] !== undefined ? Number(saved['violencia_infancia_total_' + ultInfYr]) : (infDefaults[ultInfYr]?.total ?? 46.1);
+                    kpiInf.textContent = valInfTot.toFixed(1) + '%';
+                }
 
                 chartViolenciaInfancia = new Chart(ctxInf.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: ['Violencia Psicológica', 'Violencia Física', 'Violencia Sexual', 'Prevalencia Total en la Infancia'],
-                        datasets: [
-                            {
-                                label: 'Año 2016',
-                                data: [psi2016, fis2016, sex2016, tot2016],
-                                backgroundColor: '#7b1fa2',
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                borderColor: '#ffffff',
-                                minBarLength: 12,
-                                barPercentage: 0.72,
-                                categoryPercentage: 0.82
-                            },
-                            {
-                                label: 'Año 2021',
-                                data: [psi2021, fis2021, sex2021, tot2021],
-                                backgroundColor: '#00897b',
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                borderColor: '#ffffff',
-                                minBarLength: 12,
-                                barPercentage: 0.72,
-                                categoryPercentage: 0.82
-                            }
-                        ]
+                        datasets: datasetsInf
                     },
                     options: {
                         animation: false,
@@ -2637,7 +2631,7 @@ type: 'bar',
             }
         }
 
-        // 5. PREVALENCIA TOTAL DE VIOLENCIA A LO LARGO DE LA VIDA (ENDIREH 2006-2021)
+        // 4. PREVALENCIA TOTAL DE VIOLENCIA A LO LARGO DE LA VIDA (Colores diferentes por año)
         if (chartViolenciaVida) { chartViolenciaVida.destroy(); chartViolenciaVida = null; }
 
         const ctxVida = document.getElementById('canvasViolenciaVida');
@@ -2648,20 +2642,28 @@ type: 'bar',
                     if (exVida) exVida.destroy();
                 }
 
-                const v2006 = saved['violencia_vida_2006'] !== undefined ? Number(saved['violencia_vida_2006']) : 61.2;
-                const v2011 = saved['violencia_vida_2011'] !== undefined ? Number(saved['violencia_vida_2011']) : 55.7;
-                const v2016 = saved['violencia_vida_2016'] !== undefined ? Number(saved['violencia_vida_2016']) : 63.7;
-                const v2021 = saved['violencia_vida_2021'] !== undefined ? Number(saved['violencia_vida_2021']) : 67.1;
+                const vidaAnios = (Array.isArray(saved.vida_anios) && saved.vida_anios.length > 0)
+                    ? saved.vida_anios.slice(-4)
+                    : [2006, 2011, 2016, 2021];
+
+                const vidaDefaults = { 2006: 61.2, 2011: 55.7, 2016: 63.7, 2021: 67.1 };
+                const dataVida = vidaAnios.map(yr => {
+                    return saved['violencia_vida_' + yr] !== undefined ? Number(saved['violencia_vida_' + yr]) : (vidaDefaults[yr] ?? 0);
+                });
+
+                // Colores diferentes por cada barra de año según requerimiento exacto
+                const coloresPorAnio = ['#7b1fa2', '#00897b', '#c2185b', '#e65100'];
+                const bgColoresVida = vidaAnios.map((_, i) => coloresPorAnio[i % coloresPorAnio.length]);
 
                 chartViolenciaVida = new Chart(ctxVida.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['Año 2006', 'Año 2011', 'Año 2016', 'Año 2021'],
+                        labels: vidaAnios.map(yr => 'Año ' + yr),
                         datasets: [
                             {
                                 label: 'Prevalencia Total en Oaxaca (%)',
-                                data: [v2006, v2011, v2016, v2021],
-                                backgroundColor: ['#8e24aa', '#ba68c8', '#7b1fa2', '#4a154b'],
+                                data: dataVida,
+                                backgroundColor: bgColoresVida,
                                 borderRadius: 6,
                                 borderWidth: 1,
                                 borderColor: '#ffffff',
@@ -2683,7 +2685,7 @@ type: 'bar',
                             tooltip: {
                                 callbacks: {
                                     label: function(c) {
-                                        return ' Prevalencia total en Oaxaca: ' + Number(c.raw).toFixed(1) + '%';
+                                        return ' Prevalencia total: ' + Number(c.raw).toFixed(1) + '% de las mujeres';
                                     }
                                 }
                             },
@@ -2691,7 +2693,7 @@ type: 'bar',
                                 display: true,
                                 anchor: 'end',
                                 align: 'top',
-                                offset: 3,
+                                offset: 4,
                                 color: '#263238',
                                 font: { weight: 'bold', size: 11 },
                                 formatter: function(v) {
@@ -2718,7 +2720,10 @@ type: 'bar',
                             x: {
                                 ticks: {
                                     font: { size: 11, weight: 'bold' },
-                                    color: '#4a154b'
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0
                                 },
                                 grid: { display: false }
                             }
