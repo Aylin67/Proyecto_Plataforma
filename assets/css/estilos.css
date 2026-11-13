@@ -331,6 +331,7 @@ body { padding-top: 85px; }
 .tema-atendidas   { background: linear-gradient(135deg, #521769 0%, #721896 100%); }
 .tema-lenguas     { background: linear-gradient(135deg, #721896, #521769); }
 .tema-violencia   { background: linear-gradient(135deg, #c2185b, #880e4f); }
+.tema-ciberacoso { background: linear-gradient(135deg, #8e24aa, #d81b60); }
 
 /* 8. PIE DE PÁGINA INSTITUCIONAL ENRIQUECIDO */
 .footer-ges {
@@ -1326,5 +1327,11 @@ h1, h2, h3, h4, h5, h6,
 /* RECUADRO Y BADGE VIOLENCIA */
 .recuadro-violencia {
     background: linear-gradient(135deg, #c2185b, #880e4f) !important;
+    color: #ffffff !important;
+}
+
+/* RECUADRO Y BADGE CIBERACOSO */
+.recuadro-ciberacoso {
+    background: linear-gradient(135deg, #8e24aa, #d81b60) !important;
     color: #ffffff !important;
 }

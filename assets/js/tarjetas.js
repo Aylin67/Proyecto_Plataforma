@@ -1,6 +1,23 @@
 (function(window) {
     'use strict';
 
+    if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+        try {
+            Chart.register(ChartDataLabels);
+            if (Chart.defaults && Chart.defaults.plugins) {
+                Chart.defaults.plugins.datalabels = {
+                    display: true,
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 4,
+                    color: '#263238',
+                    font: { weight: 'bold', size: 10.5 },
+                    clip: false
+                };
+            }
+        } catch(e) {}
+    }
+
     const datosTematicos = {
         //  USUARIAS ATENDIDAS
         atendidas: {
@@ -169,6 +186,17 @@
             fuenteCorta: "INEGI / ENDIREH",
             pieFuente: "INEGI · Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares, 2006, 2016 y 2021",
             kpiTotal: { label: "Violencia Total en la Familia (2021)", valor: "12.0" }
+        },
+        // CIBERACOSO (INEGI MOCIBA)
+        ciberacoso: {
+            titulo: "DIMENSIÓN DE CIBERACOSO (MOCIBA)",
+            subtitulo: "Prevalencia de ciberacoso en personas de 12 años y más en Oaxaca (INEGI · MOCIBA 2025)",
+            icono: "fa-laptop-code",
+            iconoColor: "#d81b60",
+            badge: "INEGI · MOCIBA 2025",
+            fuenteCorta: "INEGI / MOCIBA 2025",
+            pieFuente: "INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025.",
+            kpiTotal: { label: "Prevalencia en Mujeres (2025)", valor: "22.4%" }
         }
     };
 
@@ -264,13 +292,16 @@
                     plugins: {
                         legend: { display: false },
                         datalabels: {
-                            anchor: 'end', align: 'end', color: '#333',
+                            display: true,
+                            anchor: 'end', align: 'top',
+                            clip: false,
+                            offset: 4, color: '#263238',
                             font: { weight: 'bold', size: 11 },
                             formatter: v => v == null ? '' : Number(v).toLocaleString('es-MX')
                         },
                         tooltip: { callbacks: { label: c => ' ' + Number(c.raw).toLocaleString('es-MX') } }
                     },
-                    layout: { padding: { top: 24, bottom: 30 } },
+                    layout: { padding: { top: 28, bottom: 30 } },
                     scales: data.graficaPrincipal.tipo === 'doughnut' ? {} : {
                         y: {
                             beginAtZero: true,
@@ -312,6 +343,7 @@
                     plugins: {
                         legend: { display: true, position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } },
                         datalabels: {
+                            display: true,
                             color: '#fff', font: { weight: 'bold', size: 10 },
                             formatter: (value, ctx) => {
                                 const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
@@ -412,7 +444,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -428,10 +460,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 9.5 },
                             formatter: function(val) {
                                 return Number(val).toLocaleString('es-MX');
@@ -505,7 +539,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -521,10 +555,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10.5 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toLocaleString('es-MX') : '';
@@ -596,7 +632,10 @@
                     plugins: {
                         legend: { display: false },
                         datalabels: {
-                            anchor: 'end', align: 'end', color: '#333',
+                            display: true,
+                            anchor: 'end', align: 'top',
+                            clip: false,
+                            offset: 4, color: '#263238',
                             font: { weight: 'bold', size: 9 },
                             formatter: v => (v && v > 0) ? Number(v).toLocaleString('es-MX') : ''
                         },
@@ -636,7 +675,7 @@
                     ],
                     datasets: [{
                         label: 'Defunciones por grupo quinquenal',
-                        data: [0, 0, 0, 3, 3, 8, 10, 17, 59, 80, 170, 230, 291, 336, 359, 313, 294, 347, 1],
+                        data: [0, 0, 0, 3, 3, 8, 10, 17, 59, 80, 170, 230, 291, 336, 359, 313, 294, 347, 0],
                         backgroundColor: [
                             '#60ced8', '#e67eb7', '#5aa348', '#e39d8a',
                             '#60ced8', '#e67eb7', '#5aa348', '#e39d8a',
@@ -657,7 +696,10 @@
                     plugins: {
                         legend: { display: false },
                         datalabels: {
-                            anchor: 'end', align: 'end', color: '#333',
+                            display: true,
+                            anchor: 'end', align: 'top',
+                            clip: false,
+                            offset: 4, color: '#263238',
                             font: { weight: 'bold', size: 9 },
                             formatter: v => (v && v > 0) ? Number(v).toLocaleString('es-MX') : ''
                         },
@@ -749,15 +791,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 9.5 },
                             formatter: function(val) {
                                 return Number(val).toLocaleString('es-MX');
@@ -862,15 +906,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 9.5 },
                             formatter: function(v) {
                                 return Number(v).toLocaleString('es-MX');
@@ -955,7 +1001,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -967,10 +1013,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10.5 },
                             formatter: function(v) {
                                 return v != null ? v + '%' : '';
@@ -1024,7 +1072,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1036,10 +1084,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10.5 },
                             formatter: function(v) {
                                 return v != null ? v + '%' : '';
@@ -1093,7 +1143,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1105,10 +1155,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 9.5 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toLocaleString('es-MX') : '';
@@ -1173,7 +1225,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1185,10 +1237,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
                                 return v != null ? v + '%' : '';
@@ -1242,7 +1296,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1254,10 +1308,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10.5 },
                             formatter: function(v) {
                                 return v != null ? v + '%' : '';
@@ -1322,7 +1378,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1334,10 +1390,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toLocaleString('es-MX') : '';
@@ -1400,7 +1458,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1412,10 +1470,12 @@
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toLocaleString('es-MX') : '';
@@ -1505,7 +1565,7 @@ function renderizarDesocupacionOaxaca() {
             animation: false,
             responsive: true,
             maintainAspectRatio: false,
-            layout: { padding: { top: 22, bottom: 5, left: 5, right: 10 } },
+            layout: { padding: { top: 28, bottom: 5, left: 5, right: 10 } },
             plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -1515,8 +1575,10 @@ function renderizarDesocupacionOaxaca() {
                     }
                 },
                 datalabels: {
+                            display: true,
                     anchor: 'end',
                     align: 'top',
+                            clip: false,
                     offset: 4,
                     color: '#4a154b',
                     font: { weight: 'bold', size: 9.5 },
@@ -1596,15 +1658,17 @@ function renderizarDesocupacionOaxaca() {
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
                                 return v != null ? '$' + Number(v).toLocaleString('es-MX') : '';
@@ -1674,7 +1738,7 @@ type: 'bar',
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1690,10 +1754,12 @@ type: 'bar',
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 9 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toFixed(2) + '%' : '';
@@ -1837,7 +1903,8 @@ type: 'bar',
                                 display: true,
                                 anchor: 'end',
                                 align: 'top',
-                                offset: 3,
+                            clip: false,
+                                offset: 4,
                                 color: '#263238',
                                 font: { weight: 'bold', size: 10 },
                                 formatter: function(v) {
@@ -1929,7 +1996,7 @@ type: 'bar',
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -1941,10 +2008,12 @@ type: 'bar',
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10.5 },
                             formatter: function(v) {
                                 return v != null ? Number(v).toLocaleString('es-MX') : '';
@@ -2001,7 +2070,7 @@ type: 'bar',
                     responsive: true,
                     maintainAspectRatio: false,
                     layout: {
-                        padding: { top: 22, bottom: 5, left: 5, right: 10 }
+                        padding: { top: 28, bottom: 5, left: 5, right: 10 }
                     },
                     plugins: {
                         legend: { display: false },
@@ -2013,10 +2082,12 @@ type: 'bar',
                             }
                         },
                         datalabels: {
+                            display: true,
                             anchor: 'end',
-                            align: 'end',
-                            offset: 2,
-                            color: '#333',
+                            align: 'top',
+                            clip: false,
+                            offset: 4,
+                            color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
                                 return v != null ? v + '%' : '';
@@ -2140,7 +2211,8 @@ type: 'bar',
                             display: true,
                             anchor: 'end',
                             align: 'top',
-                            offset: 3,
+                            clip: false,
+                            offset: 4,
                             color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
@@ -2224,7 +2296,8 @@ type: 'bar',
                             display: true,
                             anchor: 'end',
                             align: 'top',
-                            offset: 3,
+                            clip: false,
+                            offset: 4,
                             color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
@@ -2350,7 +2423,8 @@ type: 'bar',
                             display: true,
                             anchor: 'end',
                             align: 'top',
-                            offset: 3,
+                            clip: false,
+                            offset: 4,
                             color: '#263238',
                             font: { weight: 'bold', size: 10 },
                             formatter: function(v) {
@@ -2468,7 +2542,8 @@ type: 'bar',
                                 display: true,
                                 anchor: 'end',
                                 align: 'top',
-                                offset: 3,
+                            clip: false,
+                                offset: 4,
                                 color: '#263238',
                                 font: { weight: 'bold', size: 10 },
                                 formatter: function(v) {
@@ -2589,7 +2664,8 @@ type: 'bar',
                                 display: true,
                                 anchor: 'end',
                                 align: 'top',
-                                offset: 3,
+                            clip: false,
+                                offset: 4,
                                 color: '#263238',
                                 font: { weight: 'bold', size: 10 },
                                 formatter: function(v) {
@@ -2676,7 +2752,7 @@ type: 'bar',
                         responsive: true,
                         maintainAspectRatio: false,
                         layout: {
-                            padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                            padding: { top: 28, bottom: 5, left: 5, right: 10 }
                         },
                         plugins: {
                             legend: {
@@ -2693,6 +2769,7 @@ type: 'bar',
                                 display: true,
                                 anchor: 'end',
                                 align: 'top',
+                            clip: false,
                                 offset: 4,
                                 color: '#263238',
                                 font: { weight: 'bold', size: 11 },
@@ -2736,6 +2813,142 @@ type: 'bar',
         }
     }
 
+    
+    let chartCiberacosoPrincipal = null;
+
+    // RENDERIZADO DE GRÁFICA DE CIBERACOSO (INEGI · MOCIBA 2025)
+    function renderizarCiberacosoINEGI() {
+        if (typeof Chart === 'undefined') return;
+
+        if (chartCiberacosoPrincipal) {
+            chartCiberacosoPrincipal.destroy();
+            chartCiberacosoPrincipal = null;
+        }
+
+        const ctx = document.getElementById('canvasCiberacosoPrincipal');
+        if (!ctx) return;
+
+        try {
+            if (typeof Chart.getChart === 'function') {
+                const ex = Chart.getChart(ctx);
+                if (ex) ex.destroy();
+            }
+
+            let saved = {};
+            try {
+                const raw = localStorage.getItem('gesmujer_ciberacoso_datos');
+                if (raw) saved = JSON.parse(raw);
+            } catch(e) {}
+
+            const est = saved['ciber_estimacion'] !== undefined ? Number(saved['ciber_estimacion']) : 22.4;
+            const inf = saved['ciber_lim_inf'] !== undefined ? Number(saved['ciber_lim_inf']) : 19.4;
+            const sup = saved['ciber_lim_sup'] !== undefined ? Number(saved['ciber_lim_sup']) : 25.4;
+            const cv  = saved['ciber_coef_var'] !== undefined ? Number(saved['ciber_coef_var']) : 8.1;
+            const err = saved['ciber_error_std'] !== undefined ? Number(saved['ciber_error_std']) : 1.8;
+
+            const kpiEst = document.getElementById('kpiCiberacosoEstimacion');
+            if (kpiEst) kpiEst.textContent = est.toFixed(1) + '%';
+            const kpiRango = document.getElementById('kpiCiberacosoRango');
+            if (kpiRango) kpiRango.textContent = inf.toFixed(1) + '% - ' + sup.toFixed(1) + '%';
+
+            const labels = [
+                ['Estimaciones', 'puntuales'],
+                ['Límite', 'inferior'],
+                ['Límite', 'superior'],
+                ['Coeficiente', 'de variación'],
+                ['Error', 'estándar']
+            ];
+            const dataVals = [est, inf, sup, cv, err];
+            const colores = [
+                '#d81b60', // Estimación puntual (rosa mexicano / magenta)
+                '#7b1fa2', // Límite inferior (morado)
+                '#ad1457', // Límite superior (rosa profundo)
+                '#00897b', // Coeficiente de variación (verde azulado)
+                '#e65100'  // Error estándar (naranja)
+            ];
+
+            chartCiberacosoPrincipal = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Porcentaje (%)',
+                        data: dataVals,
+                        backgroundColor: colores,
+                        borderRadius: 6,
+                        borderWidth: 1.5,
+                        borderColor: '#ffffff',
+                        minBarLength: 12,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 32, bottom: 5, left: 5, right: 10 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(items) {
+                                    const l = items[0].label;
+                                    return Array.isArray(l) ? l.join(' ') : l;
+                                },
+                                label: function(c) {
+                                    return ' ' + Number(c.raw).toFixed(1) + '%';
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'top',
+                            clip: false,
+                            offset: 5,
+                            color: '#263238',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(v) {
+                                return v != null ? Number(v).toFixed(1) + '%' : '';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 30,
+                            title: {
+                                display: true,
+                                text: 'Porcentaje (%)',
+                                color: '#666',
+                                font: { size: 10.5, weight: '500' }
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                callback: function(val) { return val + '%'; }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { size: 10, weight: 'bold' },
+                                color: '#4a154b',
+                                autoSkip: false,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        } catch(err) {
+            console.error('Error al renderizar canvasCiberacosoPrincipal:', err);
+        }
+    }
+
     function abrirModalTematico(nombreTema) {
         const data = datosTematicos[nombreTema];
         if (!data) { console.warn("No hay configuración: " + nombreTema); return; }
@@ -2764,6 +2977,7 @@ type: 'bar',
         const layoutIngreso = document.getElementById("layoutTematicoIngreso");
         const layoutLenguas = document.getElementById("layoutTematicoLenguas");
         const layoutViolencia = document.getElementById("layoutTematicoViolencia");
+        const layoutCiberacoso = document.getElementById("layoutTematicoCiberacoso");
         const layoutStd = document.getElementById("layoutTematicoEstandar");
 
         if (layoutSalud) layoutSalud.classList.add("d-none");
@@ -2772,6 +2986,7 @@ type: 'bar',
         if (layoutIngreso) layoutIngreso.classList.add("d-none");
         if (layoutLenguas) layoutLenguas.classList.add("d-none");
         if (layoutViolencia) layoutViolencia.classList.add("d-none");
+        if (layoutCiberacoso) layoutCiberacoso.classList.add("d-none");
         if (layoutStd) layoutStd.classList.add("d-none");
 
         const esDimensionCISGES = ['atendidas', 'psicologia', 'juicios', 'feminicidios', 'talleres', 'proyectos'].indexOf(nombreTema) !== -1;
@@ -2806,6 +3021,11 @@ type: 'bar',
                 layoutViolencia.classList.remove("d-none");
                 renderizarViolenciaINEGI();
             }
+        } else if (nombreTema === 'ciberacoso') {
+            if (layoutCiberacoso) {
+                layoutCiberacoso.classList.remove("d-none");
+                renderizarCiberacosoINEGI();
+            }
         } else if (esDimensionCISGES) {
             if (layoutStd) {
                 layoutStd.classList.remove("d-none");
@@ -2829,7 +3049,9 @@ type: 'bar',
         if (modalTematicoBootstrap) {
             modalTematicoBootstrap.show();
             setTimeout(function() {
-                if (nombreTema === 'violencia' && typeof renderizarViolenciaINEGI === 'function') {
+                if (nombreTema === 'ciberacoso' && typeof renderizarCiberacosoINEGI === 'function') {
+                    renderizarCiberacosoINEGI();
+                } else if (nombreTema === 'violencia' && typeof renderizarViolenciaINEGI === 'function') {
                     renderizarViolenciaINEGI();
                 } else if (nombreTema === 'lenguas' && typeof renderizarLenguasINEGI === 'function') {
                     renderizarLenguasINEGI();
@@ -2871,4 +3093,5 @@ type: 'bar',
     window.renderizarIngresoINEGI = renderizarIngresoINEGI;
     window.renderizarLenguasINEGI = renderizarLenguasINEGI;
     window.renderizarViolenciaINEGI = renderizarViolenciaINEGI;
+    window.renderizarCiberacosoINEGI = renderizarCiberacosoINEGI;
 })(window);

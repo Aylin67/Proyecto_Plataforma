@@ -2324,6 +2324,57 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             }
             this.mostrarToast('Datos de Violencia guardados con éxito.');
         },
+        // Valores por defecto de Ciberacoso (MOCIBA INEGI 2025)
+        obtenerCiberacosoDefault: function() {
+            return {
+                ciber_estimacion: 22.4,
+                ciber_lim_inf: 19.4,
+                ciber_lim_sup: 25.4,
+                ciber_coef_var: 8.1,
+                ciber_error_std: 1.8
+            };
+        },
+
+        cargarCiberacosoEnFormulario: function() {
+            try {
+                const defaults = this.obtenerCiberacosoDefault();
+                let d = defaults;
+                const raw = localStorage.getItem('gesmujer_ciberacoso_datos');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    d = Object.assign({}, defaults, parsed);
+                }
+                Object.keys(d).forEach(k => {
+                    const el = document.getElementById(k);
+                    if (el && d[k] !== undefined && d[k] !== null) el.value = d[k];
+                });
+            } catch(e) {
+                console.error('Error al cargar ciberacoso:', e);
+            }
+        },
+
+        guardarCiberacoso: function() {
+            const ids = ['ciber_estimacion', 'ciber_lim_inf', 'ciber_lim_sup', 'ciber_coef_var', 'ciber_error_std'];
+            let prevData = {};
+            try {
+                const rawPrev = localStorage.getItem('gesmujer_ciberacoso_datos');
+                if (rawPrev) prevData = JSON.parse(rawPrev);
+            } catch(e) {}
+            const data = Object.assign({}, prevData);
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = parseFloat(el.value) || 0;
+            });
+
+            localStorage.setItem('gesmujer_ciberacoso_datos', JSON.stringify(data));
+
+            if (typeof window.renderizarCiberacosoINEGI === 'function') {
+                window.renderizarCiberacosoINEGI();
+            }
+
+            this.mostrarToast('Datos de Ciberacoso (MOCIBA 2025) guardados con éxito.');
+        },
+
 
         cargarFotoPerfil: function() {
             try {
@@ -2375,6 +2426,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 this.cargarLenguasEnFormulario();
             } else if (cat === 'violencia') {
                 this.cargarViolenciaEnFormulario();
+            } else if (cat === 'ciberacoso') {
+                this.cargarCiberacosoEnFormulario();
             } else if (cat === 'fuentes') {
                 this.cargarFuentesEnFormulario();
             }

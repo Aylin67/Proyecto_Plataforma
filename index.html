@@ -27,11 +27,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script>
+        if (typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js?v=20261112_v1"></script>
-    <script src="assets/js/admin_datos.js?v=20261112_v1"></script>
+    <script src="assets/js/tarjetas.js?v=20261112_v3"></script>
+    <script src="assets/js/admin_datos.js?v=20261112_v3"></script>
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
@@ -205,6 +210,15 @@
                 <i class="fa-solid fa-shield-heart"></i>
             </div>
             <span class="tema-nombre">Violencia</span>
+        </div>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 item-fuente-inegi">
+        <div class="tema-card" onclick="mostrarTema('ciberacoso', this)">
+            <div class="tema-icon-wrapper tema-ciberacoso">
+                <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <span class="tema-nombre">Ciberacoso</span>
         </div>
     </div>
 
@@ -1669,7 +1683,65 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                             </div>
                         </div>
 
-                    </div> 
+                    </div>
+
+                    <!-- LAYOUT TEMÁTICO CIBERACOSO (INEGI MOCIBA) Inicia Ciberacoso -->
+                    <div id="layoutTematicoCiberacoso" class="d-none">
+
+                        <!-- 1. PREVALENCIA DE CIBERACOSO EN MUJERES DE 12 AÑOS Y MÁS (OAXACA) -->
+                        <div class="row g-4 align-items-stretch mb-4">
+                            <!-- DIVISIÓN 1: GRÁFICA -->
+                            <div class="col-12 col-xl-7 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                        <div>
+                                            <h6 class="modal-nacional-titulo-seccion mb-1" style="color: #4a154b; font-weight: 700;">
+                                                <i class="fa-solid fa-laptop-code me-2" style="color: #d81b60;"></i>
+                                                Prevalencia de Ciberacoso en Mujeres 
+                                            </h6>
+                                        </div>
+                                        <span class="badge bg-light text-secondary border px-2 py-1 flex-shrink-0">INEGI · MOCIBA 2025</span>
+                                    </div>
+                                    <div class="grafica-barras-contenedor mb-2 mt-2" style="height: 350px;">
+                                        <canvas id="canvasCiberacosoPrincipal"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DIVISIÓN 2: MÉTRICA Y LECTURA DE DATOS -->
+                            <div class="col-12 col-xl-5 col-lg-6">
+                                <div class="card modal-nacional-card h-100">
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <i class="fa-solid fa-lightbulb" style="color:#e65100; font-size:1.1rem; margin-top:2px;"></i>
+                                            <div style="flex:1;">
+                                                <div class="fw-bold small text-uppercase mb-1" style="color:#4a154b;">Lectura de datos</div>
+                                                <p class="small mb-0" style="color:#444; line-height:1.55; text-align:justify;">
+                                                En el estado de Oaxaca un sector significativo de las mujeres y adolescentes usuarias de internet vive situaciones de ciberacoso. Esta realidad visibiliza que un número alarmante de mujeres experimenta agresiones en el espacio digital, lo que evidencia la apremiante necesidad de garantizar entornos virtuales seguros, promover la alfabetización digital preventiva y establecer mecanismos ágiles de denuncia y sanción ante la violencia digital por razones de género.</p>
+                                            </div>
+                                        </div>
+
+                                        <small class="text-muted d-block mt-3" style="font-size: 0.74rem;">Fuente: INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CUADRO DE CRÉDITOS Y FUENTES INEGI -->
+                        <div class="card p-3 border-0 mt-3 mb-2 shadow-sm" style="background-color: #6c757d; color: #ffffff; border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;">Fuente oficial:</div>
+                                    <div style="font-size: 0.8rem; line-height: 1.4;">
+                                        INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025. Prevalencia de ciberacoso en las personas de 12 años y más durante los últimos 12 meses por entidad federativa y sexo de la víctima (Oaxaca · Mujeres).
+                                    </div>
+                                </div>
+                                <div class="text-end" style="font-size: 0.78rem; opacity: 0.95;">
+                                    Derechos Reservados © INEGI
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div> <!-- Cierra modal-body -->
 
@@ -1939,6 +2011,15 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                         <div class="admin-btn-left">
                                             <i class="fa-solid fa-shield-heart menu-icon"></i>
                                             <span class="menu-label">Violencia Familiar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right menu-chevron"></i>
+                                    </button>
+                                </li>
+                                <li class="admin-menu-item">
+                                    <button type="button" class="admin-menu-btn" data-cat="ciberacoso" onclick="AdminMenuDashboard.seleccionar('ciberacoso')">
+                                        <div class="admin-btn-left">
+                                            <i class="fa-solid fa-laptop-code menu-icon"></i>
+                                            <span class="menu-label">Ciberacoso</span>
                                         </div>
                                         <i class="fa-solid fa-chevron-right menu-chevron"></i>
                                     </button>
@@ -3160,6 +3241,66 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                     </div>
                                 </div>
 
+                                <!-- 10. VISTA: CIBERACOSO (MOCIBA INEGI) -->
+                                <div id="adminView_ciberacoso" class="admin-form-box d-none">
+                                    <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0" style="color: #4a154b;">
+                                                <i class="fa-solid fa-laptop-code me-2" style="color: #d81b60;"></i> Ciberacoso contra las Mujeres (MOCIBA)
+                                            </h5>
+                                            <span class="badge bg-light text-secondary border px-3 py-1">INEGI · MOCIBA 2025</span>
+                                        </div>
+
+                                        <div class="p-3 rounded-3 mb-4 bg-light border">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="fw-bold mb-0 text-dark">
+                                                    <span class="badge me-2" style="background-color: #d81b60;">1</span> Indicadores de Prevalencia en Oaxaca (Mujeres de 12 años y más)
+                                                </h6>
+                                                <span class="badge bg-white text-secondary border px-2 py-1 small">MOCIBA 2025</span>
+                                            </div>
+                                            <div class="p-3 bg-white rounded-2 border mb-3">
+                                                <div class="row g-3">
+                                                    <div class="col-12 col-md-4">
+                                                        <label class="form-label small fw-bold text-muted mb-1">
+                                                            <i class="fa-solid fa-chart-column me-1" style="color: #d81b60;"></i> Estimaciones Puntuales (%):
+                                                        </label>
+                                                        <input type="number" step="0.1" id="ciber_estimacion" class="form-control" value="22.4">
+                                                    </div>
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="form-label small fw-bold text-muted mb-1">
+                                                            <i class="fa-solid fa-arrow-down-short-wide me-1" style="color: #7b1fa2;"></i> Límite Inferior (%):
+                                                        </label>
+                                                        <input type="number" step="0.1" id="ciber_lim_inf" class="form-control" value="19.4">
+                                                    </div>
+                                                    <div class="col-6 col-md-4">
+                                                        <label class="form-label small fw-bold text-muted mb-1">
+                                                            <i class="fa-solid fa-arrow-up-wide-short me-1" style="color: #ad1457;"></i> Límite Superior (%):
+                                                        </label>
+                                                        <input type="number" step="0.1" id="ciber_lim_sup" class="form-control" value="25.4">
+                                                    </div>
+                                                    <div class="col-6 col-md-6">
+                                                        <label class="form-label small fw-bold text-muted mb-1">
+                                                            <i class="fa-solid fa-percent me-1" style="color: #00897b;"></i> Coeficiente de Variación (%):
+                                                        </label>
+                                                        <input type="number" step="0.1" id="ciber_coef_var" class="form-control" value="8.1">
+                                                    </div>
+                                                    <div class="col-6 col-md-6">
+                                                        <label class="form-label small fw-bold text-muted mb-1">
+                                                            <i class="fa-solid fa-calculator me-1" style="color: #e65100;"></i> Error Estándar (%):
+                                                        </label>
+                                                        <input type="number" step="0.1" id="ciber_error_std" class="form-control" value="1.8">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #d81b60, #8e24aa); border-radius: 8px;" onclick="AdminDatosUI.guardarCiberacoso()">
+                                                    <i class="fa-solid fa-floppy-disk me-2"></i> Guardar Datos de Ciberacoso
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div id="adminView_fuentes" class="admin-form-box d-none">
                                     <div class="p-4 bg-white rounded-3 shadow-sm border mb-4">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -3521,6 +3662,14 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                     kpi2: { label: 'Violencia Psicológica', sub: 'Mayor prevalencia' },
                     kpi3: { label: 'Fuente Oficial', sub: 'ENDIREH INEGI' }
                 },
+                ciberacoso: {
+                    label: '<i class="fa-solid fa-laptop-code me-2"></i>CIBERACOSO (MOCIBA)',
+                    clase: 'recuadro-ciberacoso',
+                    titulo: 'Ciberacoso contra las Mujeres (MOCIBA)',
+                    kpi1: { label: 'Prevalencia en Mujeres', sub: 'Oaxaca (12 años y más)' },
+                    kpi2: { label: 'Límites de Confianza', sub: 'Inferior y Superior' },
+                    kpi3: { label: 'Fuente Oficial', sub: 'INEGI MOCIBA 2025' }
+                },
                 fuentes: {
                     label: '<i class="fa-solid fa-book-bookmark me-2"></i>FUENTES OFICIALES',
                     clase: 'recuadro-fuentes',
@@ -3543,7 +3692,7 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                     btn.classList.toggle('active', btn.dataset.cat === cat);
                 });
 
-                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas', 'violencia', 'fuentes'];
+                const vistas = ['inicio', 'nacional', 'estatal', 'salud', 'educacion', 'vivienda', 'ingreso', 'lenguas', 'violencia', 'ciberacoso', 'fuentes'];
                 vistas.forEach(v => {
                     const el = document.getElementById('adminView_' + v);
                    if (el) el.classList.toggle('d-none', v !== cat);
@@ -3668,6 +3817,15 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                     if (b2) b2.textContent = '52.5%';
                     if (v3) v3.textContent = '580,355 hombres';
                     if (b3) b3.textContent = '47.5%';
+                } else if (cat === 'ciberacoso') {
+                    const est = parseFloat(document.getElementById('ciber_estimacion')?.value) || 22.4;
+                    const inf = parseFloat(document.getElementById('ciber_lim_inf')?.value) || 19.4;
+                    const sup = parseFloat(document.getElementById('ciber_lim_sup')?.value) || 25.4;
+                    if (v1) v1.textContent = est.toFixed(1) + '%';
+                    if (v2) v2.textContent = inf.toFixed(1) + '% - ' + sup.toFixed(1) + '%';
+                    if (b2) b2.textContent = 'Rango';
+                    if (v3) v3.textContent = 'MOCIBA 2025';
+                    if (b3) b3.textContent = 'INEGI';
                 }
             },
 
@@ -3728,10 +3886,12 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
         plugins: {
             legend: { display: false },
             datalabels: {
+                display: true,
                 anchor: 'end',
-                align: 'end',
-                color: '#333',
-                font: { weight: 'bold', size: 10 },
+                align: 'top',
+                offset: 4,
+                color: '#263238',
+                font: { weight: 'bold', size: 10.5 },
                 formatter: function(value) {
                     if (!value && value !== 0) return '';
                     return Number(value).toLocaleString('es-MX');
@@ -4306,7 +4466,8 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
         { id: 'vivienda',     nombre: 'Vivienda',     icono: 'fa-house-chimney',      color: 'tema-vivienda' },
         { id: 'ingreso',      nombre: 'Ingreso',      icono: 'fa-sack-dollar',        color: 'tema-ingreso' },
         { id: 'lenguas',      nombre: 'Lenguas',      icono: 'fa-language',           color: 'tema-lenguas' },
-        { id: 'violencia',    nombre: 'Violencia',    icono: 'fa-shield-heart',       color: 'tema-violencia' }
+        { id: 'violencia',    nombre: 'Violencia',    icono: 'fa-shield-heart',       color: 'tema-violencia' },
+        { id: 'ciberacoso',  nombre: 'Ciberacoso',   icono: 'fa-laptop-code',        color: 'tema-ciberacoso' }
     ];
 
     let timerTarjetaMiniActiva = null;
@@ -4360,7 +4521,9 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
             modalTematicoEl.addEventListener('shown.bs.modal', function() {
                 renderizarTarjetasFooter();
                 if (typeof window.temaActual !== 'undefined') {
-                    if (window.temaActual === 'violencia' && typeof window.renderizarViolenciaINEGI === 'function') {
+                    if (window.temaActual === 'ciberacoso' && typeof window.renderizarCiberacosoINEGI === 'function') {
+                        window.renderizarCiberacosoINEGI();
+                    } else if (window.temaActual === 'violencia' && typeof window.renderizarViolenciaINEGI === 'function') {
                         window.renderizarViolenciaINEGI();
                     } else if (window.temaActual === 'lenguas' && typeof window.renderizarLenguasINEGI === 'function') {
                         window.renderizarLenguasINEGI();
