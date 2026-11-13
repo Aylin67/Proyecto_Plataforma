@@ -2049,7 +2049,7 @@ type: 'bar',
         if (ctx1) {
             const condSi = saved['lenguas_cond_si'] !== undefined ? Number(saved['lenguas_cond_si']) : 29.39;
             const condNo = saved['lenguas_cond_no'] !== undefined ? Number(saved['lenguas_cond_no']) : 70.29;
-            const condNoesp = saved['lenguas_cond_noesp'] !== undefined ? Number(saved['lenguas_cond_noesp']) : 0.32;
+            const condNoesp = saved['lenguas_cond_noesp'] !== undefined ? Number(saved['lenguas_cond_noesp']) : 0;
 
             chartLenguasCondicion = new Chart(ctx1.getContext('2d'), {
                 type: 'bar',
