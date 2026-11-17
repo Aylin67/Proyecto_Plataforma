@@ -2331,7 +2331,43 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 ciber_lim_inf: 19.4,
                 ciber_lim_sup: 25.4,
                 ciber_coef_var: 8.1,
-                ciber_error_std: 1.8
+                ciber_error_std: 1.8,
+                // Cuadro 1.27 MOCIBA 2025 (Oaxaca - Mujeres)
+                ciber_tipo_total: 322177,
+                ciber_tipo_desconocidas_pct: 62.3,
+                ciber_tipo_desconocidas_abs: 200855,
+                ciber_tipo_conocidas_pct: 30.1,
+                ciber_tipo_conocidas_abs: 97010,
+                ciber_tipo_ambas_pct: 7.5,
+                ciber_tipo_ambas_abs: 24312,
+                // Cuadro 1.45 MOCIBA 2025 (Oaxaca - Situaciones de ciberacoso y medio digital más frecuente)
+                ciber_sit_mensajes_ofensivos: 45.3,
+                ciber_sit_llamadas_ofensivas: 77.0,
+                ciber_sit_criticas_apariencia: 45.2,
+                ciber_sit_suplantacion: 40.2,
+                ciber_sit_identidades_falsas: 50.2,
+                ciber_sit_rastreo_cuentas: 29.3,
+                ciber_sit_provocaciones: 33.8,
+                ciber_sit_insinuaciones_sex: 39.3,
+                ciber_sit_contenido_sexual: 40.9,
+                ciber_sit_vender_sexual: 84.2,
+                ciber_sit_publicar_personal: 83.0,
+                ciber_sit_amenazar_extorsion: 49.1,
+                ciber_sit_otra_situacion: 71.4,
+                // Cuadro 1.46 MOCIBA 2025 (Oaxaca - Nivel de escolaridad)
+                ciber_esc_mensajes_bas: 49.0, ciber_esc_mensajes_med: 27.2, ciber_esc_mensajes_sup: 22.3,
+                ciber_esc_llamadas_bas: 44.3, ciber_esc_llamadas_med: 24.4, ciber_esc_llamadas_sup: 27.8,
+                ciber_esc_criticas_bas: 39.3, ciber_esc_criticas_med: 16.8, ciber_esc_criticas_sup: 41.4,
+                ciber_esc_suplantacion_bas: 39.5, ciber_esc_suplantacion_med: 24.1, ciber_esc_suplantacion_sup: 36.4,
+                ciber_esc_identidades_bas: 37.9, ciber_esc_identidades_med: 25.7, ciber_esc_identidades_sup: 33.4,
+                ciber_esc_rastreo_bas: 37.8, ciber_esc_rastreo_med: 23.5, ciber_esc_rastreo_sup: 36.5,
+                ciber_esc_provocaciones_bas: 33.8, ciber_esc_provocaciones_med: 27.5, ciber_esc_provocaciones_sup: 37.5,
+                ciber_esc_insinuaciones_bas: 25.8, ciber_esc_insinuaciones_med: 19.5, ciber_esc_insinuaciones_sup: 54.7,
+                ciber_esc_contenido_bas: 40.6, ciber_esc_contenido_med: 23.9, ciber_esc_contenido_sup: 35.6,
+                ciber_esc_vender_bas: 30.0, ciber_esc_vender_med: 70.0, ciber_esc_vender_sup: 0.0,
+                ciber_esc_publicar_bas: 52.9, ciber_esc_publicar_med: 9.9, ciber_esc_publicar_sup: 37.1,
+                ciber_esc_amenazar_bas: 45.7, ciber_esc_amenazar_med: 29.5, ciber_esc_amenazar_sup: 21.2,
+                ciber_esc_otra_bas: 64.0, ciber_esc_otra_med: 28.6, ciber_esc_otra_sup: 7.4
             };
         },
 
@@ -2354,7 +2390,29 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
         },
 
         guardarCiberacoso: function() {
-            const ids = ['ciber_estimacion', 'ciber_lim_inf', 'ciber_lim_sup', 'ciber_coef_var', 'ciber_error_std'];
+            const ids = [
+                'ciber_estimacion', 'ciber_lim_inf', 'ciber_lim_sup', 'ciber_coef_var', 'ciber_error_std',
+                'ciber_tipo_total', 'ciber_tipo_desconocidas_pct', 'ciber_tipo_desconocidas_abs',
+                'ciber_tipo_conocidas_pct', 'ciber_tipo_conocidas_abs', 'ciber_tipo_ambas_pct', 'ciber_tipo_ambas_abs',
+                'ciber_sit_mensajes_ofensivos', 'ciber_sit_llamadas_ofensivas', 'ciber_sit_criticas_apariencia',
+                'ciber_sit_suplantacion', 'ciber_sit_identidades_falsas', 'ciber_sit_rastreo_cuentas',
+                'ciber_sit_provocaciones', 'ciber_sit_insinuaciones_sex', 'ciber_sit_contenido_sexual',
+                'ciber_sit_vender_sexual', 'ciber_sit_publicar_personal', 'ciber_sit_amenazar_extorsion',
+                'ciber_sit_otra_situacion',
+                'ciber_esc_mensajes_bas', 'ciber_esc_mensajes_med', 'ciber_esc_mensajes_sup',
+                'ciber_esc_llamadas_bas', 'ciber_esc_llamadas_med', 'ciber_esc_llamadas_sup',
+                'ciber_esc_criticas_bas', 'ciber_esc_criticas_med', 'ciber_esc_criticas_sup',
+                'ciber_esc_suplantacion_bas', 'ciber_esc_suplantacion_med', 'ciber_esc_suplantacion_sup',
+                'ciber_esc_identidades_bas', 'ciber_esc_identidades_med', 'ciber_esc_identidades_sup',
+                'ciber_esc_rastreo_bas', 'ciber_esc_rastreo_med', 'ciber_esc_rastreo_sup',
+                'ciber_esc_provocaciones_bas', 'ciber_esc_provocaciones_med', 'ciber_esc_provocaciones_sup',
+                'ciber_esc_insinuaciones_bas', 'ciber_esc_insinuaciones_med', 'ciber_esc_insinuaciones_sup',
+                'ciber_esc_contenido_bas', 'ciber_esc_contenido_med', 'ciber_esc_contenido_sup',
+                'ciber_esc_vender_bas', 'ciber_esc_vender_med', 'ciber_esc_vender_sup',
+                'ciber_esc_publicar_bas', 'ciber_esc_publicar_med', 'ciber_esc_publicar_sup',
+                'ciber_esc_amenazar_bas', 'ciber_esc_amenazar_med', 'ciber_esc_amenazar_sup',
+                'ciber_esc_otra_bas', 'ciber_esc_otra_med', 'ciber_esc_otra_sup'
+            ];
             let prevData = {};
             try {
                 const rawPrev = localStorage.getItem('gesmujer_ciberacoso_datos');
@@ -2475,6 +2533,24 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     desc: 'Fuentes: INEGI. Censo de Población y Vivienda 2010. INEGI. Censo de Población y Vivienda 2020.',
                     cuadro1: '1. INEGI. Censo de Población y Vivienda 2010 y Censo de Población y Vivienda 2020.',
                     cuadro2: '2. INEGI. Encuesta Intercensal 2025.',
+                    derechos: 'Derechos Reservados © INEGI'
+                },
+                violencia: {
+                    badge: 'INEGI · ENDIREH',
+                    desc: 'Fuente: INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH).',
+                    cuadro1: '1. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2016 y 2021 (Violencia contra las mujeres en el ámbito familiar).',
+                    cuadro2: '2. SSA/INEGI. Estadísticas de Defunciones Registradas (EDR), 1990-2024 (Defunciones por Suicidio, Homicidio y Causas Accidentales según sexo).',
+                    cuadro3: '3. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2016 y 2021 (Prevalencia de violencia durante la infancia en mujeres de 15 años y más).',
+                    cuadro4: '4. INEGI. Encuesta Nacional sobre la Dinámica de las Relaciones en los Hogares (ENDIREH) 2006, 2011, 2016 y 2021 (Prevalencia total de violencia contra las mujeres a lo largo de la vida en Oaxaca).',
+                    derechos: 'Derechos Reservados © INEGI'
+                },
+                ciberacoso: {
+                    badge: 'INEGI · MOCIBA 2025',
+                    desc: 'Fuente: INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025.',
+                    cuadro1: '1. INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025. Prevalencia de ciberacoso en las personas de 12 años y más durante los últimos 12 meses por entidad federativa y sexo de la víctima (Oaxaca · Mujeres).',
+                    cuadro2: '2. INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025. Tabulados básicos. Cuadro 1.27: Población de mujeres de 12 años y más según tipo de persona identificada (Oaxaca · Estimaciones puntuales).',
+                    cuadro3: '3. INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025. Tabulados básicos. Cuadro 1.45: Situaciones de ciberacoso según el medio digital más frecuente (Oaxaca · Estimaciones puntuales).',
+                    cuadro4: '4. INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025. Tabulados básicos. Cuadro 1.46: Situaciones de ciberacoso experimentadas según nivel de escolaridad (Oaxaca · Estimaciones puntuales).',
                     derechos: 'Derechos Reservados © INEGI'
                 }
             };
@@ -2618,8 +2694,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 if (c2Edu && eduItem.cuadro2 !== undefined) c2Edu.value = eduItem.cuadro2;
                 if (derEdu && eduItem.derechos !== undefined) derEdu.value = eduItem.derechos;
 
-                // Cargar datos de las otras 3 dimensiones
-                ['vivienda', 'ingreso', 'lenguas'].forEach(dim => {
+                // Cargar datos de las otras 5 dimensiones (vivienda, ingreso, lenguas, violencia, ciberacoso)
+                ['vivienda', 'ingreso', 'lenguas', 'violencia', 'ciberacoso'].forEach(dim => {
                     const item = Object.assign({}, defaults[dim], guardadas[dim] || {});
                     if (!item) return;
 
@@ -2627,6 +2703,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     const elDesc = document.getElementById('fuente_desc_' + dim);
                     const elC1 = document.getElementById('fuente_cuadro1_' + dim);
                     const elC2 = document.getElementById('fuente_cuadro2_' + dim);
+                    const elC3 = document.getElementById('fuente_cuadro3_' + dim);
+                    const elC4 = document.getElementById('fuente_cuadro4_' + dim);
                     const elDer = document.getElementById('fuente_cuadro_derechos_' + dim);
 
                     if (elBadge && item.badge !== undefined) elBadge.value = item.badge;
@@ -2634,6 +2712,12 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     if (elC1 && item.cuadro1 !== undefined) elC1.value = item.cuadro1;
                     if (elC2) {
                         elC2.value = (item.cuadro2 !== undefined && item.cuadro2 !== '') ? item.cuadro2 : (defaults[dim]?.cuadro2 || '');
+                    }
+                    if (elC3) {
+                        elC3.value = (item.cuadro3 !== undefined && item.cuadro3 !== '') ? item.cuadro3 : (defaults[dim]?.cuadro3 || '');
+                    }
+                    if (elC4) {
+                        elC4.value = (item.cuadro4 !== undefined && item.cuadro4 !== '') ? item.cuadro4 : (defaults[dim]?.cuadro4 || '');
                     }
                     if (elDer && item.derechos !== undefined) elDer.value = item.derechos;
                 });
@@ -2693,6 +2777,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     const desc = document.getElementById('fuente_desc_' + dim)?.value || '';
                     const cuadro1 = document.getElementById('fuente_cuadro1_' + dim)?.value || '';
                     const cuadro2 = document.getElementById('fuente_cuadro2_' + dim)?.value || '';
+                    const cuadro3 = document.getElementById('fuente_cuadro3_' + dim)?.value || '';
+                    const cuadro4 = document.getElementById('fuente_cuadro4_' + dim)?.value || '';
                     const derechos = document.getElementById('fuente_cuadro_derechos_' + dim)?.value || '';
 
                     todas[dim] = {
@@ -2700,6 +2786,8 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                         desc: desc,
                         cuadro1: cuadro1,
                         cuadro2: cuadro2,
+                        cuadro3: cuadro3,
+                        cuadro4: cuadro4,
                         derechos: derechos
                     };
                 }
@@ -2709,7 +2797,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 // Sincronizar en la plataforma en tiempo real
                 this.aplicarFuentesDimension(dim, todas[dim]);
 
-                const nombres = { salud: 'Salud', educacion: 'Educación', vivienda: 'Vivienda', ingreso: 'Ingreso', lenguas: 'Lenguas Indígenas' };
+                const nombres = { salud: 'Salud', educacion: 'Educación', vivienda: 'Vivienda', ingreso: 'Ingreso', lenguas: 'Lenguas Indígenas', violencia: 'Violencia', ciberacoso: 'Ciberacoso' };
                 this.mostrarToast('¡Fuentes de ' + (nombres[dim] || dim) + ' guardadas y actualizadas!');
             } catch(e) {
                 console.error('Error al guardar fuentes:', e);
@@ -2764,11 +2852,15 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
                 if (cuadro) {
                     const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
-                    if (divs.length >= 1 && data.cuadro1) {
-                        divs[0].textContent = data.cuadro1;
-                    }
+                    const actDiv = (el, txt) => {
+                        if (!el || txt === undefined) return;
+                        const aTag = el.querySelector('a');
+                        if (aTag) aTag.textContent = txt;
+                        else el.textContent = txt;
+                    };
+                    if (divs.length >= 1 && data.cuadro1) actDiv(divs[0], data.cuadro1);
                     if (divs.length >= 2 && data.cuadro2 !== undefined) {
-                        divs[1].textContent = data.cuadro2;
+                        actDiv(divs[1], data.cuadro2);
                         divs[1].style.display = data.cuadro2 ? 'block' : 'none';
                     }
                     const der = cuadro.querySelector('.text-end');
@@ -2819,11 +2911,15 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
                 if (cuadro) {
                     const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
-                    if (divs.length >= 1 && data.cuadro1) {
-                        divs[0].textContent = data.cuadro1;
-                    }
+                    const actDiv = (el, txt) => {
+                        if (!el || txt === undefined) return;
+                        const aTag = el.querySelector('a');
+                        if (aTag) aTag.textContent = txt;
+                        else el.textContent = txt;
+                    };
+                    if (divs.length >= 1 && data.cuadro1) actDiv(divs[0], data.cuadro1);
                     if (divs.length >= 2 && data.cuadro2 !== undefined) {
-                        divs[1].textContent = data.cuadro2;
+                        actDiv(divs[1], data.cuadro2);
                         divs[1].style.display = data.cuadro2 ? 'block' : 'none';
                     }
                     const der = cuadro.querySelector('.text-end');
@@ -2859,12 +2955,30 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             const cuadro = layout.querySelector('.card[style*="border-0 mt-3 mb-2 shadow-sm"]');
             if (cuadro) {
                 const divs = cuadro.querySelectorAll('div[style*="font-size: 0.8rem"]');
+                const actualizarDiv = (el, txt) => {
+                    if (!el || txt === undefined) return;
+                    const aTag = el.querySelector('a');
+                    if (aTag) {
+                        aTag.textContent = txt;
+                    } else {
+                        el.textContent = txt;
+                    }
+                };
+
                 if (divs.length >= 1 && data.cuadro1) {
-                    divs[0].textContent = data.cuadro1;
+                    actualizarDiv(divs[0], data.cuadro1);
                 }
                 if (divs.length >= 2 && data.cuadro2 !== undefined) {
-                    divs[1].textContent = data.cuadro2;
+                    actualizarDiv(divs[1], data.cuadro2);
                     divs[1].style.display = data.cuadro2 ? 'block' : 'none';
+                }
+                if (divs.length >= 3 && data.cuadro3 !== undefined) {
+                    actualizarDiv(divs[2], data.cuadro3);
+                    divs[2].style.display = data.cuadro3 ? 'block' : 'none';
+                }
+                if (divs.length >= 4 && data.cuadro4 !== undefined) {
+                    actualizarDiv(divs[3], data.cuadro4);
+                    divs[3].style.display = data.cuadro4 ? 'block' : 'none';
                 }
                 const der = cuadro.querySelector('.text-end');
                 if (der && data.derechos) {
@@ -2878,7 +2992,7 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 const raw = localStorage.getItem('gesmujer_fuentes_datos');
                 if (!raw) return;
                 const todas = JSON.parse(raw);
-                ['salud', 'educacion', 'vivienda', 'ingreso', 'lenguas'].forEach(dim => {
+                ['salud', 'educacion', 'vivienda', 'ingreso', 'lenguas', 'violencia', 'ciberacoso'].forEach(dim => {
                     if (todas[dim]) {
                         this.aplicarFuentesDimension(dim, todas[dim]);
                     }

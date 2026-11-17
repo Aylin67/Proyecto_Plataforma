@@ -197,6 +197,17 @@
             fuenteCorta: "INEGI / MOCIBA 2025",
             pieFuente: "INEGI. Módulo sobre Ciberacoso (MOCIBA) 2025.",
             kpiTotal: { label: "Prevalencia en Mujeres (2025)", valor: "22.4%" }
+        },
+        // DESARROLLO SUSTENTABLE (SIODS · AGENDA 2030)
+        sustentable: {
+            titulo: "DESARROLLO SUSTENTABLE",
+            subtitulo: "México | SIODS | Sistema de Información de los Objetivos de Desarrollo Sostenible",
+            icono: "fa-globe",
+            iconoColor: "#455a64",
+            badge: "SIODS",
+            fuenteCorta: "SIODS / INEGI",
+            pieFuente: "México | SIODS | Sistema de Información de los Objetivos de Desarrollo Sostenible (agenda2030.mx)",
+            kpiTotal: { label: "Portal Oficial", valor: "SIODS" }
         }
     };
 
@@ -2815,6 +2826,9 @@ type: 'bar',
 
     
     let chartCiberacosoPrincipal = null;
+    let chartCiberacosoTipoPersona = null;
+    let chartCiberacosoMedios = null;
+    let chartCiberacosoEscolaridad = null;
 
     // RENDERIZADO DE GRÁFICA DE CIBERACOSO (INEGI · MOCIBA 2025)
     function renderizarCiberacosoINEGI() {
@@ -2947,6 +2961,497 @@ type: 'bar',
         } catch(err) {
             console.error('Error al renderizar canvasCiberacosoPrincipal:', err);
         }
+
+        // ========================================================
+        // 2. RENDERIZADO DE GRÁFICA 2: TIPO DE PERSONA (CUADRO 1.27)
+        // ========================================================
+        const ctxTipo = document.getElementById('canvasCiberacosoTipoPersona');
+        if (ctxTipo) {
+            try {
+                if (chartCiberacosoTipoPersona) {
+                    chartCiberacosoTipoPersona.destroy();
+                    chartCiberacosoTipoPersona = null;
+                }
+                if (typeof Chart.getChart === 'function') {
+                    const exTipo = Chart.getChart(ctxTipo);
+                    if (exTipo) exTipo.destroy();
+                }
+
+                let saved = {};
+                try {
+                    const raw = localStorage.getItem('gesmujer_ciberacoso_datos');
+                    if (raw) saved = JSON.parse(raw);
+                } catch(e) {}
+
+                const pDesc = saved['ciber_tipo_desconocidas_pct'] !== undefined ? Number(saved['ciber_tipo_desconocidas_pct']) : 62.3;
+                const aDesc = saved['ciber_tipo_desconocidas_abs'] !== undefined ? Number(saved['ciber_tipo_desconocidas_abs']) : 200855;
+                const pCono = saved['ciber_tipo_conocidas_pct'] !== undefined ? Number(saved['ciber_tipo_conocidas_pct']) : 30.1;
+                const aCono = saved['ciber_tipo_conocidas_abs'] !== undefined ? Number(saved['ciber_tipo_conocidas_abs']) : 97010;
+                const pAmbos = saved['ciber_tipo_ambas_pct'] !== undefined ? Number(saved['ciber_tipo_ambas_pct']) : 7.5;
+                const aAmbos = saved['ciber_tipo_ambas_abs'] !== undefined ? Number(saved['ciber_tipo_ambas_abs']) : 24312;
+
+                const labelsTipo = [
+                    ['Solo', 'desconocidas(os)'],
+                    ['Solo', 'conocidas(os)'],
+                    ['Conocidas(os) y', 'desconocidas(os)']
+                ];
+                const dataTipoVals = [pDesc, pCono, pAmbos];
+                const dataTipoAbs  = [aDesc, aCono, aAmbos];
+                const coloresTipo = [
+                    '#d81b60', // Solo desconocidas(os)
+                    '#8e24aa', // Solo conocidas(os)
+                    '#e65100'  // Conocidas(os) y desconocidas(os)
+                ];
+
+                chartCiberacosoTipoPersona = new Chart(ctxTipo.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labelsTipo,
+                        datasets: [{
+                            label: 'Porcentaje (%)',
+                            data: dataTipoVals,
+                            backgroundColor: coloresTipo,
+                            borderRadius: 6,
+                            borderWidth: 1.5,
+                            borderColor: '#ffffff',
+                            minBarLength: 12,
+                            barPercentage: 0.55
+                        }]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 32, bottom: 5, left: 5, right: 10 }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(items) {
+                                        const l = items[0].label;
+                                        return Array.isArray(l) ? l.join(' ') : l;
+                                    },
+                                    label: function(c) {
+                                        const idx = c.dataIndex;
+                                        const pct = Number(c.raw).toFixed(1) + '%';
+                                        const abs = dataTipoAbs[idx] ? ' (' + Number(dataTipoAbs[idx]).toLocaleString('es-MX') + ' mujeres)' : '';
+                                        return ' ' + pct + abs;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                clip: false,
+                                offset: 5,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 12 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 70,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 10, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 0,
+                                    minRotation: 0
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            } catch (err2) {
+                console.error('Error al renderizar canvasCiberacosoTipoPersona:', err2);
+            }
+        }
+
+        // ========================================================
+        // 3. RENDERIZADO DE GRÁFICA 3: SITUACIONES Y MEDIO DIGITAL (CUADRO 1.45)
+        // ========================================================
+        const ctxMedios = document.getElementById('canvasCiberacosoMedios');
+        if (ctxMedios) {
+            try {
+                if (chartCiberacosoMedios) {
+                    chartCiberacosoMedios.destroy();
+                    chartCiberacosoMedios = null;
+                }
+                if (typeof Chart.getChart === 'function') {
+                    const exMedios = Chart.getChart(ctxMedios);
+                    if (exMedios) exMedios.destroy();
+                }
+
+                let saved = {};
+                try {
+                    const raw = localStorage.getItem('gesmujer_ciberacoso_datos');
+                    if (raw) saved = JSON.parse(raw);
+                } catch(e) {}
+
+                const situacionesCiberacosoNombres = [
+                    'Mensajes ofensivos',
+                    'Llamadas ofensivas',
+                    'Críticas por apariencia o clase social',
+                    'Suplantación de identidad',
+                    'Contacto mediante identidades falsas',
+                    'Rastreo de cuentas o sitios web',
+                    'Provocaciones para reaccionar de forma negativa',
+                    'Insinuaciones o propuestas sexuales',
+                    'Recibir contenido sexual',
+                    'Publicar o vender imágenes o videos de contenido sexual',
+                    'Publicar y/o enviar información personal, fotos o videos',
+                    'Amenazar con publicar información personal, audios o videos para extorsionar',
+                    'Otra situación'
+                ];
+
+                const situacionesMedios = [
+                    'WhatsApp',
+                    'Llamadas de teléfono celular',
+                    'Facebook',
+                    'Facebook',
+                    'Llamadas de teléfono celular',
+                    'WhatsApp',
+                    'Llamadas de teléfono celular',
+                    'Facebook',
+                    'Facebook',
+                    'Facebook',
+                    'Facebook',
+                    'Llamadas de teléfono celular',
+                    'Llamadas de teléfono celular'
+                ];
+
+                const situacionesLabelsEje = [
+                    ['Mensajes', 'ofensivos'],
+                    ['Llamadas', 'ofensivas'],
+                    ['Críticas', 'apariencia'],
+                    ['Suplantación', 'identidad'],
+                    ['Identidades', 'falsas'],
+                    ['Rastreo', 'cuentas/web'],
+                    ['Provocación', 'negativa'],
+                    ['Insinuación', 'sexual'],
+                    ['Contenido', 'sexual'],
+                    ['Vender/publicar', 'video sexual'],
+                    ['Publicar fotos', 'o videos'],
+                    ['Amenaza con', 'extorsión'],
+                    ['Otra', 'situación']
+                ];
+
+                const defaultsMedios = [45.3, 77.0, 45.2, 40.2, 50.2, 29.3, 33.8, 39.3, 40.9, 84.2, 83.0, 49.1, 71.4];
+                const keysMedios = [
+                    'ciber_sit_mensajes_ofensivos', 'ciber_sit_llamadas_ofensivas', 'ciber_sit_criticas_apariencia',
+                    'ciber_sit_suplantacion', 'ciber_sit_identidades_falsas', 'ciber_sit_rastreo_cuentas',
+                    'ciber_sit_provocaciones', 'ciber_sit_insinuaciones_sex', 'ciber_sit_contenido_sexual',
+                    'ciber_sit_vender_sexual', 'ciber_sit_publicar_personal', 'ciber_sit_amenazar_extorsion',
+                    'ciber_sit_otra_situacion'
+                ];
+                const dataValsMedios = keysMedios.map((k, idx) => (saved[k] !== undefined ? Number(saved[k]) : defaultsMedios[idx]));
+
+                const coloresMedios = situacionesMedios.map(m => {
+                    if (m === 'Facebook') return '#1877f2'; // Azul Facebook
+                    if (m === 'WhatsApp') return '#25d366'; // Verde WhatsApp
+                    return '#e65100'; // Naranja llamadas celular
+                });
+
+                chartCiberacosoMedios = new Chart(ctxMedios.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: situacionesLabelsEje,
+                        datasets: [{
+                            label: 'Porcentaje (%)',
+                            data: dataValsMedios,
+                            backgroundColor: coloresMedios,
+                            borderRadius: 6,
+                            borderWidth: 1.5,
+                            borderColor: '#ffffff',
+                            minBarLength: 10,
+                            barPercentage: 0.72
+                        }]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: {
+                            padding: { top: 32, bottom: 5, left: 5, right: 10 }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(items) {
+                                        const idx = items[0].dataIndex;
+                                        return situacionesCiberacosoNombres[idx];
+                                    },
+                                    label: function(c) {
+                                        const idx = c.dataIndex;
+                                        return ' Porcentaje: ' + Number(c.raw).toFixed(1) + '%';
+                                    },
+                                    afterLabel: function(c) {
+                                        const idx = c.dataIndex;
+                                        return ' Medio digital más frecuente: ' + situacionesMedios[idx];
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                clip: false,
+                                offset: 4,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 9.5 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 95,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 8.5, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 45,
+                                    minRotation: 25
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            } catch (err3) {
+                console.error('Error al renderizar canvasCiberacosoMedios:', err3);
+            }
+        }
+
+        // ========================================================
+        // 4. RENDERIZADO DE GRÁFICA 4: NIVEL DE ESCOLARIDAD (CUADRO 1.46)
+        // ========================================================
+        const ctxEsc = document.getElementById('canvasCiberacosoEscolaridad');
+        if (ctxEsc) {
+            try {
+                if (chartCiberacosoEscolaridad) {
+                    chartCiberacosoEscolaridad.destroy();
+                    chartCiberacosoEscolaridad = null;
+                }
+                if (typeof Chart.getChart === 'function') {
+                    const exEsc = Chart.getChart(ctxEsc);
+                    if (exEsc) exEsc.destroy();
+                }
+
+                let saved = {};
+                try {
+                    const raw = localStorage.getItem('gesmujer_ciberacoso_datos');
+                    if (raw) saved = JSON.parse(raw);
+                } catch(e) {}
+
+                const titulosCompletosEsc = [
+                    'Mensajes ofensivos',
+                    'Llamadas ofensivas',
+                    'Críticas por apariencia o clase social',
+                    'Suplantación de identidad',
+                    'Contacto mediante identidades falsas',
+                    'Rastreo de cuentas o sitios web',
+                    'Provocaciones para reaccionar de forma negativa',
+                    'Insinuaciones o propuestas sexuales',
+                    'Recibir contenido sexual',
+                    'Publicar o vender imágenes o videos de contenido sexual',
+                    'Publicar y/o enviar información personal, fotos o videos',
+                    'Amenazar con publicar información personal, audios o videos para extorsionar',
+                    'Otra situación'
+                ];
+
+                const labelsEjeEsc = [
+                    ['Mensajes', 'ofensivos'],
+                    ['Llamadas', 'ofensivas'],
+                    ['Críticas', 'apariencia'],
+                    ['Suplantación', 'identidad'],
+                    ['Identidades', 'falsas'],
+                    ['Rastreo', 'cuentas/web'],
+                    ['Provocación', 'negativa'],
+                    ['Insinuaciones', 'sexuales'],
+                    ['Contenido', 'sexual'],
+                    ['Vender/publicar', 'video sexual'],
+                    ['Publicar fotos', 'o videos'],
+                    ['Amenaza', 'extorsión'],
+                    ['Otra', 'situación']
+                ];
+
+                const defaultsBasica = [49.0, 44.3, 39.3, 39.5, 37.9, 37.8, 33.8, 25.8, 40.6, 30.0, 52.9, 45.7, 64.0];
+                const defaultsMedia  = [27.2, 24.4, 16.8, 24.1, 25.7, 23.5, 27.5, 19.5, 23.9, 70.0, 9.9,  29.5, 28.6];
+                const defaultsSuper  = [22.3, 27.8, 41.4, 36.4, 33.4, 36.5, 37.5, 54.7, 35.6, 0.0,  37.1, 21.2, 7.4];
+
+                const keysBasica = [
+                    'ciber_esc_mensajes_bas', 'ciber_esc_llamadas_bas', 'ciber_esc_criticas_bas',
+                    'ciber_esc_suplantacion_bas', 'ciber_esc_identidades_bas', 'ciber_esc_rastreo_bas', 'ciber_esc_provocaciones_bas',
+                    'ciber_esc_insinuaciones_bas', 'ciber_esc_contenido_bas', 'ciber_esc_vender_bas', 'ciber_esc_publicar_bas',
+                    'ciber_esc_amenazar_bas', 'ciber_esc_otra_bas'
+                ];
+                const keysMedia = [
+                    'ciber_esc_mensajes_med', 'ciber_esc_llamadas_med', 'ciber_esc_criticas_med',
+                    'ciber_esc_suplantacion_med', 'ciber_esc_identidades_med', 'ciber_esc_rastreo_med', 'ciber_esc_provocaciones_med',
+                    'ciber_esc_insinuaciones_med', 'ciber_esc_contenido_med', 'ciber_esc_vender_med', 'ciber_esc_publicar_med',
+                    'ciber_esc_amenazar_med', 'ciber_esc_otra_med'
+                ];
+                const keysSuper = [
+                    'ciber_esc_mensajes_sup', 'ciber_esc_llamadas_sup', 'ciber_esc_criticas_sup',
+                    'ciber_esc_suplantacion_sup', 'ciber_esc_identidades_sup', 'ciber_esc_rastreo_sup', 'ciber_esc_provocaciones_sup',
+                    'ciber_esc_insinuaciones_sup', 'ciber_esc_contenido_sup', 'ciber_esc_vender_sup', 'ciber_esc_publicar_sup',
+                    'ciber_esc_amenazar_sup', 'ciber_esc_otra_sup'
+                ];
+
+                const dataValsBas = keysBasica.map((k, idx) => (saved[k] !== undefined ? Number(saved[k]) : defaultsBasica[idx]));
+                const dataValsMed = keysMedia.map((k, idx) => (saved[k] !== undefined ? Number(saved[k]) : defaultsMedia[idx]));
+                const dataValsSup = keysSuper.map((k, idx) => (saved[k] !== undefined ? Number(saved[k]) : defaultsSuper[idx]));
+
+                const absolutosBas = [85975, 77769, 27137, 47019, 111225, 41853, 45973, 23883, 49491, 3243, 14550, 21167, 14614];
+                const absolutosMed = [47753, 42835, 11584, 28616, 75426,  26025, 37331, 18051, 29104, 7557, 2726,  13664, 6542];
+                const absolutosSup = [39161, 48760, 28588, 43313, 97809,  40369, 50978, 50698, 43373, 0,    10203, 9822,  1694];
+
+                chartCiberacosoEscolaridad = new Chart(ctxEsc.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labelsEjeEsc,
+                        datasets: [
+                            {
+                                label: 'Básica',
+                                data: dataValsBas,
+                                backgroundColor: '#1565c0',
+                                borderRadius: 4,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 4
+                            },
+                            {
+                                label: 'Media Superior',
+                                data: dataValsMed,
+                                backgroundColor: '#f57c00',
+                                borderRadius: 4,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 4
+                            },
+                            {
+                                label: 'Superior',
+                                data: dataValsSup,
+                                backgroundColor: '#7b1fa2',
+                                borderRadius: 4,
+                                borderWidth: 1,
+                                borderColor: '#ffffff',
+                                minBarLength: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        barPercentage: 0.85,
+                        categoryPercentage: 0.82,
+                        layout: {
+                            padding: { top: 28, bottom: 5, left: 5, right: 10 }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(items) {
+                                        const idx = items[0].dataIndex;
+                                        return titulosCompletosEsc[idx];
+                                    },
+                                    label: function(c) {
+                                        const dLabel = c.dataset.label;
+                                        const pct = Number(c.raw).toFixed(1) + '%';
+                                        let abs = 0;
+                                        if (c.datasetIndex === 0) abs = absolutosBas[c.dataIndex];
+                                        else if (c.datasetIndex === 1) abs = absolutosMed[c.dataIndex];
+                                        else if (c.datasetIndex === 2) abs = absolutosSup[c.dataIndex];
+                                        return ' ' + dLabel + ': ' + pct + (abs ? ' (' + Number(abs).toLocaleString('es-MX') + ' personas)' : '');
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: true,
+                                anchor: 'end',
+                                align: 'top',
+                                clip: false,
+                                offset: 2,
+                                color: '#263238',
+                                font: { weight: 'bold', size: 7.5 },
+                                formatter: function(v) {
+                                    return v != null ? Number(v).toFixed(1) + '%' : '';
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 80,
+                                title: {
+                                    display: true,
+                                    text: 'Porcentaje (%)',
+                                    color: '#666',
+                                    font: { size: 10.5, weight: '500' }
+                                },
+                                ticks: {
+                                    font: { size: 10 },
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                ticks: {
+                                    font: { size: 8, weight: 'bold' },
+                                    color: '#4a154b',
+                                    autoSkip: false,
+                                    maxRotation: 45,
+                                    minRotation: 25
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            } catch (err4) {
+                console.error('Error al renderizar canvasCiberacosoEscolaridad:', err4);
+            }
+        }
     }
 
     function abrirModalTematico(nombreTema) {
@@ -2978,6 +3483,7 @@ type: 'bar',
         const layoutLenguas = document.getElementById("layoutTematicoLenguas");
         const layoutViolencia = document.getElementById("layoutTematicoViolencia");
         const layoutCiberacoso = document.getElementById("layoutTematicoCiberacoso");
+        const layoutSustentable = document.getElementById("layoutTematicoSustentable");
         const layoutStd = document.getElementById("layoutTematicoEstandar");
 
         if (layoutSalud) layoutSalud.classList.add("d-none");
@@ -2987,6 +3493,7 @@ type: 'bar',
         if (layoutLenguas) layoutLenguas.classList.add("d-none");
         if (layoutViolencia) layoutViolencia.classList.add("d-none");
         if (layoutCiberacoso) layoutCiberacoso.classList.add("d-none");
+        if (layoutSustentable) layoutSustentable.classList.add("d-none");
         if (layoutStd) layoutStd.classList.add("d-none");
 
         const esDimensionCISGES = ['atendidas', 'psicologia', 'juicios', 'feminicidios', 'talleres', 'proyectos'].indexOf(nombreTema) !== -1;
@@ -3026,6 +3533,11 @@ type: 'bar',
                 layoutCiberacoso.classList.remove("d-none");
                 renderizarCiberacosoINEGI();
             }
+        } else if (nombreTema === 'sustentable') {
+            if (layoutSustentable) {
+                layoutSustentable.classList.remove("d-none");
+                renderizarSustentableSIODS();
+            }
         } else if (esDimensionCISGES) {
             if (layoutStd) {
                 layoutStd.classList.remove("d-none");
@@ -3049,7 +3561,9 @@ type: 'bar',
         if (modalTematicoBootstrap) {
             modalTematicoBootstrap.show();
             setTimeout(function() {
-                if (nombreTema === 'ciberacoso' && typeof renderizarCiberacosoINEGI === 'function') {
+                if (nombreTema === 'sustentable' && typeof renderizarSustentableSIODS === 'function') {
+                    renderizarSustentableSIODS();
+                } else if (nombreTema === 'ciberacoso' && typeof renderizarCiberacosoINEGI === 'function') {
                     renderizarCiberacosoINEGI();
                 } else if (nombreTema === 'violencia' && typeof renderizarViolenciaINEGI === 'function') {
                     renderizarViolenciaINEGI();
@@ -3087,6 +3601,15 @@ type: 'bar',
         }
     }
 
+    // RENDERIZADO DE DESARROLLO SUSTENTABLE (SIODS · AGENDA 2030)
+    function renderizarSustentableSIODS() {
+        const url = 'https://agenda2030.mx/#/home';
+        const iframe = document.getElementById('iframeSiodsPortal');
+        if (iframe && (!iframe.src || iframe.src === 'about:blank' || iframe.src.indexOf('agenda2030.mx') === -1)) {
+            iframe.src = url;
+        }
+    }
+
     window.datosTematicos = datosTematicos;
     window.abrirModalTematico = abrirModalTematico;
     window.mostrarTema = mostrarTema;
@@ -3094,4 +3617,5 @@ type: 'bar',
     window.renderizarLenguasINEGI = renderizarLenguasINEGI;
     window.renderizarViolenciaINEGI = renderizarViolenciaINEGI;
     window.renderizarCiberacosoINEGI = renderizarCiberacosoINEGI;
+    window.renderizarSustentableSIODS = renderizarSustentableSIODS;
 })(window);
