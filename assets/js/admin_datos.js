@@ -1409,6 +1409,9 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                 if (el) data[id] = parseFloat(el.value) || 0;
             });
             localStorage.setItem('gesmujer_vivienda_datos', JSON.stringify(data));
+            if (typeof window.renderizarViviendaINEGI === 'function') {
+                window.renderizarViviendaINEGI();
+            }
             this.mostrarToast('Datos de Vivienda (2 categorías) guardados con éxito.');
         },
 

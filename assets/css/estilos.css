@@ -509,8 +509,33 @@ body { padding-top: 85px; }
 #modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 1.5rem;
+}
+#modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card .border-top {
+    margin-top: 1.75rem !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid #ebdbe9 !important;
+}
+#modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card .btn-outline-secondary {
+    border-color: #d1c4e9;
+    color: #4a154b;
+    font-weight: 600;
+    font-size: 0.74rem;
+    padding: 6px 14px;
+    background-color: #faf7fb;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+#modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card .btn-outline-secondary:hover {
+    background-color: #4a154b;
+    border-color: #4a154b;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(74, 21, 75, 0.18);
+}
+#modalTematico .col-12.col-xl-5.col-lg-6 .modal-nacional-card .btn-outline-secondary:hover i {
+    color: #ffffff !important;
 }
 .card-metrica-mujeres {
     background: #fdf4f8;

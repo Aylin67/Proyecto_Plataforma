@@ -640,6 +640,9 @@
                     animation: false,
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                    },
                     plugins: {
                         legend: { display: false },
                         datalabels: {
@@ -655,7 +658,8 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: { font: { size: 10 } },
+                            suggestedMax: 35,
+                            ticks: { font: { size: 10 }, stepSize: 5 },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
                         x: {
@@ -704,6 +708,9 @@
                     animation: false,
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 25, bottom: 5, left: 5, right: 10 }
+                    },
                     plugins: {
                         legend: { display: false },
                         datalabels: {
@@ -719,6 +726,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            suggestedMax: 390,
                             ticks: { font: { size: 10 } },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
@@ -1004,7 +1012,8 @@
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.55
+                        barPercentage: 0.55,
+                        minBarLength: 6
                     }]
                 },
                 options: {
@@ -1075,7 +1084,8 @@
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.55
+                        barPercentage: 0.55,
+                        minBarLength: 6
                     }]
                 },
                 options: {
@@ -1228,7 +1238,8 @@
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.6
+                        barPercentage: 0.6,
+                        minBarLength: 6
                     }]
                 },
                 options: {
@@ -1299,7 +1310,8 @@
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.55
+                        barPercentage: 0.55,
+                        minBarLength: 6
                     }]
                 },
                 options: {
@@ -1446,6 +1458,21 @@
         // 2. Viviendas según material en pisos
         const ctx1 = document.getElementById('canvasVivPisos');
         if (ctx1) {
+            let vivPisosData = [969778, 149170, 2898];
+            try {
+                const rawViv = localStorage.getItem('gesmujer_vivienda_datos');
+                if (rawViv) {
+                    const dV = JSON.parse(rawViv);
+                    if (dV.viv_pisos_firme !== undefined && dV.viv_pisos_tierra !== undefined && dV.viv_pisos_noesp !== undefined) {
+                        vivPisosData = [
+                            parseFloat(dV.viv_pisos_firme) || 0,
+                            parseFloat(dV.viv_pisos_tierra) || 0,
+                            parseFloat(dV.viv_pisos_noesp) || 0
+                        ];
+                    }
+                }
+            } catch(e) {}
+
             chartVivPisos = new Chart(ctx1.getContext('2d'), {
                 type: 'bar',
                 data: {
@@ -1456,12 +1483,13 @@
                     ],
                     datasets: [{
                         label: '',
-                        data: [969778, 149170, 2898],
-                        backgroundColor: ['#5aa348', '#e65100', '#b0bec5'],
+                        data: vivPisosData,
+                        backgroundColor: ['#5aa348', '#e65100', '#78909c'],
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.55
+                        barPercentage: 0.55,
+                        minBarLength: 8
                     }]
                 },
                 options: {
@@ -1638,6 +1666,23 @@ function renderizarDesocupacionOaxaca() {
 
         const ctx = document.getElementById('canvasIngresoRubros');
         if (ctx) {
+            let ingRubrosData = [32613, 1992, 11587, 5811, 22];
+            try {
+                const rawIng = localStorage.getItem('gesmujer_ingreso_datos');
+                if (rawIng) {
+                    const dI = JSON.parse(rawIng);
+                    if (dI.ing_rubro_trabajo !== undefined) {
+                        ingRubrosData = [
+                            parseFloat(dI.ing_rubro_trabajo) || 0,
+                            parseFloat(dI.ing_rubro_renta) || 0,
+                            parseFloat(dI.ing_rubro_transf) || 0,
+                            parseFloat(dI.ing_rubro_alquiler) || 0,
+                            parseFloat(dI.ing_rubro_otros) !== undefined ? parseFloat(dI.ing_rubro_otros) : 22
+                        ];
+                    }
+                }
+            } catch(e) {}
+
             chartIngresoRubros = new Chart(ctx.getContext('2d'), {
                 type: 'bar',
                 data: {
@@ -1650,7 +1695,7 @@ function renderizarDesocupacionOaxaca() {
                     ],
                     datasets: [{
                         label: 'Ingreso promedio trimestral ($ MXN)',
-                        data: [32613, 1992, 11587, 5811, 22],
+                        data: ingRubrosData,
                         backgroundColor: [
                             '#2e7d32',
                             '#0288d1',
@@ -1661,7 +1706,8 @@ function renderizarDesocupacionOaxaca() {
                         borderRadius: 6,
                         borderWidth: 1,
                         borderColor: '#ffffff',
-                        barPercentage: 0.55
+                        barPercentage: 0.55,
+                        minBarLength: 8
                     }]
                 },
                 options: {
@@ -3571,6 +3617,12 @@ type: 'bar',
                     renderizarLenguasINEGI();
                 } else if (nombreTema === 'ingreso' && typeof renderizarIngresoINEGI === 'function') {
                     renderizarIngresoINEGI();
+                } else if (nombreTema === 'vivienda' && typeof renderizarViviendaINEGI === 'function') {
+                    renderizarViviendaINEGI();
+                } else if (nombreTema === 'educacion' && typeof renderizarEducacionINEGI === 'function') {
+                    renderizarEducacionINEGI();
+                } else if (nombreTema === 'salud' && typeof renderizarSaludINEGI === 'function') {
+                    renderizarSaludINEGI();
                 }
             }, 120);
         }
@@ -3613,6 +3665,9 @@ type: 'bar',
     window.datosTematicos = datosTematicos;
     window.abrirModalTematico = abrirModalTematico;
     window.mostrarTema = mostrarTema;
+    window.renderizarSaludINEGI = typeof renderizarSaludINEGI === 'function' ? renderizarSaludINEGI : null;
+    window.renderizarEducacionINEGI = typeof renderizarEducacionINEGI === 'function' ? renderizarEducacionINEGI : null;
+    window.renderizarViviendaINEGI = typeof renderizarViviendaINEGI === 'function' ? renderizarViviendaINEGI : null;
     window.renderizarIngresoINEGI = renderizarIngresoINEGI;
     window.renderizarLenguasINEGI = renderizarLenguasINEGI;
     window.renderizarViolenciaINEGI = renderizarViolenciaINEGI;
