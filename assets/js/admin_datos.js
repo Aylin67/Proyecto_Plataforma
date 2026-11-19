@@ -6,8 +6,9 @@
     const STORAGE_SNAPSHOT_KEY = 'gesmujer_admin_version_anterior';
     const STORAGE_FOTO_KEY = 'gesmujer_admin_foto';
     const STORAGE_PASSWORD_KEY = 'gesmujer_admin_password';
-const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
+    const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
     const STORAGE_REMEMBER_USER_KEY = 'gesmujer_admin_user_recordado';
+    const DEFAULT_ADMIN_USER = 'admin@gesmujer.org';
     const DEFAULT_ADMIN_PASSWORD = 'Gesmujer2026!';
     const ADMIN_PASSWORD = DEFAULT_ADMIN_PASSWORD;
     const DEFAULT_PIN = ADMIN_PASSWORD;
@@ -670,7 +671,9 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
         },
 
         solicitarAccesoAdmin: function(forzarLogin = false) {
-            const sesionActiva = sessionStorage.getItem(SESSION_AUTH_KEY) === 'true' || 
+            const sesionActiva = localStorage.getItem(SESSION_AUTH_KEY) === 'true' ||
+                                 localStorage.getItem('plataforma_admin_sesion_activa') === 'true' ||
+                                 sessionStorage.getItem(SESSION_AUTH_KEY) === 'true' || 
                                  sessionStorage.getItem('plataforma_admin_sesion_activa') === 'true';
 
             // Cerrar cualquier modal público abierto para evitar superposiciones o pantallas oscuras
@@ -728,14 +731,14 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             this.mostrarVistaLogin();
             const pinInput = document.getElementById('inputAdminPin');
             const userInput = document.getElementById('inputAdminUsername');
-            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
-            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY);
+            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY) || DEFAULT_ADMIN_USER;
+            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY) || this.obtenerPasswordActiva();
 
             if (userInput) {
-                userInput.value = userRecordado || '';
+                userInput.value = userRecordado;
             }
             if (pinInput) {
-                pinInput.value = pinRecordado || '';
+                pinInput.value = pinRecordado;
                 const pinError = document.getElementById('adminPinError');
                 if (pinError) pinError.classList.add('d-none');
             }
@@ -818,9 +821,14 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
             }
 
             if (pinIngresado === passActiva || pinIngresado === '@dminGeSol.' || pinIngresado === '@dminGeSol' || pinIngresado === 'gesmujer' || pinIngresado === 'Gesmujer2026!') {
-                // 1. Guardar de forma persistente en la plataforma
+                // 1. Guardar de forma permanente en el ordenador (localStorage)
                 localStorage.setItem(STORAGE_REMEMBER_USER_KEY, userIngresado);
                 localStorage.setItem(STORAGE_REMEMBER_PIN_KEY, pinIngresado);
+                localStorage.setItem(SESSION_AUTH_KEY, 'true');
+                localStorage.setItem('plataforma_admin_sesion_activa', 'true');
+
+                sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
+                sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
 
                 // 2. Intentar API de credenciales nativas si está disponible
                 if (window.PasswordCredential && navigator.credentials && navigator.credentials.store) {
@@ -833,15 +841,11 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
                     } catch(e) {}
                 }
 
-                sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
-                sessionStorage.setItem('plataforma_admin_sesion_activa', 'true');
-
-                // 3. Permitir que el formulario envíe su POST nativo al iframe oculto
-                // Esto es exactamente lo que hace que Edge y Google detecten el login y pregunten "¿Guardar contraseña?"
+                // 3. Abrir directamente el panel de administracion
                 setTimeout(() => {
                     this.cerrarModalPin();
                     this.abrirModalAdmin();
-                }, 150);
+                }, 100);
 
                 return true;
             } else {
@@ -942,12 +946,12 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
 
             const userInput = document.getElementById('inputAdminUsername');
             const pinInput = document.getElementById('inputAdminPin');
-            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY);
-            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY);
+            const userRecordado = localStorage.getItem(STORAGE_REMEMBER_USER_KEY) || DEFAULT_ADMIN_USER;
+            const pinRecordado = localStorage.getItem(STORAGE_REMEMBER_PIN_KEY) || this.obtenerPasswordActiva();
 
-            if (userInput) userInput.value = userRecordado || '';
+            if (userInput) userInput.value = userRecordado;
             if (pinInput) {
-                pinInput.value = pinRecordado || '';
+                pinInput.value = pinRecordado;
                 if (!userRecordado && userInput) {
                     userInput.focus();
                 } else {
@@ -1128,12 +1132,14 @@ const STORAGE_REMEMBER_PIN_KEY = 'gesmujer_admin_pin_recordado';
         },
 
         cerrarSesion: function() {
+            localStorage.removeItem(SESSION_AUTH_KEY);
+            localStorage.removeItem('plataforma_admin_sesion_activa');
             sessionStorage.removeItem(SESSION_AUTH_KEY);
             sessionStorage.removeItem('plataforma_admin_sesion_activa');
             sessionStorage.removeItem('plataforma_admin_categoria');
             sessionStorage.removeItem('plataforma_admin_modal_abierto');
             this.cerrarModalAdmin();
-            this.mostrarToast('Sesión de administración cerrada correctamente.');
+            this.mostrarToast('Sesión cerrada. Tus credenciales siguen recordadas en este equipo.');
         },
 
         
