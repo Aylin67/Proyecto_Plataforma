@@ -2,7 +2,7 @@
 // api/conexion.php - Conexión centralizada a la base de datos pública de GESMujer
 
 $host = 'localhost';
-$dbname = 'gesmujer_publica_db';
+$dbname = 'gesmujer_sigd2';
 $usuario = 'root';
 $password = ''; // Contraseña de XAMPP
 
