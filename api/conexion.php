@@ -1,7 +1,7 @@
 <?php
 // api/conexion.php - Conexión centralizada a la base de datos pública de GESMujer
 
-$host = 'localhost';
+$host = '127.0.0.1;port=3307';
 $dbname = 'gesmujer_sigd2';
 $usuario = 'root';
 $password = ''; // Contraseña de XAMPP
