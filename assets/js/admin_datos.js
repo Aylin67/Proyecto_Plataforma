@@ -70,7 +70,7 @@
         regiones: [
             { id: 1, clave: 'REG-01', nombre: 'Valles Centrales',      lat: 17.0732, lng: -96.7266, pob: 1033884, mujeresHab: 549000, hombresHab: 484884, psic: 1147, juicios: 598, casos: 420 },
             { id: 2, clave: 'REG-02', nombre: 'Istmo de Tehuantepec',  lat: 16.4360, lng: -95.2400, pob: 622464,  mujeresHab: 322000, hombresHab: 300464, psic: 185,  juicios: 120, casos: 198 },
-            { id: 3, clave: 'REG-03', nombre: 'Tuxtepec (Papaloapan)', lat: 18.1000, lng: -96.1000, pob: 492028,  mujeresHab: 257000, hombresHab: 235028, psic: 92,   juicios: 45,  casos: 99  },
+            { id: 3, clave: 'REG-03', nombre: 'Papaloapan', lat: 18.1000, lng: -96.1000, pob: 492028,  mujeresHab: 257000, hombresHab: 235028, psic: 92,   juicios: 45,  casos: 99  },
             { id: 4, clave: 'REG-04', nombre: 'Costa',                 lat: 15.8500, lng: -96.3200, pob: 597975,  mujeresHab: 309000, hombresHab: 288975, psic: 148,  juicios: 74,  casos: 165 },
             { id: 5, clave: 'REG-05', nombre: 'Mixteca',               lat: 17.5000, lng: -97.5000, pob: 483163,  mujeresHab: 258000, hombresHab: 225163, psic: 142,  juicios: 82,  casos: 121 },
             { id: 6, clave: 'REG-06', nombre: 'Sierra Sur',            lat: 16.2000, lng: -96.5000, pob: 341202,  mujeresHab: 177000, hombresHab: 164202, psic: 74,   juicios: 38,  casos: 55  },

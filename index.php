@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/mexico_estados.js"></script>
-    <script src="assets/js/tarjetas.js?v=20261112_v3"></script>
+    <script src="assets/js/tarjetas.js?v=20261124_v4"></script>
     <script src="assets/js/admin_datos.js?v=20261112_v3"></script>
     <link rel="stylesheet" href="assets/css/estilos.css?v=20261118_borde_v2">
 </head>
@@ -4635,7 +4635,7 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
         const regionesOaxacaCoordenadas = [
             { id: 1, clave: 'REG-01', nombre: 'Valles C', lat: 17.0732, lng: -96.7266, pob: '1,033,884', mujeresHab: '549,000', hombresHab: '484,884', mujeres: '53.1%', hombres: '46.9%', psic: 1147, juicios: 598, casos: 420 },
             { id: 2, clave: 'REG-02', nombre: 'Istmo', lat: 16.4360, lng: -95.2400, pob: '622,464', mujeresHab: '322,000', hombresHab: '300,464', mujeres: '51.7%', hombres: '48.3%', psic: 185, juicios: 120, casos: 198 },
-            { id: 3, clave: 'REG-03', nombre: 'Tuxtepec', lat: 18.1000, lng: -96.1000, pob: '492,028', mujeresHab: '257,000', hombresHab: '235,028', mujeres: '52.2%', hombres: '47.8%', psic: 92, juicios: 45, casos: 99 },
+            { id: 3, clave: 'REG-03', nombre: 'Papaloapan', lat: 18.1000, lng: -96.1000, pob: '492,028', mujeresHab: '257,000', hombresHab: '235,028', mujeres: '52.2%', hombres: '47.8%', psic: 92, juicios: 45, casos: 99 },
             { id: 4, clave: 'REG-04', nombre: 'Costa', lat: 15.8500, lng: -96.3200, pob: '597,975', mujeresHab: '309,000', hombresHab: '288,975', mujeres: '51.7%', hombres: '48.3%', psic: 148, juicios: 74, casos: 165 },
             { id: 5, clave: 'REG-05', nombre: 'Mixteca', lat: 17.5000, lng: -97.5000, pob: '483,163', mujeresHab: '258,000', hombresHab: '225,163', mujeres: '53.4%', hombres: '46.6%', psic: 142, juicios: 82, casos: 121 },
             { id: 6, clave: 'REG-06', nombre: 'Sierra S', lat: 16.2000, lng: -96.5000, pob: '341,202', mujeresHab: '177,000', hombresHab: '164,202', mujeres: '51.9%', hombres: '48.1%', psic: 74, juicios: 38, casos: 55 },

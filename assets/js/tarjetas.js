@@ -84,8 +84,8 @@
             kpiTotal: { label: "Casos registrados", valor: "154" },
             graficaPrincipal: {
                 titulo: "Distribución por regiones de Oaxaca",
-                labels: ["Valles Centrales", "Istmo", "Tuxtepec", "Costa", "Mixteca", "Sierra Sur", "Sierra Norte", "Cañada"],
-                data: [30, 45, 4, 37, 13, 14, 6, 5],
+                labels: ["Valles Centrales", "Istmo", "Papaloapan", "Costa", "Mixteca", "Sierra Sur", "Sierra Norte", "Cañada"],
+                data: [28, 43, 4, 38, 13, 16, 6, 6],
                 colores: ["#60ced8", "#e67eb7", "#5aa348", "#e39d8a", "#c592e6", "#ea8d8d", "#f7ee73", "#e089b7"],
                 tipo: "bar"
             },
@@ -3587,7 +3587,24 @@ type: 'bar',
         } else if (esDimensionCISGES) {
             if (layoutStd) {
                 layoutStd.classList.remove("d-none");
-                renderizarModalTematico(nombreTema, data);
+                fetch('api/datos_cisges.php')
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res && res.status === 'success' && res.dimensiones && res.dimensiones[nombreTema]) {
+                            const info = res.dimensiones[nombreTema];
+                            if (data.kpiTotal && info.kpiTotal !== undefined) {
+                                data.kpiTotal.valor = String(info.kpiTotal);
+                            }
+                            if (data.graficaPrincipal && info.labels && info.data) {
+                                data.graficaPrincipal.labels = info.labels;
+                                data.graficaPrincipal.data   = info.data;
+                            }
+                        }
+                    })
+                    .catch(() => {})
+                    .finally(() => {
+                        renderizarModalTematico(nombreTema, data);
+                    });
             }
         }
 
@@ -3661,6 +3678,28 @@ type: 'bar',
             iframe.src = url;
         }
     }
+
+    // Precarga automática en vivo de las 6 dimensiones de CISGES
+    try {
+        fetch('api/datos_cisges.php')
+            .then(r => r.json())
+            .then(res => {
+                if (res && res.status === 'success' && res.dimensiones) {
+                    for (const [tema, info] of Object.entries(res.dimensiones)) {
+                        if (datosTematicos[tema]) {
+                            if (info.kpiTotal !== undefined) {
+                                datosTematicos[tema].kpiTotal.valor = String(info.kpiTotal);
+                            }
+                            if (info.labels && info.data) {
+                                datosTematicos[tema].graficaPrincipal.labels = info.labels;
+                                datosTematicos[tema].graficaPrincipal.data   = info.data;
+                            }
+                        }
+                    }
+                }
+            })
+            .catch(() => {});
+    } catch(e) {}
 
     window.datosTematicos = datosTematicos;
     window.abrirModalTematico = abrirModalTematico;
