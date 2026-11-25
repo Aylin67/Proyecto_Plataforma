@@ -16,7 +16,7 @@ try {
     $regionesMap = [
         'Valles Centrales' => ['VALLES'],
         'Istmo'            => ['ISTMO', 'ITSMO'],
-        'Papaloapan'       => ['PAPALOAPAN', 'TUXTEPEC'],
+        'Papaloapan'       => ['PAPALOAPAN', ],
         'Costa'            => ['COSTA'],
         'Mixteca'          => ['MIXTECA'],
         'Sierra Sur'       => ['SIERRA SUR'],
