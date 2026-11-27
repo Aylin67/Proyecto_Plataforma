@@ -70,7 +70,7 @@
         regiones: [
             { id: 1, clave: 'REG-01', nombre: 'Valles Centrales',      lat: 17.0732, lng: -96.7266, pob: 1033884, mujeresHab: 549000, hombresHab: 484884, psic: 1147, juicios: 598, casos: 420 },
             { id: 2, clave: 'REG-02', nombre: 'Istmo de Tehuantepec',  lat: 16.4360, lng: -95.2400, pob: 622464,  mujeresHab: 322000, hombresHab: 300464, psic: 185,  juicios: 120, casos: 198 },
-            { id: 3, clave: 'REG-03', nombre: 'Papaloapan', lat: 18.1000, lng: -96.1000, pob: 492028,  mujeresHab: 257000, hombresHab: 235028, psic: 92,   juicios: 45,  casos: 99  },
+            { id: 3, clave: 'REG-03', nombre: 'Tuxtepec (Papaloapan)', lat: 18.1000, lng: -96.1000, pob: 492028,  mujeresHab: 257000, hombresHab: 235028, psic: 92,   juicios: 45,  casos: 99  },
             { id: 4, clave: 'REG-04', nombre: 'Costa',                 lat: 15.8500, lng: -96.3200, pob: 597975,  mujeresHab: 309000, hombresHab: 288975, psic: 148,  juicios: 74,  casos: 165 },
             { id: 5, clave: 'REG-05', nombre: 'Mixteca',               lat: 17.5000, lng: -97.5000, pob: 483163,  mujeresHab: 258000, hombresHab: 225163, psic: 142,  juicios: 82,  casos: 121 },
             { id: 6, clave: 'REG-06', nombre: 'Sierra Sur',            lat: 16.2000, lng: -96.5000, pob: 341202,  mujeresHab: 177000, hombresHab: 164202, psic: 74,   juicios: 38,  casos: 55  },
@@ -481,6 +481,10 @@
             }
         },
 
+        deshacer: function() {
+            return this.deshacerCambio();
+        },
+
         deshacerCambio: function() {
             try {
                 const raw = localStorage.getItem(STORAGE_SNAPSHOT_KEY);
@@ -503,6 +507,10 @@
         // ==========================================
         // RESTABLECIMIENTO Y RESPALDO
         // ==========================================
+        restablecerFabrica: function() {
+            this.restablecerTodo();
+        },
+
         restablecerTodo: function() {
             this.guardarSnapshot();
             this._datos = JSON.parse(JSON.stringify(DATOS_DEFAULT));
@@ -1341,6 +1349,10 @@
         },
 
         guardarSalud: function() {
+            const prev = localStorage.getItem('gesmujer_salud_datos');
+            if (prev) {
+                localStorage.setItem('gesmujer_salud_datos_prev', prev);
+            }
             const ids = [
                 'salud_enf_endocrinas', 'salud_enf_corazon', 'salud_enf_digestivo', 'salud_enf_respiratorio',
                 'salud_enf_cerebrovascular', 'salud_enf_hipertensiva', 'salud_enf_tumores_dig',
@@ -1356,6 +1368,9 @@
                 if (el) data[id] = parseFloat(el.value) || 0;
             });
             localStorage.setItem('gesmujer_salud_datos', JSON.stringify(data));
+            if (typeof window.renderizarSaludINEGI === 'function') {
+                window.renderizarSaludINEGI();
+            }
             this.mostrarToast('Datos de Salud (6 categorías) guardados con éxito.');
         },
 
@@ -1374,11 +1389,15 @@
         },
 
         guardarEducacion: function() {
+            const prev = localStorage.getItem('gesmujer_educacion_datos');
+            if (prev) {
+                localStorage.setItem('gesmujer_educacion_datos_prev', prev);
+            }
             const ids = [
                 'edu_aptitud_sabe', 'edu_aptitud_nosabe', 'edu_aptitud_noesp',
                 'edu_alfa_si', 'edu_alfa_no', 'edu_alfa_noesp',
                 'edu_mat_inicial', 'edu_mat_preescolar', 'edu_mat_primaria', 'edu_mat_secundaria', 'edu_mat_mediasup', 'edu_mat_superior',
-                'edu_esc_sinesc', 'edu_esc_basica', 'edu_esc_mediasup', 'edu_esc_superior',
+                'edu_esc_sinesc', 'edu_esc_basica', 'edu_esc_mediasup', 'edu_esc_superior', 'edu_esc_noesp',
                 'edu_asist_si', 'edu_asist_no', 'edu_asist_noesp'
             ];
             const data = {};
@@ -1387,6 +1406,9 @@
                 if (el) data[id] = parseFloat(el.value) || 0;
             });
             localStorage.setItem('gesmujer_educacion_datos', JSON.stringify(data));
+            if (typeof window.renderizarEducacionINEGI === 'function') {
+                window.renderizarEducacionINEGI();
+            }
             this.mostrarToast('Datos de Educación (5 categorías) guardados con éxito.');
         },
 
@@ -1405,6 +1427,10 @@
         },
 
         guardarVivienda: function() {
+            const prev = localStorage.getItem('gesmujer_vivienda_datos');
+            if (prev) {
+                localStorage.setItem('gesmujer_vivienda_datos_prev', prev);
+            }
             const ids = [
                 'viv_serv_electricidad', 'viv_serv_sanitario', 'viv_serv_drenaje', 'viv_serv_agua',
                 'viv_pisos_firme', 'viv_pisos_tierra', 'viv_pisos_noesp'
@@ -3124,7 +3150,34 @@
         },
 
         deshacerCambioPrevio: function() {
-            const exito = AdminDatos.deshacer();
+            const cat = this.categoriaActiva;
+            if (cat && cat !== 'inicio' && cat !== 'nacional' && cat !== 'estatal') {
+                const prev = localStorage.getItem('gesmujer_' + cat + '_datos_prev');
+                if (prev) {
+                    const actual = localStorage.getItem('gesmujer_' + cat + '_datos') || '';
+                    localStorage.setItem('gesmujer_' + cat + '_datos', prev);
+                    if (actual) {
+                        localStorage.setItem('gesmujer_' + cat + '_datos_prev', actual);
+                    } else {
+                        localStorage.removeItem('gesmujer_' + cat + '_datos_prev');
+                    }
+                    this.abrirCategoria(cat);
+                    if (cat === 'educacion' && typeof window.renderizarEducacionINEGI === 'function') {
+                        window.renderizarEducacionINEGI();
+                    } else if (cat === 'salud' && typeof window.renderizarSaludINEGI === 'function') {
+                        window.renderizarSaludINEGI();
+                    } else if (cat === 'vivienda' && typeof window.renderizarViviendaINEGI === 'function') {
+                        window.renderizarViviendaINEGI();
+                    }
+                    this.mostrarToast(`Se restauró la versión previa de ${cat.charAt(0).toUpperCase() + cat.slice(1)}.`);
+                    return;
+                } else {
+                    this.mostrarToast('No hay cambios anteriores guardados para deshacer.');
+                    return;
+                }
+            }
+
+            const exito = typeof AdminDatos.deshacer === 'function' ? AdminDatos.deshacer() : AdminDatos.deshacerCambio();
             if (exito) {
                 if (this.categoriaActiva) {
                     this.abrirCategoria(this.categoriaActiva);
@@ -3146,13 +3199,74 @@
         },
 
         confirmarRestablecer: function() {
-            AdminDatos.restablecerFabrica();
             const banner = document.getElementById('adminConfirmBanner');
             if (banner) banner.classList.add('d-none');
-            if (this.categoriaActiva) {
-                this.abrirCategoria(this.categoriaActiva);
+
+            const cat = this.categoriaActiva;
+            if (cat && cat !== 'inicio' && cat !== 'nacional' && cat !== 'estatal') {
+                const prev = localStorage.getItem('gesmujer_' + cat + '_datos');
+                if (prev) {
+                    localStorage.setItem('gesmujer_' + cat + '_datos_prev', prev);
+                }
+                localStorage.removeItem('gesmujer_' + cat + '_datos');
+
+                if (cat === 'educacion') {
+                    const defs = {
+                        edu_aptitud_sabe: 89.19, edu_aptitud_nosabe: 10.23, edu_aptitud_noesp: 0.58,
+                        edu_alfa_si: 88.35, edu_alfa_no: 11.32, edu_alfa_noesp: 0.33,
+                        edu_mat_inicial: 3938, edu_mat_preescolar: 84019, edu_mat_primaria: 239800, edu_mat_secundaria: 110641, edu_mat_mediasup: 78735, edu_mat_superior: 48973,
+                        edu_esc_sinesc: 9.78, edu_esc_basica: 52.72, edu_esc_mediasup: 20.19, edu_esc_superior: 16.98, edu_esc_noesp: 0.33,
+                        edu_asist_si: 25.55, edu_asist_no: 74.13, edu_asist_noesp: 0.32
+                    };
+                    Object.keys(defs).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = defs[k];
+                    });
+                    if (typeof window.renderizarEducacionINEGI === 'function') {
+                        window.renderizarEducacionINEGI();
+                    }
+                } else if (cat === 'salud') {
+                    const defs = {
+                        salud_enf_endocrinas: 2622, salud_enf_corazon: 2367, salud_enf_digestivo: 894, salud_enf_respiratorio: 862,
+                        salud_enf_cerebrovascular: 799, salud_enf_hipertensiva: 707, salud_enf_tumores_dig: 606,
+                        salud_enf_tumores_gen: 367, salud_enf_urinario: 337, salud_enf_tumores_mama: 287,
+                        salud_suicidio_ahorcamiento: 34, salud_suicidio_envenenamiento: 8, salud_suicidio_arma: 4,
+                        salud_mama_35_44: 21, salud_mama_45_54: 53, salud_mama_55_64: 84, salud_mama_65_mas: 129,
+                        salud_diabetes_sub50: 112, salud_diabetes_50_64: 528, salud_diabetes_65_79: 981, salud_diabetes_80_mas: 1001,
+                        salud_materna_rmm: 35.8, salud_materna_defunciones: 28, salud_infantil_tasa: 11.4, salud_infantil_defunciones: 412
+                    };
+                    Object.keys(defs).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = defs[k];
+                    });
+                    if (typeof window.renderizarSaludINEGI === 'function') {
+                        window.renderizarSaludINEGI();
+                    }
+                } else if (cat === 'vivienda') {
+                    const defs = {
+                        viv_serv_electricidad: 98.4, viv_serv_sanitario: 91.2, viv_serv_drenaje: 78.5, viv_serv_agua: 72.1,
+                        viv_pisos_firme: 969778, viv_pisos_tierra: 149170, viv_pisos_noesp: 2898
+                    };
+                    Object.keys(defs).forEach(k => {
+                        const el = document.getElementById(k);
+                        if (el) el.value = defs[k];
+                    });
+                    if (typeof window.renderizarViviendaINEGI === 'function') {
+                        window.renderizarViviendaINEGI();
+                    }
+                } else {
+                    this.abrirCategoria(cat);
+                }
+                this.mostrarToast(`Datos de ${cat.charAt(0).toUpperCase() + cat.slice(1)} restablecidos al Censo Oficial INEGI.`);
+            } else {
+                if (typeof AdminDatos.restablecerTodo === 'function') {
+                    AdminDatos.restablecerTodo();
+                }
+                if (this.categoriaActiva) {
+                    this.abrirCategoria(this.categoriaActiva);
+                }
+                this.mostrarToast('Datos restablecidos al Censo Oficial INEGI 2020.');
             }
-            this.mostrarToast('Datos restablecidos al Censo Oficial INEGI 2020.');
         },
 
         mostrarToast: function(msg) {

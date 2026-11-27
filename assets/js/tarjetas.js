@@ -45,11 +45,11 @@
             iconoColor: "#7b1fa2",
             badge: "CISGES",
             fuenteCorta: "CISGES ",
-            kpiTotal: { label: "Sesiones psicológicas", valor: "1" },
+            kpiTotal: { label: "Sesiones psicológicas", valor: "0" },
             graficaPrincipal: {
                 titulo: "Tipo de atención psicológica",
                 labels: ["Asesoría inicial", "Terapia continua", "Contención en crisis", "Canalización clínica"],
-                data: [1, 1, 1, 1],
+                data: [0, 0, 0, 0],
                 colores: ["#60ced8", "#e67eb7", "#5aa348", "#ecb0a0"],
                 tipo: "bar"
             },
@@ -63,12 +63,12 @@
             iconoColor: "#283593",
             badge: "CISGES",
             fuenteCorta: "CISGES ",
-            kpiTotal: { label: "Servicios jurídicos", valor: "1" },
+            kpiTotal: { label: "Servicios jurídicos", valor: "0" },
             graficaPrincipal: {
-                titulo: "Materia del litigio",
-                labels: ["Pensión alimenticia", "Guarda y custodia", "Divorcio incausado", "Órdenes de protección"],
-                data: [1, 1, 1, 1],
-                colores: ["#60ced8", "#e67eb7", "#5aa348", "#ecb0a0"],
+                titulo: "Materia del litigio y asesorías",
+                labels: ["Asesoría legal", "Pensión alimenticia", "Guarda y custodia", "Divorcio incausado", "Órdenes de protección"],
+                data: [0, 0, 0, 0, 0],
+                colores: ["#3b82f6", "#60ced8", "#e67eb7", "#5aa348", "#ecb0a0"],
                 tipo: "bar"
             },
             analisis: "El acceso a la justicia no debería ser un privilegio. En GESMujer acompañamos jurídicamente a mujeres que enfrentan litigios familiares, demandas de pensión alimenticia, guarda y custodia, divorcios y solicitudes de órdenes de protección. Cada expediente abierto es una puerta que se abre frente a la impunidad, un paso firme hacia la restitución de derechos y una vida digna para las mujeres y sus hijas e hijos."
@@ -84,8 +84,8 @@
             kpiTotal: { label: "Casos registrados", valor: "154" },
             graficaPrincipal: {
                 titulo: "Distribución por regiones de Oaxaca",
-                labels: ["Valles Centrales", "Istmo", "Papaloapan", "Costa", "Mixteca", "Sierra Sur", "Sierra Norte", "Cañada"],
-                data: [28, 43, 4, 38, 13, 16, 6, 6],
+                labels: ["Valles Centrales", "Istmo", "Tuxtepec", "Costa", "Mixteca", "Sierra Sur", "Sierra Norte", "Cañada"],
+                data: [30, 45, 4, 37, 13, 14, 6, 5],
                 colores: ["#60ced8", "#e67eb7", "#5aa348", "#e39d8a", "#c592e6", "#ea8d8d", "#f7ee73", "#e089b7"],
                 tipo: "bar"
             },
@@ -99,11 +99,11 @@
             iconoColor: "#e65100",
             badge: "CISGES",
             fuenteCorta: "CISGES",
-            kpiTotal: { label: "Procesos formativos", valor: "1" },
+            kpiTotal: { label: "Procesos formativos", valor: "0" },
             graficaPrincipal: {
                 titulo: "Modalidades de formación impartidas",
                 labels: ["Talleres comunitarios", "Diplomados", "Seminarios", "Módulos"],
-                data: [1, 1, 1, 1],
+                data: [0, 0, 0, 0],
                 colores: ["#60ced8", "#e67eb7", "#5aa348", "#e39d8a"],
                 tipo: "bar"
             },
@@ -117,12 +117,12 @@
             iconoColor: "#00695c",
             badge: "CISGES",
             fuenteCorta: "CISGES",
-            kpiTotal: { label: "Proyectos institucionales", valor: "1" },
+            kpiTotal: { label: "Proyectos institucionales", valor: "0" },
             graficaPrincipal: {
                 titulo: "Estado de la cartera de proyectos",
                 labels: ["Activos", "Concluidos", "En gestión"],
-                data: [1, 1, 1],
-                colores: ["#60ced8", "#e67eb7", "#5aa348", "#e39d8a"],
+                data: [0, 0, 0],
+                colores: ["#60ced8", "#e67eb7", "#5aa348"],
                 tipo: "bar"
             },
             analisis: "Gestionamos proyectos que transforman realidades. Con el respaldo de fondos públicos y donaciones privadas, ejecutamos iniciativas de atención directa, formación comunitaria, investigación e incidencia pública. Cada peso invertido se traduce en más mujeres acompañadas, más comunidades informadas y más pasos hacia una Oaxaca con igualdad sustantiva."
@@ -998,6 +998,43 @@
         if (chartEduEscolaridad) { chartEduEscolaridad.destroy(); chartEduEscolaridad = null; }
         if (chartEduAsistencia) { chartEduAsistencia.destroy(); chartEduAsistencia = null; }
 
+        let eduData = {};
+        try {
+            const rawEdu = localStorage.getItem('gesmujer_educacion_datos');
+            if (rawEdu) eduData = JSON.parse(rawEdu);
+        } catch(e) {}
+
+        const valAptitud = [
+            eduData.edu_aptitud_sabe !== undefined ? parseFloat(eduData.edu_aptitud_sabe) : 89.19,
+            eduData.edu_aptitud_nosabe !== undefined ? parseFloat(eduData.edu_aptitud_nosabe) : 10.23,
+            eduData.edu_aptitud_noesp !== undefined ? parseFloat(eduData.edu_aptitud_noesp) : 0.58
+        ];
+        const valAlfabetismo = [
+            eduData.edu_alfa_si !== undefined ? parseFloat(eduData.edu_alfa_si) : 88.35,
+            eduData.edu_alfa_no !== undefined ? parseFloat(eduData.edu_alfa_no) : 11.32,
+            eduData.edu_alfa_noesp !== undefined ? parseFloat(eduData.edu_alfa_noesp) : 0.33
+        ];
+        const valMatricula = [
+            eduData.edu_mat_inicial !== undefined ? parseFloat(eduData.edu_mat_inicial) : 3938,
+            eduData.edu_mat_preescolar !== undefined ? parseFloat(eduData.edu_mat_preescolar) : 84019,
+            eduData.edu_mat_primaria !== undefined ? parseFloat(eduData.edu_mat_primaria) : 239800,
+            eduData.edu_mat_secundaria !== undefined ? parseFloat(eduData.edu_mat_secundaria) : 110641,
+            eduData.edu_mat_mediasup !== undefined ? parseFloat(eduData.edu_mat_mediasup) : 78735,
+            eduData.edu_mat_superior !== undefined ? parseFloat(eduData.edu_mat_superior) : 48973
+        ];
+        const valEscolaridad = [
+            eduData.edu_esc_sinesc !== undefined ? parseFloat(eduData.edu_esc_sinesc) : 9.78,
+            eduData.edu_esc_basica !== undefined ? parseFloat(eduData.edu_esc_basica) : 52.72,
+            eduData.edu_esc_mediasup !== undefined ? parseFloat(eduData.edu_esc_mediasup) : 20.19,
+            eduData.edu_esc_superior !== undefined ? parseFloat(eduData.edu_esc_superior) : 16.98,
+            eduData.edu_esc_noesp !== undefined ? parseFloat(eduData.edu_esc_noesp) : 0.33
+        ];
+        const valAsistencia = [
+            eduData.edu_asist_si !== undefined ? parseFloat(eduData.edu_asist_si) : 25.55,
+            eduData.edu_asist_no !== undefined ? parseFloat(eduData.edu_asist_no) : 74.13,
+            eduData.edu_asist_noesp !== undefined ? parseFloat(eduData.edu_asist_noesp) : 0.32
+        ];
+
         // 1. Población de 6 a 14 años según aptitud para leer y escribir
         const ctx0 = document.getElementById('canvasEduAptitud');
         if (ctx0) {
@@ -1007,7 +1044,7 @@
                     labels: ['Sabe leer y escribir', 'No sabe leer y escribir', 'No especificado'],
                     datasets: [{
                         label: 'Valor porcentual (%)',
-                        data: [89.19, 10.23, 0.58],
+                        data: valAptitud,
                         backgroundColor: ['#48b5c4', '#e67eb7', '#b0bec5'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1079,7 +1116,7 @@
                     labels: ['Alfabeta', 'Analfabeta', 'No especificado'],
                     datasets: [{
                         label: 'Valor porcentual (%)',
-                        data: [88.35, 11.32, 0.33],
+                        data: valAlfabetismo,
                         backgroundColor: ['#5aa348', '#e65100', '#b0bec5'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1151,7 +1188,7 @@
                     labels: ['Inicial', 'Preescolar', 'Primaria', 'Secundaria', 'Media superior', 'Superior'],
                     datasets: [{
                         label: 'Alumnas matriculadas',
-                        data: [3938, 84019, 239800, 110641, 78735, 48973],
+                        data: valMatricula,
                         backgroundColor: ['#ecb0a0', '#60ced8', '#48b5c4', '#5aa348', '#f57c00', '#7b1fa2'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1233,7 +1270,7 @@
                     ],
                     datasets: [{
                         label: '',
-                        data: [9.78, 52.72, 20.19, 16.98, 0.33],
+                        data: valEscolaridad,
                         backgroundColor: ['#e65100', '#48b5c4', '#5aa348', '#7b1fa2', '#b0bec5'],
                         borderRadius: 6,
                         borderWidth: 1,
@@ -1305,7 +1342,7 @@
                     labels: ['Asiste a la escuela', 'No asiste a la escuela', 'No especificado'],
                     datasets: [{
                         label: '',
-                        data: [25.55, 74.13, 0.32],
+                        data: valAsistencia,
                         backgroundColor: ['#60ced8', '#e67eb7', '#b0bec5'],
                         borderRadius: 6,
                         borderWidth: 1,

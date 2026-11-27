@@ -868,15 +868,15 @@ h1, h2, h3, h4, h5, h6,
 /* Banner de confirmación */
 .admin-confirm-banner {
     background: #fff8e1;
-    border: 1.5px solid #ffe082;
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 20px;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin-bottom: 12px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 10px;
     animation: fadeIn 0.2s ease-in;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
