@@ -21,7 +21,7 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -37,7 +37,7 @@
     <script src="assets/js/mexico_estados.js"></script>
     <script src="assets/js/tarjetas.js?v=<?= time() ?>"></script>
     <script src="assets/js/admin_datos.js?v=<?= time() ?>"></script>
-    <link rel="stylesheet" href="assets/css/estilos.css?v=20261118_borde_v2">
+    <link rel="stylesheet" href="assets/css/estilos.css?v=20261127_inter_v1">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-ges sticky-top">
@@ -273,7 +273,7 @@
                         <i class="fa-solid fa-location-dot me-1" style="color: var(--ges-naranja);"></i> Tercera privada de Guadalupe Victoria número 107, colonia Libertad, código postal 68090, Oaxaca, México.
                     </p>
                     <p class="small mb-1 text-white-50" style="font-size: 0.8rem;">
-                        <i class="fa-solid fa-clock me-1" style="color: var(--ges-turquesa);"></i> Horario: Lun-viernes de 9 a 3 pm.
+                        <i class="fa-solid fa-clock me-1" style="color: var(--ges-turquesa);"></i> Horario: Lun-viernes de 09:00 am a 03:00 pm.
                     </p>
                     <p class="small mb-1" style="font-size: 0.8rem;">
                         <i class="fa-solid fa-envelope me-1" style="color: var(--ges-rosa);"></i> <a href="mailto:contacto@gesmujer.org">contacto@gesmujer.org</a>
@@ -3950,6 +3950,11 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                                     <i class="fa-solid fa-laptop-code me-1" style="color: #d81b60;"></i> 7. Ciberacoso
                                                 </button>
                                             </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link fw-bold px-3 py-2" id="pill-fuente-links-tab" data-bs-toggle="pill" data-bs-target="#pill-fuente-links" type="button" role="tab" style="border-radius: 8px;">
+                                                    <i class="fa-solid fa-link me-1" style="color: #5c35a0;"></i> 8. Links Oficiales
+                                                </button>
+                                            </li>
                                         </ul>
 
                                         <!-- Contenido de las 7 Dimensiones -->
@@ -4263,6 +4268,94 @@ A lo largo del periodo analizado, la prevalencia de violencia contra las mujeres
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #d81b60, #8e24aa); border-radius: 8px;" onclick="AdminDatosUI.guardarFuentes('ciberacoso')">
+                                                        <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- PESTAÑA 8: LINKS OFICIALES -->
+                                            <div class="tab-pane fade" id="pill-fuente-links" role="tabpanel">
+                                                <div class="p-3 rounded-3 mb-3 bg-light border">
+                                                    <p class="small text-muted mb-3"><i class="fa-solid fa-circle-info me-1"></i> Escribe o pega la URL de cada gráfica. Puedes actualizarlas cuando cambie la fuente oficial.</p>
+
+                                                    <!-- SALUD -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#00695c; font-size:0.85rem;"><i class="fa-solid fa-heart-pulse me-1"></i> 1. Salud</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1 y 6:</label><input type="url" id="link_salud_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/sistemas/olap/consulta/general_ver4/MDXQueryDatos.asp?#Regreso&c=11144"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_salud_g2" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Salud_Mental_07_2cc5c0fc-a84a-4905-90fa-5aa74491c824"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 3:</label><input type="url" id="link_salud_g3" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=mortalidad_Mortalidad_05_31099426-f9d4-491e-bf34-214a85a7bc0f"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 4:</label><input type="url" id="link_salud_g4" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=mortalidad_Mortalidad_04_1e3bddc9-7bd7-482b-aef6-77e9f55315e1"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 5:</label><input type="url" id="link_salud_g5" class="form-control form-control-sm" value="https://www.inegi.org.mx/sistemas/olap/consulta/general_ver4/MDXQueryDatos.asp?proy=mortgral_mg"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- EDUCACIÓN -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#f57f17; font-size:0.85rem;"><i class="fa-solid fa-graduation-cap me-1"></i> 2. Educación</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_edu_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=educacion_Educacion_01_72199959-16b9-47e6-8cfa-2a4d5fb27958"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_edu_g2" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=educacion_Educacion_02_75e5d2bc-f8f5-43bb-b105-c40515ff8023"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 3:</label><input type="url" id="link_edu_g3" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Educacion_Educacion_06_b2f874c8-0871-4ccf-8dd2-ca367cc21f7f"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 4:</label><input type="url" id="link_edu_g4" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=educacion_Educacion_04_484be2f6-9811-4ab4-8310-0aa56305b50e"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 5:</label><input type="url" id="link_edu_g5" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=educacion_Educacion_03_f7d23e0c-311b-4799-82d3-a3af566a1fbf"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- VIVIENDA -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#1565c0; font-size:0.85rem;"><i class="fa-solid fa-house-chimney me-1"></i> 3. Vivienda</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_viv_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Vivienda_Vivienda_04_1fb94584-4816-4435-a1b7-4689b8d2ee81&idrt=56&opc=t"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_viv_g2" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Vivienda_Vivienda_03_216bf423-3a75-4264-a709-f02295e98275&idrt=56&opc=t"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- INGRESO -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#2e7d32; font-size:0.85rem;"><i class="fa-solid fa-hand-holding-dollar me-1"></i> 4. Ingreso</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_ing_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Hogares_Hogares_11_861f5732-c3db-4614-be03-741f649d605c&idrt=54&opc=t"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_ing_g2" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/default.html?nc=624&idrt=18&opc=t"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 3:</label><input type="url" id="link_ing_g3" class="form-control form-control-sm" value="https://sc.inegi.org.mx/SIESVIM1/paginas/contenido.jsf?t=24&s=52&c=52&i=738"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- LENGUAS -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#7b1fa2; font-size:0.85rem;"><i class="fa-solid fa-language me-1"></i> 5. Lenguas Indígenas</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_len_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=LenguaIndigena_Lengua_02_2fc3e39a-e279-413e-897d-6240bc5bf881&idrt=132&opc=t"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_len_g2" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=lenguaindigena_Lengua_09_613a9c34-5499-4906-ac3d-1dbc5fa75c50"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráficas 3 y 4 (Excel):</label><input type="url" id="link_len_g3" class="form-control form-control-sm" value="https://www.inegi.org.mx/contenidos/programas/ccpv/2020/tabulados/ampliado/cpv2020_a_eum_05_etnicidad.xlsx"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- VIOLENCIA -->
+                                                    <div class="mb-4">
+                                                        <h6 class="fw-bold mb-2" style="color:#c2185b; font-size:0.85rem;"><i class="fa-solid fa-shield-heart me-1"></i> 6. Violencia</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_vio_g1" class="form-control form-control-sm" value="https://sc.inegi.org.mx/SIESVIM1/paginas/indicadores.jsf?t=24&s=50&c=50"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2:</label><input type="url" id="link_vio_g2" class="form-control form-control-sm" value="https://sc.inegi.org.mx/SIESVIM1/paginas/contenido.jsf?t=24&s=231&c=231&i=725"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 3:</label><input type="url" id="link_vio_g3" class="form-control form-control-sm" value="https://sc.inegi.org.mx/SIESVIM1/paginas/indicadores.jsf?t=24&s=424&c=424"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 4:</label><input type="url" id="link_vio_g4" class="form-control form-control-sm" value="https://sc.inegi.org.mx/SIESVIM1/paginas/contenido.jsf?t=24&s=425&c=425&i=922"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- CIBERACOSO -->
+                                                    <div class="mb-3">
+                                                        <h6 class="fw-bold mb-2" style="color:#d81b60; font-size:0.85rem;"><i class="fa-solid fa-laptop-code me-1"></i> 7. Ciberacoso</h6>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 1:</label><input type="url" id="link_cib_g1" class="form-control form-control-sm" value="https://www.inegi.org.mx/app/tabulados/interactivos/?px=MOCIBA2025_pre-cib_es&bd=mociba"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 2 (Cuadro 1.27):</label><input type="url" id="link_cib_g2" class="form-control form-control-sm" value="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fwww.inegi.org.mx%2Fcontenidos%2Fprogramas%2Fmociba%2F2025%2Ftabulados%2Fmociba2025_tabulados.xlsx&wdOrigin=BROWSELINK"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 3 (Cuadro 1.45):</label><input type="url" id="link_cib_g3" class="form-control form-control-sm" value="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fwww.inegi.org.mx%2Fcontenidos%2Fprogramas%2Fmociba%2F2025%2Ftabulados%2Fmociba2025_tabulados.xlsx&wdOrigin=BROWSELINK"></div>
+                                                            <div><label class="small text-muted d-block mb-1">Gráfica 4 (Cuadro 1.46):</label><input type="url" id="link_cib_g4" class="form-control form-control-sm" value="https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fwww.inegi.org.mx%2Fcontenidos%2Fprogramas%2Fmociba%2F2025%2Ftabulados%2Fmociba2025_tabulados.xlsx&wdOrigin=BROWSELINK"></div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" class="btn text-white fw-bold px-4 py-2" style="background: linear-gradient(135deg, #5c35a0, #3a1a7a); border-radius: 8px;" onclick="AdminDatosUI.guardarFuentes('links')">
                                                         <i class="fa-solid fa-floppy-disk me-1"></i> Guardar
                                                     </button>
                                                 </div>
